@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prepareModulesClient": "npm install",
+    "prepaireServer": "npm install",
     "startServer": "node server.js"
   },
   "keywords": [],
