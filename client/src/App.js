@@ -5,6 +5,8 @@ import {BrowserRouter,Switch,Route} from "react-router-dom";
 import Home from './Pages/Home'
 import Menu from "./Components/Menu/Menu";
 import DataTest from "./Pages/DataTest";
+import Rooster from "./Pages/Rooster";
+import addStringFunctions from "./Values/addStringFunctions";
 
 class App extends React.Component{
 
@@ -14,6 +16,8 @@ class App extends React.Component{
 
 
   render(){
+      // this programm adds new string functions
+      addStringFunctions()
     return (
         <div>
 
@@ -22,6 +26,7 @@ class App extends React.Component{
             <Switch>
               <Route path="/" exact render={()=> <Home /> } />
               <Route path="/DataTest" render={()=><DataTest/>}/>
+              <Route path="/Rooster" render={()=><Rooster/>}/>
             </Switch>
           </BrowserRouter>
         </div>
