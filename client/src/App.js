@@ -1,12 +1,13 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component }from 'react';
 import './App.css';
-import DataTest from "./Pages/DataTest";
+import logo from './logo.svg'
 
-function App() {
-  return (
-    <DataTest/>
-  );
+
+class app extends Component {
+  render(){
+    return(
+         </div>
+      );
+    }
 }
-
 export default App;
