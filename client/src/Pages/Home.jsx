@@ -8,10 +8,9 @@ class Home extends React.Component{
 
     render() {
         return(
-        <div>
-
-            <p>Dit is de Homepage</p>
-        </div>
+            <div>
+                <a href="./DataTest.jsx"><img src="https://imgur.com/dmz4p4p.png" /></a>
+            </div>
         )
     }
 
