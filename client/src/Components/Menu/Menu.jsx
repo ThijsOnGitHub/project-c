@@ -17,6 +17,7 @@ class Menu extends React.Component{
                 <Link to={"/DataTest"}>Contact</Link>
                 </nav>
             </div>
+
         )
     }
 }
