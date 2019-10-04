@@ -8,7 +8,7 @@ class Menu extends React.Component{
 
     render() {
         return(
-            <div>
+            <div className='Menu' align='center'>
                 <Link to={'/'} >Home</Link>
                 <br/>
                 <Link to={"/DataTest"}>DataTest</Link>

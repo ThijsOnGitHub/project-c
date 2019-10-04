@@ -6,6 +6,11 @@
   height: 40vmin;
 }
 
+.Menu {
+  background: mediumslateblue;
+  border-radius: 50px;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -19,4 +24,19 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+.LinebreakPrevent {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  margin: auto;
+  border-radius: 50px;
+}
+
+
+
+.Home {
+  background: lightgrey;
+  border-radius: 500px;
 }
