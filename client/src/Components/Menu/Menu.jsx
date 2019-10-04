@@ -8,10 +8,14 @@ class Menu extends React.Component{
 
     render() {
         return(
-            <div class="top-header">
-                <h1>RoosterIT</h1>
+            <div class="top-menu">
+                <h1><i>RoosterIT</i></h1>
+                <nav>
                 <Link to={'/'} >Home</Link>
-                <Link to={"/DataTest"}>DataTest</Link>
+                <Link to={'/'} >Inloggen</Link>
+                <Link to={'/'} >Mijn account</Link>
+                <Link to={"/DataTest"}>Contact</Link>
+                </nav>
             </div>
         )
     }

@@ -25,13 +25,29 @@ body{
 }
 
 /*----------Menu----------*/
-.top-header{
+.top-menu{
   width: 100vw;
-  height: 100px;
+  height: 120px;
   background: #016ab6;
+  margin-top: -22px;
 }
-.top-header h1{
+.top-menu h1{
   font-family: 'Open Sans', sans-serif;
   color: white;
   text-align: center;
+  display: block;
+  width: 180px;
+  margin: auto;
+  padding-top: 45px;
+}
+.top-menu a{
+  font-family: 'Open Sans', sans-serif;
+  text-decoration: none;
+  color: white;
+  display: inline-block;
+  margin-right: 30px;
+}
+nav{
+  width: auto;
+  float: right;
 }

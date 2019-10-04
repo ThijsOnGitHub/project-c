@@ -12,13 +12,9 @@ class App extends React.Component{
     super()
   }
 
-
   render(){
     return (
-        /*Google fonts*/
-
         <div>
-
         <BrowserRouter>
             <Menu/>
             <Switch>
@@ -29,7 +25,5 @@ class App extends React.Component{
         </div>
     );
   }
-
 }
-
 export default App;
