@@ -15,6 +15,8 @@ class App extends React.Component{
 
   render(){
     return (
+        /*Google fonts*/
+
         <div>
 
         <BrowserRouter>

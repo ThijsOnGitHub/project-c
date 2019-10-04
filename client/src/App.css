@@ -1,3 +1,6 @@
+body{
+  margin: 0px 0px 0px 0px;
+}
 .App {
   text-align: center;
 }
@@ -19,4 +22,16 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+/*----------Menu----------*/
+.top-header{
+  width: 100vw;
+  height: 100px;
+  background: #016ab6;
+}
+.top-header h1{
+  font-family: 'Open Sans', sans-serif;
+  color: white;
+  text-align: center;
 }
