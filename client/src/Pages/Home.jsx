@@ -22,11 +22,22 @@ class Home extends React.Component{
                             <td><input type="text" id="uname" name="uname" value="Gebruiksersnaam"/></td>
                         </tr>
                         <tr>
-                            <td><input type="text" id="pass" name="pass" value="Wachtwoord"/></td>
+                            <td><input type="text" id="pass" name="pass" value="Wachtwoord"/>
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td><a href="#">Wachtwoord vergeten</a></td>
+                                        <td><img id="btnLogin" src="https://i.imgur.com/oPCJcCA.png"/></td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                     </form></td>
+
                 </tr>
                 </tbody>
             </table>

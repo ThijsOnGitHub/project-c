@@ -93,3 +93,26 @@ input[type=text]:focus {
   position: relative;
   bottom: 20px
 }
+#intro a{
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 800;
+  color: #585858;
+  font-size: 18px;
+  text-decoration: none;
+}
+#intro a:hover{
+  color: #323232;
+}
+#btnLogin{
+  width: 130px;
+  position: relative;
+  left: 25px;
+}
+#btnLogin:hover{
+  opacity: .8;
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s; /* Firefox < 16 */
+  -ms-animation: fadein 2s; /* Internet Explorer */
+  -o-animation: fadein 2s; /* Opera < 12.1 */
+  animation: fadein 2s;
+}
