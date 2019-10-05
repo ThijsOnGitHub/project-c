@@ -12,7 +12,11 @@ class App extends React.Component{
 
   constructor(){
     super()
+    this.state={
+        apiLink:"http://localhost:5000"
+    }
   }
+
 
 
   render(){
@@ -26,7 +30,7 @@ class App extends React.Component{
             <Switch>
               <Route path="/" exact render={()=> <Home /> } />
               <Route path="/DataTest" render={()=><DataTest/>}/>
-              <Route path="/Rooster" render={()=><Rooster/>}/>
+              <Route path="/Rooster" render={()=><Rooster apiLink={this.state.apiLink}/>}/>
             </Switch>
           </BrowserRouter>
         </div>

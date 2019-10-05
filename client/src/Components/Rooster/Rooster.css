@@ -1,0 +1,25 @@
+.dagFields{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.dagFields > div{
+    flex: 1 1 100px;
+}
+.absolute{
+    position: absolute;
+    width: 100%;
+}
+.lineMarker{
+    border: 1px dashed gray;
+    width: 98%;
+    height: 0px;
+}
+.DagField{
+    border:black solid 2px;
+    position:relative
+}
+.roosterItem{
+    background:green;
+    border-radius:15px;
+}

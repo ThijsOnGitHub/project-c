@@ -10,12 +10,4 @@
 .centerText{
   text-align: center;
 }
-.dagFields{
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-.dagFields > div{
-  flex: 1 1 100px;
-}
 
