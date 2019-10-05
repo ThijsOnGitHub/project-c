@@ -1,5 +1,6 @@
 :root{
-    --accentColor:#9900CC
+    --accentColor:#9900CC;
+    --onAccentColor:#ffffff;
 }
 
 .agendaFields{
@@ -10,4 +11,8 @@
 .centerText{
   text-align: center;
 }
-
+/* Werknemer RoosterItems*/
+.onAccent{
+    color:var(--onAccentColor);
+    fill:var(--onAccentColor)
+}

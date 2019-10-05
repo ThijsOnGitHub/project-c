@@ -20,6 +20,24 @@
     position:relative
 }
 .roosterItem{
-    background:green;
+    background:var(--accentColor);
     border-radius:15px;
+
+}
+.isideItem{
+    padding: 5px 10px;
+}
+.noTopMargin{
+    margin: auto 0;
+}
+.column{
+    display: flex;
+    flex-direction: column;
+}
+.right{
+    margin-left: auto;
+}
+.row{
+    display: flex;
+    flex-direction: row;
 }
