@@ -1,3 +1,7 @@
+:root{
+    --accentColor:#9900CC
+}
+
 .agendaFields{
   display: flex;
   flex-direction: row;
