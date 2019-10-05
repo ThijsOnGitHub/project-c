@@ -12,7 +12,7 @@ class DagField extends React.Component{
     }
 
     render() {
-
+        console.log(this.props.renderItems)
         return(
             <div>
                 <DagTitel datum={this.props.datum}/>
@@ -21,10 +21,13 @@ class DagField extends React.Component{
                         <TimeMarker interval={this.props.markerInterval}beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={this.props.hourHeight} height={this.props.height} type="line"/>
                     </div>
                     <div className="Items absolute">
-                        {this.props.dagJSON.map(value => {
-                            console.log(new Date(value.eindTijd))
-                            return <RoosterItem roosterData={this.props} beginTijd={new Date(value.beginTijd)} eindTijd={new Date(value.eindTijd)}/>
-                        })}
+                        {
+                            // Hier wordt het rooster items echt uitgevoerd en geplaasts
+                            this.props.renderItems.map(value=>{
+                                return Object.values(value)[0](this.props)
+                            })
+                        }
+
                     </div>
                 </div>
             </div>

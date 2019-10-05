@@ -24,6 +24,7 @@ class RoosterItem extends React.Component{
 
         return(
             <div  className="absolute roosterItem" style={{top:this.state.top,height:this.state.length}}>
+                {this.props.children}
             </div>
         )
     }

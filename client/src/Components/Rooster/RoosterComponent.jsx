@@ -4,9 +4,11 @@ import TimeMarker from "./TimeMarker";
 import './Rooster.css'
 
 
+
 /*
     Dit component zorgt dat er een timemarker aan de linkerkant komt en er 7 dagen daarnaast staan
     Daarnaast zorgt hij ervoor dat de begintijden en eindtijden op alle velden hetzelfde zijn
+    En dat de roosterItems verdeeld worden over de dagen
  */
 class RoosterComponent extends React.Component{
 
@@ -35,16 +37,14 @@ class RoosterComponent extends React.Component{
                     </div>
                     <div className="dagFields">
                     {
-                        // Hier worden alle dagVelden gemaakt
+                        datums.map(value => <DagField datum={value} renderItems={
+                            /* *1 Hier worden alle roosterItems verdeeld over de dagen d.m.v. de datum die in het object stond */
+                            this.props.renderItems.filter(value1=>{
+                                console.log(Object.keys(value1)[0])
+                                console.log(value.getTime())
+                            return Number.parseInt(Object.keys(value1)[0])===value.getTime()
 
-                        datums.map(value => <DagField datum={value}
-
-                            // Aan deze velden word json waarvan de dag hetzelfde is als de dag die wordt weergegeven
-                          dagJSON={this.props.agendaJSON.filter(value1 => {
-                            var datum=new Date(value1.datum)
-                            return datum.getTime()===value.getTime()
-                            }
-                        )} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} markerInterval={this.props.markerInterval}/>)
+                        })} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} markerInterval={this.props.markerInterval}/>)
                     }
                     </div>
                 </div>
