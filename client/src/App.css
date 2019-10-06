@@ -1,6 +1,85 @@
 body{
-  margin: 0px 0px 0px 0px;
+  margin: 0;
 }
+
+/*--------------Global Menu--------------*/
+.menu{
+  font-family: 'Open Sans', sans-serif;
+  background: #622081;
+  vertical-align: center;
+}
+.menu #logo{
+  width: 250px;
+  padding-right: 10px;
+  position: relative;
+  top: 5px;
+  vertical-align: center;
+  height: auto;
+  display:inline-block;
+}
+
+.menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  padding: 35px 0px 30px 100px;
+}
+.menu li {float: left;}
+
+.menu li a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+.menu li a:hover {color: #c5a4d5;}
+.menu .active {color: #af71cc;}
+
+/*Underlay*/
+.underlay{
+  width: 100vw;
+  height: 50px;
+  background: #43494f;
+  margin-top: -22px;
+}
+.underlay h1{
+  font-size: 25px;
+  padding-top: 7px;
+  font-family: 'Open Sans', sans-serif;
+  color: white;
+  text-align: center;
+  font-weight: 400;
+}
+.weighted{
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
 .App {
   text-align: center;
 }
@@ -24,7 +103,7 @@ body{
   color: #09d3ac;
 }
 
-/*----------Menu----------*/
+/*----------Menu----------
 #intro{
 
   width: 50vw;
@@ -60,8 +139,8 @@ nav{
   width: auto;
   float: right;
 }
-
-/*Form*/
+*/
+/*Form
 table h1{
   position: relative;
   top: 20px;
@@ -88,11 +167,7 @@ input[type=text]:focus {
   border: 3px solid #555;
 }
 
-#logo{
-  width: 400px;
-  position: relative;
-  bottom: 20px
-}
+
 #intro a{
   font-family: 'Open Sans', sans-serif;
   font-weight: 800;
@@ -106,13 +181,13 @@ input[type=text]:focus {
 #btnLogin{
   width: 130px;
   position: relative;
-  left: 25px;
+  left: 25dpx;
 }
 #btnLogin:hover{
   opacity: .8;
-  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fadein 2s; /* Firefox < 16 */
-  -ms-animation: fadein 2s; /* Internet Explorer */
-  -o-animation: fadein 2s; /* Opera < 12.1 */
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1
+  -moz-animation: fadein 2s; /* Firefox < 16
+  -ms-animation: fadein 2s; /* Internet Explorer
+  -o-animation: fadein 2s; /* Opera < 12.1
   animation: fadein 2s;
-}
+}*/

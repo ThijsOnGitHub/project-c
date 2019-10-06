@@ -13,7 +13,7 @@ class Home extends React.Component{
                 <tbody>
                 <tr>
                     <td>
-                        <h1>Welkom bij</h1><img id="logo" src="https://i.imgur.com/QdRROLE.png"/>
+                        <img id="logo" src="https://i.simgur.com/QdRROLE.png"/>
                     </td>
                     <td><form>
                         <table>
