@@ -14,13 +14,13 @@ class Home extends React.Component{
                 <div align='center' className="LinebreakPrevent">
                     <Link to='./Rooster'>
                         <figure>
-                            <img src='https://svgshare.com/i/FKH.svg' alt="Calendar Icon" width='150' height='150'/>
+                            <img src='https://svgshare.com/i/FKH.svg' alt="Calendar Icon" width='150'/>
                             <figcaption>SCHEDULE</figcaption>
                         </figure>
                     </Link>
                     <Link to='./Salaris'>
                         <figure>
-                            <img src='https://svgshare.com/i/FL7.svg' alt="money" width='150' height='150'/>
+                            <img src='https://svgshare.com/i/FL7.svg' alt="money" width='150'/>
                             <figcaption>SALARY</figcaption>
                         </figure>
                     </Link>
