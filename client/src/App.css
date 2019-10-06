@@ -6,17 +6,12 @@
   height: 40vmin;
 }
 
-.Menu {
-  background: mediumslateblue;
-  border-radius: 50px;
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-content: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
@@ -29,14 +24,29 @@
 .LinebreakPrevent {
   display: flex;
   flex-direction: row;
-  align-self: center;
+  align-content: center;
+  justify-content: center;
   margin: auto;
-  border-radius: 50px;
 }
 
-
-
 .Home {
-  background: lightgrey;
+  background: #eeeeee;
+  align-content: center;
+  justify-content: center;
+}
+.Home figcaption {
+  color: white;
+  background: #622081;
+  font-weight: bold;
+  padding: 10px;
   border-radius: 500px;
+  margin: 10px;
+}
+.Home figure {
+  background: white;
+  border-radius: 20px;
+}
+.Home img {
+  display: block;
+  margin: auto;
 }

@@ -7,10 +7,10 @@ class Home extends React.Component{
     }
 
     render() {
+        const username = "User";
         return(
             <div className="Home">
-                <p align="center">This is a line. I will now edit this line, so that it may become meaningful.</p>
-                <h1 align="center">Welcome to Planit.</h1>
+                <h1 align="center" style={{paddingTop: 20}}>Welcome, {username}!</h1>
                 <div align='center' className="LinebreakPrevent">
                     <Link to='./Rooster'>
                         <figure>
@@ -25,6 +25,7 @@ class Home extends React.Component{
                         </figure>
                     </Link>
                 </div>
+                <img className='ScheduleImg' src="https://imgur.com/Y8x0HaC.png" alt="schedule placeholder"/>
             </div>
         )
     }
