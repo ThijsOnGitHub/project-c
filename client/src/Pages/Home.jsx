@@ -8,11 +8,6 @@ class Home extends React.Component{
 
     render() {
         return(
-<<<<<<< Updated upstream
-        <div>
-
-            <p>Dit is de Homepage</p>
-=======
         <div id="intro">
             <form>
             <table>
@@ -32,7 +27,6 @@ class Home extends React.Component{
                 </tbody>
             </table>
             </form>
->>>>>>> Stashed changes
         </div>
         )
     }

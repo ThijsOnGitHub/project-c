@@ -1,7 +1,6 @@
 body{
   margin: 0px 0px 0px 0px;
 }
-<<<<<<< Updated upstream
 .App {
   text-align: center;
 }
@@ -48,10 +47,10 @@ body{
   display: inline-block;
   margin-right: 30px;
 }
-nav{
+nav {
   width: auto;
   float: right;
-=======
+}
 
 /*--------------Global Menu--------------*/
 .menu{
@@ -171,8 +170,7 @@ input[type=text]:focus {
   margin:auto;
 }
 
-button:hover{
+button:hover {
   opacity: .8;
   -webkit-animation: fadein 2s;
->>>>>>> Stashed changes
 }
