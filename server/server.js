@@ -51,6 +51,20 @@ app.post("/api/addbedrijf",(req,res)=>{
 
 
 
+// Zend een POST request dat de data uit de front-end in de database krijgt.
+app.post("/api/addgebruiker", (req, res) => {
+    var data = req.body;
+    console.log("posting:");
+    connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, img_link) VALUES (?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth, data.img_link],
+        (error, results, fields) => {console.log(error);
+        if (error) {
+            res.status(422);
+            res.json({message:error});
+        }else{
+            res.send("Done!")
+        }
+    });
+});
 
 app.listen(5000,()=> {
     console.log("listening")
