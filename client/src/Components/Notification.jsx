@@ -9,7 +9,7 @@ class NotificationItem {
     sendNotif() {
         return (
             <div className='NotifItem'>
-                <p>Person: {this.person}, messageId: {this.messageId}</p>
+                <p>Person: {this.person},<br/>messageId: {this.messageId}</p>
             </div>
         )
     }
