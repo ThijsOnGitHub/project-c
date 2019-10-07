@@ -1,6 +1,6 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component }from 'react';
 import './App.css';
+import logo from './logo.svg'
 import {BrowserRouter,Switch,Route} from "react-router-dom";
 import Home from './Pages/Home'
 import Menu from "./Components/Menu/Menu";
@@ -31,4 +31,4 @@ class App extends React.Component{
 
 }
 
-export default App;
+
