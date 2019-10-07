@@ -3,7 +3,9 @@
     flex-direction: row;
     width: 100%;
 }
-
+.centerText{
+    text-align: center;
+}
 .absolute{
     position: absolute;
     width: 100%;
