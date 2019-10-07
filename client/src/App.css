@@ -1,3 +1,85 @@
+body{
+  margin: 0;
+}
+
+/*--------------Global Menu--------------*/
+.menu{
+  font-family: 'Open Sans', sans-serif;
+  background: #622081;
+  vertical-align: center;
+}
+.menu #logo{
+  width: 250px;
+  padding-right: 10px;
+  position: relative;
+  top: 5px;
+  vertical-align: center;
+  height: auto;
+  display:inline-block;
+}
+
+.menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  padding: 35px 0px 30px 100px;
+}
+.menu li {float: left;}
+
+.menu li a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+.menu li a:hover {color: #c5a4d5;}
+.menu .active {color: #af71cc;}
+
+/*Underlay*/
+.underlay{
+  width: 100vw;
+  height: 50px;
+  background: #43494f;
+  margin-top: -22px;
+}
+.underlay h1{
+  font-size: 25px;
+  padding-top: 7px;
+  font-family: 'Open Sans', sans-serif;
+  color: white;
+  text-align: center;
+  font-weight: 400;
+}
+.weighted{
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
 .App {
   text-align: center;
 }
@@ -20,3 +102,92 @@
 .App-link {
   color: #09d3ac;
 }
+
+/*----------Menu----------
+#intro{
+
+  width: 50vw;
+  display: block;
+  margin: auto;
+  margin-top: 40px;
+
+}
+
+.top-menu{
+  width: 100vw;
+  height: 120px;
+  background: #016ab6;
+  margin-top: -22px;
+}
+.top-menu h1{
+  font-family: 'Open Sans', sans-serif;
+  color: white;
+  text-align: center;
+  display: block;
+  width: 180px;
+  margin: auto;
+  padding-top: 45px;
+}
+.top-menu a{
+  font-family: 'Open Sans', sans-serif;
+  text-decoration: none;
+  color: white;
+  display: inline-block;
+  margin-right: 30px;
+}
+nav{
+  width: auto;
+  float: right;
+}
+*/
+/*Form
+table h1{
+  position: relative;
+  top: 20px;
+  text-align: center;
+  font-size: 50px;
+}
+input[type=text] {
+  border-radius: 50px;
+  width: 350px;
+  padding: 15px 40px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 3px solid #ccc;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 800;
+  color: #585858;
+  font-size: 18px;
+}
+
+input[type=text]:focus {
+  border: 3px solid #555;
+}
+
+
+#intro a{
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 800;
+  color: #585858;
+  font-size: 18px;
+  text-decoration: none;
+}
+#intro a:hover{
+  color: #323232;
+}
+#btnLogin{
+  width: 130px;
+  position: relative;
+  left: 25dpx;
+}
+#btnLogin:hover{
+  opacity: .8;
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1
+  -moz-animation: fadein 2s; /* Firefox < 16
+  -ms-animation: fadein 2s; /* Internet Explorer
+  -o-animation: fadein 2s; /* Opera < 12.1
+  animation: fadein 2s;
+}*/

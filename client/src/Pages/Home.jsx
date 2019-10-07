@@ -8,9 +8,54 @@ class Home extends React.Component{
 
     render() {
         return(
-        <div>
+        <div id="intro">
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        <img id="logo" src="https://i.simgur.com/QdRROLE.png"/>
+                    </td>
+                    <td><form>
+                        <table>
+                        <tbody>
+                        <tr>
+                            <td><input type="text" id="uname" name="uname" value="Gebruiksersnaam"/></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="pass" name="pass" value="Wachtwoord"/>
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td><a href="#">Wachtwoord vergeten</a></td>
+                                        <td><img id="btnLogin" src="https://i.imgur.com/oPCJcCA.png"/></td>
 
-            <p>Dit is de Homepage</p>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </form></td>
+
+                </tr>
+                </tbody>
+            </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
         )
     }

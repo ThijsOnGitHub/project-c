@@ -8,12 +8,16 @@ class Menu extends React.Component{
 
     render() {
         return(
-            <div>
-                <Link to={'/'} >Home</Link>
-                <br/>
-                <Link to={"/DataTest"}>DataTest</Link>
-                <p>Dit is het Menu</p>
+
+            <div class="menu">
+                <ul>
+                    <li><img id='logo' src="https://i.imgur.com/HVmQHos.png"/></li>
+                    <li><Link to={'/'} className="active">Home</Link></li>
+                    <li><Link to={'/'} >Registreren</Link></li>
+                    <li><Link to={"/DataTest"}>Contact</Link></li>
+                </ul>
             </div>
+
         )
     }
 }
