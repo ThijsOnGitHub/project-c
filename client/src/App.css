@@ -135,59 +135,130 @@ body{
   display: inline-block;
   margin-right: 30px;
 }
-nav{
+nav {
   width: auto;
   float: right;
 }
-*/
-/*Form
-table h1{
-  position: relative;
-  top: 20px;
-  text-align: center;
-  font-size: 50px;
+
+/*--------------Global Menu--------------*/
+.menu{
+  font-family: 'Open Sans', sans-serif;
+  background: #622081;
+  vertical-align: center;
 }
-input[type=text] {
+.menu #logo{
+  width: 250px;
+  padding-right: 10px;
+  position: relative;
+  top: 5px;
+  vertical-align: center;
+  height: auto;
+  display:inline-block;
+}
+.menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  padding: 35px 0px 30px 100px;
+}
+.menu li {float: left;}
+.menu li a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+.menu li a:hover {color: #c5a4d5;}
+.menu .active {color: #af71cc;}
+
+/*Underlay*/
+.underlay{
+  width: 100vw;
+  height: 50px;
+  background: #43494f;
+  margin-top: -22px;
+}
+.underlay h1{
+  font-size: 25px;
+  padding-top: 7px;
+  font-family: 'Open Sans', sans-serif;
+  color: white;
+  text-align: center;
+  font-weight: 400;
+}
+.weighted{
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+}
+
+/*---------------Login---------------*/
+#intro{
+  border-radius: 40px;
+  background:#f7f7f7;
+  border: 3px solid #c7c7c7;
+  width: 55vw;
+  margin: auto;
+  margin-top: 50px;
+}
+
+#intro table{
+  margin: auto;
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+input {
+  margin: auto;
   border-radius: 50px;
   width: 350px;
+  margin-bottom: 10px;
+  display: block;
   padding: 15px 40px;
-  margin: 8px 0;
   box-sizing: border-box;
   border: 3px solid #ccc;
   -webkit-transition: 0.5s;
   transition: 0.5s;
   outline: none;
   font-family: 'Open Sans', sans-serif;
-  font-weight: 800;
+  font-weight: 400;
+  text-align: center;
   color: #585858;
   font-size: 18px;
 }
-
-input[type=text]:focus {
+input:focus {
   border: 3px solid #555;
 }
-
-
-#intro a{
+#intro table a{
   font-family: 'Open Sans', sans-serif;
   font-weight: 800;
-  color: #585858;
-  font-size: 18px;
   text-decoration: none;
+  text-align: right;
+  display: block;
+  margin: auto;
+  width: 350px;
 }
-#intro a:hover{
-  color: #323232;
+#intro table a:hover {
+  color: #af71cc;
 }
-#btnLogin{
-  width: 130px;
-  position: relative;
-  left: 25dpx;
+#intro table button{
+  background-color: #ad35d7;
+  border: 4px solid #ba83cd;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  font-size: 25px;
+  text-decoration: none;
+  margin: 4px 2px;
+  border-radius: 50px;
+  width: 350px;
+  display: block;
+  margin:auto;
 }
-#btnLogin:hover{
+
+button:hover {
   opacity: .8;
-  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1
-  -moz-animation: fadein 2s; /* Firefox < 16
-  -ms-animation: fadein 2s; /* Internet Explorer
-  -o-animation: fadein 2s; /* Opera < 12.1
-  animation: fadein 2s;
-}*/
+  -webkit-animation: fadein 2s;
+}
