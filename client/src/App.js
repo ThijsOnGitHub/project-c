@@ -5,7 +5,7 @@ import {BrowserRouter,Switch,Route} from "react-router-dom";
 import Home from './Pages/Home'
 import Menu from "./Components/Menu/Menu";
 import DataTest from "./Pages/DataTest";
-import LoginIn from "./Pages/Inlogpagina";
+
 
 class App extends React.Component{
 
@@ -23,7 +23,6 @@ class App extends React.Component{
             <Switch>
               <Route path="/" exact render={()=> <Home /> } />
               <Route path="/DataTest" render={()=><DataTest/>}/>
-              <Route path="/Login" render={()=><LoginIn/>}/>
             </Switch>
           </BrowserRouter>
         </div>
