@@ -15,7 +15,7 @@ class DagField extends React.Component{
         console.log(this.props.renderItems)
         return(
             <div>
-                <DagTitel datum={this.props.datum}/>
+
                 <div className="DagField" style={{height:this.props.height}}>
                     <div className="DagLijnen absolute">
                         <TimeMarker interval={this.props.markerInterval}beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={this.props.hourHeight} height={this.props.height} type="line"/>
