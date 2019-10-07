@@ -2,6 +2,7 @@ import React from 'react'
 import DagField from "./DagField";
 import TimeMarker from "./TimeMarker";
 import './Rooster.css'
+import DagTitel from "./DagTitel";
 
 
 
@@ -30,12 +31,16 @@ class RoosterComponent extends React.Component{
         var hourHeight=this.props.height/(this.props.eindTijd.getHours()-this.props.beginTijd.getHours())
         return(
             <div>
-                <div className="agendaFields">
-                    <div style={{marginTop:132}}>
-                        {/*Hier wordt de zijkant met de tijden gegenereerd  */}
-                        <TimeMarker interval={this.props.markerInterval} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} />
+                <div className="rooster">
+                    <div className="dagVelden dagTitles">
+                        {datums.map(value => {
+                            return <DagTitel datum={value}/>
+                        })}
                     </div>
-                    <div className="dagFields">
+                    <div className="roosterVelden">
+                        {/*Hier wordt de zijkant met de tijden gegenereerd  */}
+                    <TimeMarker interval={this.props.markerInterval} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} />
+                    <div className="row dagVelden">
                     {
                         datums.map(value => <DagField datum={value} renderItems={
                             /* *1 Hier worden alle roosterItems verdeeld over de dagen d.m.v. de datum die in het object stond */
@@ -46,6 +51,7 @@ class RoosterComponent extends React.Component{
 
                         })} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} markerInterval={this.props.markerInterval}/>)
                     }
+                    </div>
                     </div>
                 </div>
 
