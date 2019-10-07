@@ -1,9 +1,11 @@
-.row{
+.dagFields{
     display: flex;
     flex-direction: row;
     width: 100%;
 }
-
+.dagFields > div{
+    flex: 1 1 100px;
+}
 .absolute{
     position: absolute;
     width: 100%;
@@ -15,14 +17,13 @@
 }
 .DagField{
     border:black solid 2px;
-    position:relative;
+    position:relative
 }
 .roosterItem{
     background:var(--accentColor);
     border-radius:15px;
 
 }
-
 .isideItem{
     padding: 5px 10px;
 }
@@ -39,56 +40,4 @@
 .row{
     display: flex;
     flex-direction: row;
-}
-.dagTitles{
-    padding-left: 50px;
-    padding-right: 7px;
-}
-
-.rooster{
-    width: 100%;
-    overflow-x: auto;
-}
-
-.roosterVelden{
-    display: flex;
-    flex-direction: row;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    height: min-content;
-    padding: 15px 0px;
-    min-width: 1385px;
-}
-
-.dagVelden{
-    display: flex;
-}
-.dagVelden > div{
-    flex: 1 0 190px;
-}
-
-
-/* width */
-.roosterVelden::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
-}
-.roosterVelden::-webkit-scrollbar-button{
-   height: 5px;
-}
-/* Track */
-.roosterVelden::-webkit-scrollbar-track {
-    border-radius: 10px;
-    background:grey ;
-}
-
-/* Handle */
-.roosterVelden::-webkit-scrollbar-thumb {
-    background: grey;
-    border-radius: 10px;
-}
-
-/* Handle on hover */
-.roosterVelden::-webkit-scrollbar-thumb:hover{
-    background: #555;
 }
