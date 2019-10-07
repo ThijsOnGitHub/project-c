@@ -48,7 +48,7 @@ class Registratie extends React.Component{
         });
     }
 
-    // Verzamel de inputs van de gebruiker om die naar de state te brengen.
+    // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
         return(
             <div>
