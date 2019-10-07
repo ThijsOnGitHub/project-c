@@ -14,7 +14,7 @@
 /* Werknemer RoosterItems*/
 .onAccent{
     color:var(--onAccentColor);
-    fill:var(--onAccentColor)
+    fill:var(--onAccentColor)}
 body{
   margin: 0;
 }
