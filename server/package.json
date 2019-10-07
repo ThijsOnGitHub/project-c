@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prepareModulesClient": "npm install",
-    "startServer": "node server.js"
+    "prepaireServer": "npm install",
+    "startServer": "node server.js",
+    "devServer": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +15,8 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mysql": "^2.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.3"
   }
 }

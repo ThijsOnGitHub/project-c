@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from "react-router-dom";
+import Logo from "../Logo";
 
 class Menu extends React.Component{
     constructor(){
@@ -15,6 +16,7 @@ class Menu extends React.Component{
                     <li><Link to={'/'} className="active">Home</Link></li>
                     <li><Link to={'/'} >Registreren</Link></li>
                     <li><Link to={"/DataTest"}>Contact</Link></li>
+                    <li><Link to={"/Rooster"}>Rooster</Link></li>
                 </ul>
             </div>
 

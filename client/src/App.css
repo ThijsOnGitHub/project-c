@@ -86,21 +86,23 @@ body{
 
 .App-logo {
   height: 40vmin;
+:root{
+    --accentColor:#9900CC;
+    --onAccentColor:#ffffff;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.agendaFields{
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
-
-.App-link {
-  color: #09d3ac;
+.centerText{
+  text-align: center;
+}
+/* Werknemer RoosterItems*/
+.onAccent{
+    color:var(--onAccentColor);
+    fill:var(--onAccentColor)
 }
 
 /*----------Menu----------

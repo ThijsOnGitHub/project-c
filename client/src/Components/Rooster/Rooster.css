@@ -1,0 +1,43 @@
+.dagFields{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.dagFields > div{
+    flex: 1 1 100px;
+}
+.absolute{
+    position: absolute;
+    width: 100%;
+}
+.lineMarker{
+    border: 1px dashed gray;
+    width: 98%;
+    height: 0px;
+}
+.DagField{
+    border:black solid 2px;
+    position:relative
+}
+.roosterItem{
+    background:var(--accentColor);
+    border-radius:15px;
+
+}
+.isideItem{
+    padding: 5px 10px;
+}
+.noTopMargin{
+    margin: auto 0;
+}
+.column{
+    display: flex;
+    flex-direction: column;
+}
+.right{
+    margin-left: auto;
+}
+.row{
+    display: flex;
+    flex-direction: row;
+}

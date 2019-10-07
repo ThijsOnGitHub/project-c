@@ -6,14 +6,23 @@ import Home from './Pages/Home'
 import Menu from "./Components/Menu/Menu";
 import MenuUnderlay from "./Components/Menu/MenuUnderlay";
 import DataTest from "./Pages/DataTest";
+import Rooster from "./Pages/Rooster";
+import addStringFunctions from "./Values/addStringFunctions";
 
 class App extends React.Component{
 
   constructor(){
     super()
+    this.state={
+        apiLink:"http://localhost:5000"
+    }
   }
 
+
+
   render(){
+      // this programm adds new string functions
+      addStringFunctions()
     return (
         <div>
         <BrowserRouter>
@@ -22,6 +31,7 @@ class App extends React.Component{
             <Switch>
               <Route path="/" exact render={()=> <Home /> } />
               <Route path="/DataTest" render={()=><DataTest/>}/>
+              <Route path="/Rooster" render={()=><Rooster apiLink={this.state.apiLink}/>}/>
             </Switch>
           </BrowserRouter>
         </div>
