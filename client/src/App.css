@@ -120,7 +120,7 @@ nav {
   padding-top: 30px;
   padding-bottom: 40px;
 }
-input[type=text] {
+input {
   margin: auto;
   border-radius: 50px;
   width: 350px;
@@ -138,7 +138,7 @@ input[type=text] {
   color: #585858;
   font-size: 18px;
 }
-input[type=text]:focus {
+input:focus {
   border: 3px solid #555;
 }
 #intro table a{
