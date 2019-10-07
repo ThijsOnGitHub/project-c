@@ -1,6 +1,8 @@
 import React from 'react'
 import {Link} from "react-router-dom";
 
+import Notification from "../Components/Notification";
+
 class Home extends React.Component{
     constructor(){
         super()
@@ -25,7 +27,13 @@ class Home extends React.Component{
                         </figure>
                     </Link>
                 </div>
-                <img className='ScheduleImg' src="https://imgur.com/Y8x0HaC.png" alt="schedule placeholder"/>
+                <div className="LinebreakPrevent">
+                    <img className='ScheduleImg' src="https://imgur.com/Y8x0HaC.png" alt="schedule placeholder"/>
+                    <div className='Notifs'>
+                        <h1>Notifications</h1>
+                        <Notification/>
+                    </div>
+                </div>
             </div>
         )
     }

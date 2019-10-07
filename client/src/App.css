@@ -43,10 +43,26 @@
   margin: 10px;
 }
 .Home figure {
-  background: white;
   border-radius: 20px;
 }
 .Home img {
   display: block;
-  margin: auto;
+  margin-left: auto;
+}
+
+.Notifs {
+  margin-right: auto;
+  display: block;
+  justify-content: start;
+  background: white;
+  border-radius: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.NotifItem {
+  background: #dddddd;
+  border-radius: 20px;
+  display: block;
+  padding-left: 20px;
+  padding-right: 20px;
 }
