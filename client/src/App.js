@@ -6,6 +6,7 @@ import Home from './Pages/Home'
 import Menu from "./Components/Menu/Menu";
 import MenuUnderlay from "./Components/Menu/MenuUnderlay";
 import DataTest from "./Pages/DataTest";
+import Registratie from "./Pages/Registratie";
 import Rooster from "./Pages/Rooster";
 import addStringFunctions from "./Values/addStringFunctions";
 
@@ -31,6 +32,7 @@ class App extends React.Component{
             <Switch>
               <Route path="/" exact render={()=> <Home /> } />
               <Route path="/DataTest" render={()=><DataTest/>}/>
+              <Route path="/Registratie" render={()=><Registratie/>}/>
               <Route path="/Rooster" render={()=><Rooster apiLink={this.state.apiLink}/>}/>
             </Switch>
           </BrowserRouter>
