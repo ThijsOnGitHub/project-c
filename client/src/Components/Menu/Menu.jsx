@@ -13,7 +13,7 @@ class Menu extends React.Component{
                 <br/>
                 <Link to={"/DataTest"}>DataTest</Link>
                 <br/>
-                <Link to={"/Inlogpagina"}>Inlogpagina</Link>
+                <Link to={"/"}></Link>
 
 
             </div>
