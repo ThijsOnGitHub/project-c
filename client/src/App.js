@@ -7,28 +7,31 @@ import Menu from "./Components/Menu/Menu";
 import DataTest from "./Pages/DataTest";
 
 
-class App extends React.Component{
 
-  constructor(){
-    super()
-  }
+class App extends React.Component {
+
+    constructor() {
+        super()
+    }
 
 
-  render(){
+
+
+render()
+{
     return (
         <div>
 
-        <BrowserRouter>
-            <Menu/>
-            <Switch>
-              <Route path="/" exact render={()=> <Home /> } />
-              <Route path="/DataTest" render={()=><DataTest/>}/>
-            </Switch>
-          </BrowserRouter>
+            <BrowserRouter>
+                <Menu/>
+                <Switch>
+                    <Route path="/" exact render={() => <Home/>}/>
+                    <Route path="/DataTest" render={() => <DataTest/>}/>
+                </Switch>
+            </BrowserRouter>
         </div>
     );
   }
-
 }
 
-
+export default App
