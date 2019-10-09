@@ -1,7 +1,8 @@
-const express = require('express')
-var mysql = require('mysql')
-const cors= require('cors')
-serverLogin=require('./serverlogin')
+const express = require('express');
+const bcrypt = require('bcrypt');
+var mysql = require('mysql');
+const cors= require('cors');
+serverLogin=require('./serverlogin');
 
 var connection=mysql.createConnection(serverLogin.serverLogin)
 connection.connect();
@@ -49,19 +50,20 @@ app.post("/api/addbedrijf",(req,res)=>{
     })
 })
 
-
-
 // Zend een POST request dat de data uit de front-end in de database krijgt.
-app.post("/api/addgebruiker", (req, res) => {
+app.post("/api/addgebruiker",async (req, res) => {
     var data = req.body;
-    console.log("posting:");
-    connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, img_link) VALUES (?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth, data.img_link],
-        (error, results, fields) => {console.log(error);
+    data.pass = await bcrypt.hash(data.pass, 10 );
+    console.log("Toevoeging gebruiker:");
+    connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, img_link, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth, data.img_link, data.isWerkgever],
+        (error, results, fields) => {
         if (error) {
+            console.log(error);
             res.status(422);
             res.json({message:error});
         }else{
-            res.send("Done!")
+            res.status(201).send("Gebruiker toegevoegd.");
+            console.log("Gebruiker toegevoegd.");
         }
     });
 });

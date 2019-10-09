@@ -13,10 +13,11 @@ class Registratie extends React.Component{
             pass: '',
             phone: '',
             birth: '',
-            img_link: ''
+            img_link: '',
+            isWerkgever: 'false'
         };
         // Lijst om uit te lezen voor het POST request.
-        this.lijst=["firstName","lastName","email","pass","phone","birth","img_link"];
+        this.lijst=["firstName","lastName","email","pass","phone","birth","img_link", "isWerkgever"];
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -41,6 +42,7 @@ class Registratie extends React.Component{
     // Ververs de waarden wanneer deze veranderd worden door de gebruiker.
     handleInputChange(event) {
         const target = event.target;
+        // Laat de waarde de waarde zijn van het actieve veld. Als het input-type een checkbox is is de waarde of deze aangevinkt is of niet.
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
         this.setState({
@@ -63,7 +65,7 @@ class Registratie extends React.Component{
                 </div>
                 <div>
                     <label>Email</label>
-                    <input type='text' name="email" value={this.state.email} placeholder="" onChange={this.handleInputChange}/>
+                    <input type='email' name="email" value={this.state.email} placeholder="" onChange={this.handleInputChange}/>
                 </div>
                 <div>
                     <label>Telefoonnummer</label>
@@ -71,7 +73,7 @@ class Registratie extends React.Component{
                 </div>
                 <div>
                     <label>Geboortedatum</label>
-                    <input type='text' name="birth" value={this.state.birth} placeholder="" onChange={this.handleInputChange}/>
+                    <input type='date' name="birth" value={this.state.birth} placeholder="" onChange={this.handleInputChange}/>
                 </div>
                 <div>
                     <label>URL gebruikersafbeelding</label>
@@ -79,7 +81,11 @@ class Registratie extends React.Component{
                 </div>
                 <div>
                     <label>Wachtwoord</label>
-                    <input type='text' name="pass" value={this.state.pass} placeholder="" onChange={this.handleInputChange}/>
+                    <input type='password' name="pass" value={this.state.pass} placeholder="" onChange={this.handleInputChange}/>
+                </div>
+                <div>
+                    <label>Account voor werkgever</label>
+                    <input type='checkbox' name="isWerkgever" value={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange}/>
                 </div>
                 <button onClick={this.handleSubmit}>submit</button>
             </div>
