@@ -1,2 +1,2 @@
-import "./App.scss"
+import "./App.css"
 export { login } from "./Loginpage";
