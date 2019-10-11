@@ -1,3 +1,2 @@
 import "./App.scss"
 export { login } from "./Loginpage";
-export { Register } from "./Registerpage";
