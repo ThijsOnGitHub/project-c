@@ -28,77 +28,77 @@ class Home extends React.Component{
         const notifs = [{
             "id": "1",
             "person": "John Magellan",
-            "messageType": "3"
+            "messageType": "2"
         },
             {
                 "id": "2",
                 "person": "Hendrik Groen",
-                "messageType": "2"
+                "messageType": "1"
             },
             {
                 "id": "3",
                 "person": "Duikbroek Verheemst",
+                "messageType": "0"
+            },
+            {
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "3"
+            },
+            {
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "3"
+            },
+            {
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "3"
+            },
+            {
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "3"
+            },
+            {
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "3"
+            },
+            {
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "3"
+            },
+            {
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "2"
+            },
+            {
+                "id": "40,",
+                "person": "Geel Hoofd",
                 "messageType": "1"
             },
             {
                 "id": "40,",
                 "person": "Geel Hoofd",
-                "messageType": "4"
+                "messageType": "0"
             },
             {
                 "id": "40,",
                 "person": "Geel Hoofd",
-                "messageType": "4"
+                "messageType": "0"
             },
             {
                 "id": "40,",
                 "person": "Geel Hoofd",
-                "messageType": "4"
+                "messageType": "0"
             },
             {
                 "id": "40,",
                 "person": "Geel Hoofd",
-                "messageType": "4"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "4"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "4"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "4"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "4"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "4"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "4"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "4"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "4"
+                "messageType": "2"
             },
         ];
         return(
@@ -122,7 +122,7 @@ class Home extends React.Component{
                     <div className='Notifs'>
                         <h1>Meldingen</h1>
                         <div className="notifList">
-                            {notifs.map(notif => <Notification key={notif.id} person={notif.person} messageId={notif.messageId}/>)}
+                            {notifs.map(notif => <Notification key={notif.id} person={notif.person} messageId={notif.messageType}/>)}
                         </div>
                     </div>
                 </div>

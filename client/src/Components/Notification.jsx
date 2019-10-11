@@ -7,9 +7,10 @@ class NotificationItem {
     }
 
     sendNotif() {
+        let messages = [" wil een dienst ruilen.", " heeft zich ziek gemeld.", " gaat op vakantie.", " heeft je rooster bijgewerkt."];
         return (
             <div className='NotifItem'>
-                <p>Person: {this.person},<br/>messageId: {this.messageId}</p>
+                <p>{this.person}{messages[this.messageId]}</p>
             </div>
         )
     }
