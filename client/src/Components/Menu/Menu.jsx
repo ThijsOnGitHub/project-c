@@ -19,6 +19,8 @@ class Menu extends React.Component{
                     <li><Link to={'/Registratie'} >Registreren</Link></li>
                     <li><Link to={"/DataTest"}>Contact</Link></li>
                     <li><Link to={"/Rooster"}>Rooster</Link></li>
+                    <li><Link to={"/Loginpage"}>login</Link></li>
+
                 </ul>
 
             </div>
