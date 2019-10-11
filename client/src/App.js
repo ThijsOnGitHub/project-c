@@ -16,13 +16,14 @@ import addStringFunctions from "./Values/addStringFunctions";
 
 
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
+class App extends Component {
+
+    constructor() {
+        super()
         this.state = {
             isLogginActive: true,
             apiLink:"http://localhost:5000"
-        };
+        }
     }
 
 
@@ -38,6 +39,7 @@ class App extends React.Component {
                         {isLogginActive && (
                             <login containerRef={ref => (this.current = ref)} />
                         )}
+
                         <div>
                             <BrowserRouter>
                                 <Menu/>
@@ -64,7 +66,7 @@ class App extends React.Component {
 }
 
 
-export default App
+export default App;
 
 
 
