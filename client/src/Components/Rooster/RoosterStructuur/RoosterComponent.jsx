@@ -1,7 +1,7 @@
 import React from 'react'
 import DagField from "./DagField";
 import TimeMarker from "./TimeMarker";
-import './Rooster.css'
+import '../Rooster.css'
 import DagTitel from "./DagTitel";
 
 

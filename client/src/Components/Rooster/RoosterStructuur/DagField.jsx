@@ -1,6 +1,6 @@
 import React from 'react'
 import DagTitel from "./DagTitel";
-import RoosterItem from "./RoosterItem";
+import RoosterItem from "../RoosterItems/RoosterItem";
 import TimeMarker from "./TimeMarker";
 class DagField extends React.Component{
 
