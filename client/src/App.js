@@ -7,7 +7,7 @@ import MenuUnderlay from "./Components/Menu/MenuUnderlay";
 import DataTest from "./Pages/DataTest";
 
 import Loginpage from "./Pages/Loginpage";
-import {login, Register} from "./Pages/index.txs";
+import { login } from "./Pages/index.txs";
 
 import Registratie from "./Pages/Registratie";
 import Rooster from "./Pages/Rooster";
@@ -28,7 +28,7 @@ class App extends React.Component {
 
 
     render() {
-        addStringFunctions();
+        addStringFunctions()
         const { isLogginActive } = this.state;
         const current = isLogginActive ? "Register" : "Login";
         return (
@@ -38,13 +38,7 @@ class App extends React.Component {
                         {isLogginActive && (
                             <login containerRef={ref => (this.current = ref)} />
                         )}
-                        {!isLogginActive && (
-                            <Register containerRef={ref => (this.current = ref)} />
-                            )}
-                        )}
                         <div>
-
-
                             <BrowserRouter>
                                 <Menu/>
                                 <MenuUnderlay/>
