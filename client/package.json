@@ -10,8 +10,8 @@
     "react-scripts": "3.1.2"
   },
   "scripts": {
-    "prepareModulesClient": "npm install",
-    "start": "react-scripts start",
+    "prepaireClient": "npm install",
+    "startClient": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
