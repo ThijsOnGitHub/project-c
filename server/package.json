@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "prepareModulesClient": "npm install",
-    "startServer": "node server.js"
+    "startServer": "node server.js",
+    "devserver": "nodemon server.js"
+
   },
   "keywords": [],
   "author": "",
