@@ -49,7 +49,9 @@ app.post("/api/addbedrijf",(req,res)=>{
     })
 })
 
-
+app.get("/api/test",(req,res)=>{
+    res.status(200).send("Hello!")
+})
 
 // Zend een POST request dat de data uit de front-end in de database krijgt.
 app.post("/api/addgebruiker", (req, res) => {
