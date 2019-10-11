@@ -6,6 +6,22 @@ import Notification from "../Components/Notification";
 class Home extends React.Component{
     constructor(){
         super()
+        this.state={
+            uname:"",
+            pass:""
+        }
+        this.handleInputChange=this.handleInputChange.bind(this)
+    }
+
+
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
     }
 
     render() {
