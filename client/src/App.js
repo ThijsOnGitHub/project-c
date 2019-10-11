@@ -1,14 +1,11 @@
 import React, { Component }from 'react';
 import './app.css';
+import './App.scss'
 import {BrowserRouter,Switch,Route} from "react-router-dom";
 import Home from './Pages/Home'
 import Menu from "./Components/Menu/Menu";
 import MenuUnderlay from "./Components/Menu/MenuUnderlay";
 import DataTest from "./Pages/DataTest";
-
-import Loginpage from "./Pages/Loginpage";
-import { login } from "./Pages/index.txs";
-
 import Registratie from "./Pages/Registratie";
 import Rooster from "./Pages/Rooster";
 import addStringFunctions from "./Values/addStringFunctions";
@@ -47,7 +44,7 @@ class App extends Component {
                                 <Switch>
                                     <Route path="/" exact render={() => <Home/>}/>
                                     <Route path="/DataTest" render={() => <DataTest/>}/>
-                                    <Route path="/login" render={() => <Loginpage/>}/>
+                                    <Route path="/Login" render={() => <login/>}/>
                                     <Route path="/Registratie" render={()=><Registratie/>}/>
                                     <Route path="/Rooster" render={()=><Rooster apiLink={this.state.apiLink}/>}/>
 
