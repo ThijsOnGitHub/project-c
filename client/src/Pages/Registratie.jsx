@@ -14,7 +14,8 @@ class Registratie extends React.Component{
             phone: '',
             birth: '',
             img_link: '',
-            isWerkgever: 'false'
+            isWerkgever: 'false',
+            errormessage: ''
         };
         // Lijst om uit te lezen voor het POST request.
         this.lijst=["firstName","lastName","email","pass","phone","birth","img_link", "isWerkgever"];
@@ -45,50 +46,67 @@ class Registratie extends React.Component{
         // Laat de waarde de waarde zijn van het actieve veld. Als het input-type een checkbox is is de waarde of deze aangevinkt is of niet.
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-        this.setState({
-            [name]: value
-        });
+
+        /* Bepaal wat de fout in de input is en geef een passende foutmelding.
+        let err = '';
+        if (name === 'phone') {
+            if (value !="" && !Number(value)) {err = <strong>Telefoonnummer dient uitsluitend uit nummers te bestaan.</strong>;}
+        }
+        this.setState({errormessage: err});
+        */
+
+        this.setState({[name]: value});
     }
 
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
         return(
-            <div>
-                <h1>Registratie</h1>
-                <div>
+        <div id="reg">
+            <form>
+            <table>
+                <tbody>
+                <tr>
                     <label>Voornaam</label>
-                    <input type='text' name="firstName" value={this.state.firstName} placeholder="" onChange={this.handleInputChange}/>
-                </div>
-                <div>
+                    <td><input type='text' name="firstName" value={this.state.firstName} placeholder="Voornaam" onChange={this.handleInputChange}/></td>
+                </tr>
+                <tr>
                     <label>Achternaam</label>
-                    <input type='text' name="lastName" value={this.state.lastName} placeholder="" onChange={this.handleInputChange}/>
-                </div>
-                <div>
+                    <td><input type='text' name="lastName" value={this.state.lastName} placeholder="Achternaam" onChange={this.handleInputChange}/></td>
+                </tr>
+                <tr>
                     <label>Email</label>
-                    <input type='email' name="email" value={this.state.email} placeholder="" onChange={this.handleInputChange}/>
-                </div>
-                <div>
+                    <td><input type='email' name="email" value={this.state.email} placeholder="Email" onChange={this.handleInputChange}/></td>
+                </tr>
+                <tr>
                     <label>Telefoonnummer</label>
-                    <input type='text' name="phone" value={this.state.phone} placeholder="" onChange={this.handleInputChange}/>
-                </div>
-                <div>
+                    <td><input type='text' name="phone" value={this.state.phone} placeholder="Telefoonnummer" onChange={this.handleInputChange}/></td>
+                </tr>
+                <tr>
                     <label>Geboortedatum</label>
-                    <input type='date' name="birth" value={this.state.birth} placeholder="" onChange={this.handleInputChange}/>
-                </div>
-                <div>
+                    <td><input type='date' name="birth" value={this.state.birth} placeholder="Geboortedatum" onChange={this.handleInputChange}/></td>
+                </tr>
+                <tr>
                     <label>URL gebruikersafbeelding</label>
-                    <input type='text' name="img_link" value={this.state.img_link} placeholder="" onChange={this.handleInputChange}/>
-                </div>
-                <div>
+                    <td><input type='text' name="img_link" value={this.state.img_link} placeholder="URL gebruikersafbeelding" onChange={this.handleInputChange}/></td>
+                </tr>
+                <tr>
                     <label>Wachtwoord</label>
-                    <input type='password' name="pass" value={this.state.pass} placeholder="" onChange={this.handleInputChange}/>
-                </div>
-                <div>
+                    <td><input type='password' name="pass" value={this.state.pass} placeholder="Wachtwoord" onChange={this.handleInputChange}/></td>
+                </tr>
+                <tr>
                     <label>Account voor werkgever</label>
-                    <input type='checkbox' name="isWerkgever" value={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange}/>
-                </div>
+                    <td><input type='checkbox' name="isWerkgever" value={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange}/></td>
+                </tr>
+                /* Locatie van de foutmeldingen voor de input.
+                <tr>
+                    {this.state.errormessage}
+                </tr>
+                */
                 <button onClick={this.handleSubmit}>submit</button>
-            </div>
+                </tbody>
+            </table>
+            </form>
+        </div>
         )
     }
 }
