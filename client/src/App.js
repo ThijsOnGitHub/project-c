@@ -5,8 +5,7 @@ import Home from './Pages/Home'
 import Menu from "./Components/Menu/Menu";
 import DataTest from "./Pages/DataTest";
 import Loginpage from "./Pages/Loginpage";
-import{login, Register} from "./Pages/index.txs";
-import Registerpage from "./Pages/Registerpage";
+import {login, Register} from "./Pages/index.txs";
 
 
 class App extends React.Component {
@@ -39,7 +38,7 @@ class App extends React.Component {
                                     <Route path="/" exact render={() => <Home/>}/>
                                     <Route path="/DataTest" render={() => <DataTest/>}/>
                                     <Route path="/login" render={() => <Loginpage/>}/>
-                                    <Route path="/Register" render={() => <Registerpage/>}/>
+
                                 </Switch>
                             </BrowserRouter>
 
