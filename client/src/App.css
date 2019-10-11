@@ -59,6 +59,12 @@
   padding-left: 50px;
   padding-right: 50px;
 }
+.notifList {
+  overflow: auto;
+  max-height: 300px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+}
 .NotifItem {
   background: #dddddd;
   border-radius: 20px;

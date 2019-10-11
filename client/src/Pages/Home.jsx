@@ -1,6 +1,5 @@
 import React from 'react'
 import {Link} from "react-router-dom";
-import notifComponent from "./"
 
 import Notification from "../Components/Notification";
 
@@ -11,7 +10,82 @@ class Home extends React.Component{
 
     render() {
         const username = "User";
-        const notifComponent = dbNotifsmap(notif => <Notification key={notif.id} person={notif.person} messageId={notif.messageId}/>);
+        var notifs = [{
+            "id" : "1",
+                "person" : "John Magellan",
+                "messageType" : "3"
+        },
+        {
+            "id" : "2",
+            "person" : "Hendrik Groen",
+            "messageType" : "2"
+        },
+        {
+            "id" : "3",
+            "person" : "Duikbroek Verheemst",
+            "messageType" : "1"
+        },
+        {
+            "id" : "40,",
+            "person" : "Geel Hoofd",
+            "messageType" : "4"
+        },
+            {
+                "id" : "40,",
+                "person" : "Geel Hoofd",
+                "messageType" : "4"
+            },
+            {
+                "id" : "40,",
+                "person" : "Geel Hoofd",
+                "messageType" : "4"
+            },
+            {
+                "id" : "40,",
+                "person" : "Geel Hoofd",
+                "messageType" : "4"
+            },
+            {
+                "id" : "40,",
+                "person" : "Geel Hoofd",
+                "messageType" : "4"
+            },
+            {
+                "id" : "40,",
+                "person" : "Geel Hoofd",
+                "messageType" : "4"
+            },
+            {
+                "id" : "40,",
+                "person" : "Geel Hoofd",
+                "messageType" : "4"
+            },
+            {
+                "id" : "40,",
+                "person" : "Geel Hoofd",
+                "messageType" : "4"
+            },
+            {
+                "id" : "40,",
+                "person" : "Geel Hoofd",
+                "messageType" : "4"
+            },
+            {
+                "id" : "40,",
+                "person" : "Geel Hoofd",
+                "messageType" : "4"
+            },
+            {
+                "id" : "40,",
+                "person" : "Geel Hoofd",
+                "messageType" : "4"
+            },
+            {
+                "id" : "40,",
+                "person" : "Geel Hoofd",
+                "messageType" : "4"
+            },
+        ];
         return(
             <div className="Home">
                 <h1 align="center" style={{paddingTop: 20}}>Welcome, {username}!</h1>
@@ -33,7 +107,9 @@ class Home extends React.Component{
                     <img className='ScheduleImg' src="https://imgur.com/Y8x0HaC.png" alt="schedule placeholder"/>
                     <div className='Notifs'>
                         <h1>Meldingen</h1>
-                        {notifComponent}
+                        <div className="notifList">
+                            {notifs.map(notif => <Notification key={notif.id} person={notif.person} messageId={notif.messageId}/>)}
+                        </div>
                     </div>
                 </div>
             </div>
