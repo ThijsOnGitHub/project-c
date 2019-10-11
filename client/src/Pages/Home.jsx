@@ -5,11 +5,11 @@ import Notification from "../Components/Notification";
 
 class Home extends React.Component{
     constructor(){
-        super()
+        super();
         this.state={
             uname:"",
             pass:""
-        }
+        };
         this.handleInputChange=this.handleInputChange.bind(this)
     }
 
@@ -25,86 +25,84 @@ class Home extends React.Component{
     }
 
     render() {
-        const username = "User";
-        var notifs = [{
-            "id" : "1",
-                "person" : "John Magellan",
-                "messageType" : "3"
-        },
-        {
-            "id" : "2",
-            "person" : "Hendrik Groen",
-            "messageType" : "2"
-        },
-        {
-            "id" : "3",
-            "person" : "Duikbroek Verheemst",
-            "messageType" : "1"
-        },
-        {
-            "id" : "40,",
-            "person" : "Geel Hoofd",
-            "messageType" : "4"
+        const notifs = [{
+            "id": "1",
+            "person": "John Magellan",
+            "messageType": "3"
         },
             {
-                "id" : "40,",
-                "person" : "Geel Hoofd",
-                "messageType" : "4"
+                "id": "2",
+                "person": "Hendrik Groen",
+                "messageType": "2"
             },
             {
-                "id" : "40,",
-                "person" : "Geel Hoofd",
-                "messageType" : "4"
+                "id": "3",
+                "person": "Duikbroek Verheemst",
+                "messageType": "1"
             },
             {
-                "id" : "40,",
-                "person" : "Geel Hoofd",
-                "messageType" : "4"
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "4"
             },
             {
-                "id" : "40,",
-                "person" : "Geel Hoofd",
-                "messageType" : "4"
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "4"
             },
             {
-                "id" : "40,",
-                "person" : "Geel Hoofd",
-                "messageType" : "4"
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "4"
             },
             {
-                "id" : "40,",
-                "person" : "Geel Hoofd",
-                "messageType" : "4"
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "4"
             },
             {
-                "id" : "40,",
-                "person" : "Geel Hoofd",
-                "messageType" : "4"
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "4"
             },
             {
-                "id" : "40,",
-                "person" : "Geel Hoofd",
-                "messageType" : "4"
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "4"
             },
             {
-                "id" : "40,",
-                "person" : "Geel Hoofd",
-                "messageType" : "4"
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "4"
             },
             {
-                "id" : "40,",
-                "person" : "Geel Hoofd",
-                "messageType" : "4"
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "4"
             },
             {
-                "id" : "40,",
-                "person" : "Geel Hoofd",
-                "messageType" : "4"
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "4"
+            },
+            {
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "4"
+            },
+            {
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "4"
+            },
+            {
+                "id": "40,",
+                "person": "Geel Hoofd",
+                "messageType": "4"
             },
         ];
         return(
             <div className="Home">
-                <h1 align="center" style={{paddingTop: 20}}>Welcome, {username}!</h1>
                 <div align='center' className="LinebreakPrevent">
                     <Link to='./Rooster'>
                         <figure>

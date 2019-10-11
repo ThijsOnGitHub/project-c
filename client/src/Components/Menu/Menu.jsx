@@ -1,6 +1,5 @@
 import React from 'react'
 import {Link} from "react-router-dom";
-import Logo from "../Logo";
 
 class Menu extends React.Component{
     constructor(){
@@ -9,13 +8,14 @@ class Menu extends React.Component{
 
     render() {
         return(
-            <div class="menu">
+            <div className="menu">
                 <ul>
-                    <li><img id='logo' src="https://i.imgur.com/HVmQHos.png"/></li>
-                    <li><Link to={'/'} className="active">Home</Link></li>
+                    <li><img id='logo' src="https://i.imgur.com/HVmQHos.png" alt="Logo RoosterIT"/></li>
+                    <li><Link to={'/'} className="active">Inloggen</Link></li>
                     <li><Link to={'/Registratie'} >Registreren</Link></li>
                     <li><Link to={"/DataTest"}>Contact</Link></li>
                     <li><Link to={"/Rooster"}>Rooster</Link></li>
+                    <li><Link to={"/Home"}>Home(Temp)</Link></li>
                 </ul>
             </div>
 

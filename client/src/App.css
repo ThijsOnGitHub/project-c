@@ -277,6 +277,7 @@ button:hover {
   background: #eeeeee;
   align-content: center;
   justify-content: center;
+  padding-top: 30px;
 }
 .Home figcaption {
   color: white;
