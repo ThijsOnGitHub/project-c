@@ -4,12 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-
-
     "prepaireServer": "npm install",
     "startServer": "node server.js",
     "devServer": "nodemon server.js"
-
   },
   "keywords": [],
   "author": "",
