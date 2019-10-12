@@ -66,14 +66,6 @@ class Registratie extends React.Component{
         // Laat de waarde de waarde zijn van het actieve veld. Als het input-type een checkbox is is de waarde of deze aangevinkt is of niet.
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-
-        /* Bepaal wat de fout in de input is en geef een passende foutmelding.
-        let err = '';
-        if (name === 'phone') {
-            if (value !="" && !Number(value)) {err = <strong>Telefoonnummer dient uitsluitend uit nummers te bestaan.</strong>;}
-        }
-        this.setState({errormessage: err});
-        */
         this.setState({[name]: value});
     }
 
@@ -117,11 +109,6 @@ class Registratie extends React.Component{
                     <label>Account voor werkgever</label>
                     <td><input type='checkbox' name="isWerkgever" value={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange}/></td>
                 </tr>
-                /* Locatie van de foutmeldingen voor de input.
-                <tr>
-                    {this.state.errormessage}
-                </tr>
-                */
                 <button disabled={!isEnabled} onClick={this.handleSubmit}>Registreer</button>
                 </tbody>
             </table>
