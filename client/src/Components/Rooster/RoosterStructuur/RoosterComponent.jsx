@@ -32,15 +32,15 @@ class RoosterComponent extends React.Component{
         return(
             <div>
                 <div className="rooster">
-                    <div className="dagVelden dagTitles">
+                    <div className="dag dagTitles">
                         {datums.map(value => {
                             return <DagTitel datum={value}/>
                         })}
                     </div>
-                    <div className="roosterVelden">
+                    <div className="roosterVelden ">
                         {/*Hier wordt de zijkant met de tijden gegenereerd  */}
                     <TimeMarker interval={this.props.markerInterval} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} />
-                    <div className="row dagVelden">
+                    <div className="row dag dagTijden">
                     {
                         datums.map(value => <DagField datum={value} renderItems={
                             /* *1 Hier worden alle roosterItems verdeeld over de dagen d.m.v. de datum die in het object stond */
@@ -58,4 +58,5 @@ class RoosterComponent extends React.Component{
             )
     }
 }
+
 export default RoosterComponent
