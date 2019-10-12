@@ -1,5 +1,5 @@
 import React from 'react'
-import functions from "../../../Values/Functions";
+import functions from "../../../Values/functions";
 
 class TimeMarker extends React.Component{
 
