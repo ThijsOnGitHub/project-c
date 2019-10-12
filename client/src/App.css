@@ -1,11 +1,23 @@
+
+:root{
+  --background:#eeeeee;
+  --accentColor:#622081;
+  --negAccentColor:#ffffff;
+  --lijnen:#6f6f6f ;
+}
+
 body{
   margin: 0;
+  background: var(--background);
 }
+/*global css*/
+
+
 
 /*--------------Global Menu--------------*/
 .menu{
   font-family: 'Open Sans', sans-serif;
-  background: #622081;
+  background: var(--accentColor);
   vertical-align: center;
 }
 .menu #logo{
@@ -100,16 +112,12 @@ body{
   text-align: center;
 }
 /* Werknemer RoosterItems*/
-.onAccent{
-    color:var(--onAccentColor);
-    fill:var(--onAccentColor)}
+
+
 body{
   margin: 0;
 }
-:root{
-  --accentColor:#622081;
-  --negAccentColor:#ffffff;
-}
+
 /*--------------Global Menu--------------*/
 .menu{
   font-family: 'Open Sans', sans-serif;
@@ -160,6 +168,7 @@ body{
   text-align: center;
   font-weight: 400;
 }
+
 .weighted{
   font-family: 'Open Sans', sans-serif;
   font-weight: 700;
