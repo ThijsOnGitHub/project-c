@@ -14,7 +14,7 @@ class Registratie extends React.Component{
             phone: '',
             birth: '',
             img_link: '',
-            isWerkgever: 'false',
+            isWerkgever: '',
             errormessage: ''
         };
         // Lijst om uit te lezen voor het POST request.
@@ -23,8 +23,28 @@ class Registratie extends React.Component{
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
+    canBeSubmitted() {
+        const {firstName, lastName, email, pass, phone, birth, img_link} = this.state;
+        return (
+            firstName.length > 0 &&
+            lastName.length > 0 &&
+            email.length > 0 &&
+            pass.length > 0 &&
+            phone.length > 0 &&
+            birth.length > 0 &&
+            img_link.length > 0
+        )
+    }
+
     // Converteer de waarden uit de state naar een JSON string om die in een POST request te plaatsen en te versturen.
-    handleSubmit() {
+    handleSubmit(event) {
+        // Laat de data niet verstuurd worden wanneer de input validatie niet succesvol is.
+        if (!this.canBeSubmitted()) {
+            event.preventDefault();
+            return;
+        }
+
         var object={};
         this.lijst.forEach((value)=>{
             object[value]=this.state[value]
@@ -54,12 +74,12 @@ class Registratie extends React.Component{
         }
         this.setState({errormessage: err});
         */
-
         this.setState({[name]: value});
     }
 
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
+        const isEnabled =  this.canBeSubmitted();
         return(
         <div id="reg">
             <form>
@@ -102,7 +122,7 @@ class Registratie extends React.Component{
                     {this.state.errormessage}
                 </tr>
                 */
-                <button onClick={this.handleSubmit}>submit</button>
+                <button disabled={!isEnabled} onClick={this.handleSubmit}>Registreer</button>
                 </tbody>
             </table>
             </form>
