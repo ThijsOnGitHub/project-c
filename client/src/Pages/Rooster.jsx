@@ -1,12 +1,14 @@
 import React from 'react'
-import RoosterComponent from "../Components/Rooster/RoosterComponent";
-import RoosterItem from "../Components/Rooster/RoosterItem";
-import WerknemerItem from "../Components/Rooster/WerknemerItem";
+import RoosterComponent from "../Components/Rooster/RoosterStructuur/RoosterComponent";
+import RoosterItem from "../Components/Rooster/RoosterItems/RoosterItem";
+import WerknemerItem from "../Components/Rooster/RoosterItems/WerknemerItem";
+import WeekKiezer from "../Components/Rooster/WeekKiezer";
 class Rooster extends React.Component{
     constructor(){
         super()
         this.state={
-            agendaJSON:[]
+            agendaJSON:[],
+            beginDatum:new Date()
         }
     }
 
@@ -14,7 +16,16 @@ class Rooster extends React.Component{
         //Hier wordt de data uit de server gehaald en in de state gezet
         var res=await fetch(this.props.apiLink+"/api/getAgenda/2").catch(reason => {console.log(reason)})
         var agendaJSON=await res.json()
-        this.setState({agendaJSON:agendaJSON})
+        this.setState({
+            agendaJSON:agendaJSON
+        })
+    }
+
+    changeBeginDatum=(datum)=>{
+        return new Promise((resolve => {
+            this.setState({beginDatum:datum},resolve())
+            })
+        )
 
     }
 
@@ -22,8 +33,15 @@ class Rooster extends React.Component{
     render() {
         return (
             <div>
-                {/*Rooster Component maakt de rooster structuur waar roosterItems ingaan*/}
-                <RoosterComponent markerInterval={new Date(0,0,0,0,30)}  startDate={new Date(2019,8,30,0,0,0)} beginTijd={new Date(0,0,0,7)} eindTijd={new Date(0,0,0,20)} height={600}
+                <WeekKiezer beginDatum={this.state.beginDatum} changeBeginDatum={this.changeBeginDatum}/>
+
+                {/*Rooster Component maakt de rooster structuur waar roosterItems ingaat*/}
+                <RoosterComponent
+                    startDate={this.state.beginDatum}
+                    markerInterval={new Date(0,0,0,0,30)}
+                    beginTijd={new Date(0,0,0,7)}
+                    eindTijd={new Date(0,0,0,20)}
+                    height={600}
                     /*
                     In de prop renderItems worden alle items gemaakt die in het rooster gaan
                     De items worden een object met {datum:genereer functie}
