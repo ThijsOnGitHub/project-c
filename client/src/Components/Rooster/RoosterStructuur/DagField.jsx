@@ -12,7 +12,6 @@ class DagField extends React.Component{
     }
 
     render() {
-        console.log(this.props.renderItems)
         return(
             <div>
 

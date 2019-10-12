@@ -45,8 +45,6 @@ class RoosterComponent extends React.Component{
                         datums.map(value => <DagField datum={value} renderItems={
                             /* *1 Hier worden alle roosterItems verdeeld over de dagen d.m.v. de datum die in het object stond */
                             this.props.renderItems.filter(value1=>{
-                                console.log(Object.keys(value1)[0])
-                                console.log(value.getTime())
                             return Number.parseInt(Object.keys(value1)[0])===value.getTime()
 
                         })} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} markerInterval={this.props.markerInterval}/>)
