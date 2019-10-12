@@ -14,8 +14,9 @@ class App extends React.Component{
 
   constructor(){
     super()
+  var options=["http://145.24.222.80:5000","http://localhost:5000"]
     this.state={
-        apiLink:"http://localhost:5000"
+        apiLink:options[1]
     }
   }
 
