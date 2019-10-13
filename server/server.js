@@ -2,18 +2,46 @@ const express = require('express')
 var mysql = require('mysql')
 const cors= require('cors')
 serverLogin=require('./serverlogin')
-
-
-
-
+const bcrypt = require('bcrypt')
+const passport = require('passport')
+const flash = require('express-flash')
+const session = require('express-session')
+const methodOverride = require('method-override')
 
 var connection=mysql.createConnection(serverLogin.serverLogin)
 connection.connect();
-
 var app = express()
+
 
 app.use(cors())
 app.use(express.json())
+
+const initializePassport = require('./passport-config')
+initializePassport(
+    passport,
+    email => users.find(user => user.email === email),
+    id => users.find(user => user.id === id)
+
+)
+
+const users = []
+
+
+
+app.set('view-engine', 'ejs')
+app.use(express.urlencoded({ extended: false }))
+app.use(flash())
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(methodOverride('_method'))
+
+
 
 app.get("/api/bedrijf",async (req,res)=>{
     console.log("Get bedrijven")
@@ -70,13 +98,70 @@ app.post("/api/addgebruiker", (req, res) => {
     });
 });
 
-app.get("/api/gebruiker",async (req,res)=>{
-    console.log("Get gebruikers")
-    connection.query('SELECT email, pass FROM gebruiker', (error, results, fields) =>{
+app.post("/api/gebruiker",async (req,res)=>{
+    console.log("gebruiker")
+    connection.query('SELECT email, pass FROM gebruiker ', (error, results, fields) =>{
+
         res.json(results)
     });
 })
 
+app.get('/', checkAuthenticated, (req, res) => {
+
+    res.render('index.ejs', { name: req.email })
+
+})
+
+
+
+app.get('/Home.jsx', checkNotAuthenticated, (req, res) => {
+
+
+
+    res.render('home.jsx')
+
+})
+
+
+
+app.post('/Home.jsx', checkNotAuthenticated, passport.authenticate('local', {
+
+    successRedirect: '/',
+
+    failureRedirect: '/login',
+
+    failureFlash: true
+
+}))
+
+app.delete('/logout', (req, res) => {
+
+    req.logOut()
+
+    res.redirect('/login')
+
+})
+
+
+
+function checkAuthenticated(req, res, next) {
+
+    if (req.isAuthenticated()) {
+
+        return next()
+
+    }
+
+    res.redirect('/Home')
+
+}
+
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return res.redirect('/')
+    }
+    next()
+}
 
 app.listen(5000,()=> {
     console.log("listening")
