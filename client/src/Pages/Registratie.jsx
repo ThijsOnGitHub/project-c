@@ -14,7 +14,7 @@ class Registratie extends React.Component{
             phone: '123',
             birth: '03/10/2019',
             img_link: 'www',
-            isWerkgever: 'false'
+            isWerkgever: false
         };
         // Lijst om uit te lezen voor het POST request.
         this.lijst=["firstName","lastName","email","pass","phone","birth","img_link", "isWerkgever"];
@@ -26,7 +26,13 @@ class Registratie extends React.Component{
     handleSubmit() {
         var object={};
         this.lijst.forEach((value)=>{
-            object[value]=this.state[value]
+            var returnValue=this.state[value]
+            if(typeof returnValue==='boolean'){
+                returnValue=returnValue?1:0
+            }else if (value==="birth"){
+                returnValue=new Date(returnValue).toLocaleDateString('en-US',{year:'2-digit',month:"2-digit",day:"2-digit"},"UTC")
+            }
+            object[value]=returnValue
         });
         console.log("sending");
         console.log(object);
