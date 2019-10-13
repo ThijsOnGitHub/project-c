@@ -3,6 +3,10 @@ var mysql = require('mysql')
 const cors= require('cors')
 serverLogin=require('./serverlogin')
 
+
+
+
+
 var connection=mysql.createConnection(serverLogin.serverLogin)
 connection.connect();
 
@@ -65,6 +69,14 @@ app.post("/api/addgebruiker", (req, res) => {
         }
     });
 });
+
+app.get("/api/gebruiker",async (req,res)=>{
+    console.log("Get gebruikers")
+    connection.query('SELECT email, pass FROM gebruiker', (error, results, fields) =>{
+        res.json(results)
+    });
+})
+
 
 app.listen(5000,()=> {
     console.log("listening")
