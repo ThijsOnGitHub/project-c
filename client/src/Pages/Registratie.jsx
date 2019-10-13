@@ -7,13 +7,13 @@ class Registratie extends React.Component{
         super(props);
         this.state = {
             // Globale variabelen.
-            firstName: 'a',
-            lastName: 'a',
-            email: 'a@a.nl',
-            pass: '123',
-            phone: '123',
-            birth: '03/10/2019',
-            img_link: 'www',
+            firstName: '',
+            lastName: '',
+            email: '',
+            pass: '',
+            phone: '',
+            birth: '',
+            img_link: '',
             isWerkgever: false
         };
         // Lijst om uit te lezen voor het POST request.
