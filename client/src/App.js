@@ -8,14 +8,15 @@ import MenuUnderlay from "./Components/Menu/MenuUnderlay";
 import DataTest from "./Pages/DataTest";
 import Registratie from "./Pages/Registratie";
 import Rooster from "./Pages/Rooster";
-import addStringFunctions from "./Values/addStringFunctions";
+import addStringFunctions from "./Values/addFunctions";
 
 class App extends React.Component{
 
   constructor(){
     super()
+  var options=["http://145.24.222.80:5000","http://localhost:5000"]
     this.state={
-        apiLink:"http://localhost:5000"
+        apiLink:options[1]
     }
   }
 

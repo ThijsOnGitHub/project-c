@@ -1,5 +1,5 @@
 import React from 'react'
-import {ReactComponent as MoreOptions} from "../../icons/more_horiz-24px.svg";
+import {ReactComponent as MoreOptions} from "../../../icons/more_horiz-24px.svg";
 
 class WerknemerItem extends React.Component{
     constructor(){
