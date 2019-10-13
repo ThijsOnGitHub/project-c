@@ -10,13 +10,15 @@ import Rooster from "./Pages/Rooster";
 import addStringFunctions from "./Values/addStringFunctions";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
+import addStringFunctions from "./Values/addFunctions";
 
 class App extends React.Component{
 
   constructor(){
     super();
+  var options=["http://145.24.222.80:5000","http://localhost:5000"]
     this.state={
-        apiLink:"http://localhost:5000"
+        apiLink:options[1]
     }
   }
 

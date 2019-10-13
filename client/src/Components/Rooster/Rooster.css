@@ -3,7 +3,9 @@
     flex-direction: row;
     width: 100%;
 }
-
+.centerText{
+    text-align: center;
+}
 .absolute{
     position: absolute;
     width: 100%;
@@ -13,16 +15,28 @@
     width: 98%;
     height: 0px;
 }
+
 .DagField{
-    border:black solid 2px;
+    border-style:solid ;
+    border-width: 2px 1.5px 2px 1.5px;
+    border-color: var(--lijnen);
     position:relative;
+    background: white;
 }
+
+
+
 .roosterItem{
     background:var(--accentColor);
     border-radius:15px;
-
 }
-
+.WeekKiezer{
+    margin: 10px;
+}
+.WeekKiezer > *{
+    margin: auto 10px;
+    justify-content: center
+}
 .isideItem{
     padding: 5px 10px;
 }
@@ -36,6 +50,7 @@
 .right{
     margin-left: auto;
 }
+
 .row{
     display: flex;
     flex-direction: row;
@@ -43,6 +58,7 @@
 .dagTitles{
     padding-left: 50px;
     padding-right: 7px;
+    transition-delay:0.5s ;
 }
 
 .rooster{
@@ -60,12 +76,24 @@
     min-width: 1385px;
 }
 
-.dagVelden{
+.dagTijden >:first-child .DagField{
+   border-radius: 10px 0px 0px 10px;
+    border-width: 2px 1.5px 2px 2px;
+}
+
+.dagTijden >:last-child .DagField{
+    border-radius: 0px 10px 10px 0px;
+    border-width: 2px 2px 2px 1.5px;
+}
+
+
+.dag{
     display: flex;
 }
-.dagVelden > div{
+.dag > div{
     flex: 1 0 190px;
 }
+
 
 
 /* width */
