@@ -40,8 +40,8 @@
 .isideItem{
     padding: 5px 10px;
 }
-.noTopMargin{
-    margin: auto 0;
+.noMargin{
+    margin: 0 0;
 }
 .column{
     display: flex;

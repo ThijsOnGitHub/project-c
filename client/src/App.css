@@ -69,10 +69,31 @@ body{
   font-weight: 700;
 }
 
+/* More options menu */
 
-
-
-
+.chooseMenu{
+  position: relative;
+}
+.chooseMenu>div{
+  position: absolute;
+  background: white;
+  border-radius: 20px;
+  color: black;
+  padding: 10px;
+  width:210px;
+  z-index: 99;
+}
+.chooseMenu > summary::-webkit-details-marker {
+  display: none;
+}
+.chooseMenu > summary{
+width:fit-content;
+  position: relative;
+}
+.chooseMenu > summary{
+    width:fit-content;
+    position: relative;
+}
 
 
 
