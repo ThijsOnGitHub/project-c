@@ -7,10 +7,10 @@ import MenuUnderlay from "./Components/Menu/MenuUnderlay";
 import DataTest from "./Pages/DataTest";
 import Registratie from "./Pages/Registratie";
 import Rooster from "./Pages/Rooster";
-import addStringFunctions from "./Values/addStringFunctions";
+import addFunctions from "./Values/addFunctions";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
-import addStringFunctions from "./Values/addFunctions";
+
 
 class App extends React.Component{
 
@@ -26,7 +26,7 @@ class App extends React.Component{
 
   render(){
       // this programm adds new string functions
-      addStringFunctions();
+      addFunctions()
     return (
         <div>
         <BrowserRouter>
