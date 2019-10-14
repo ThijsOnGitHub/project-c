@@ -44,7 +44,13 @@ class WeekKiezer extends React.Component{
     }
 
     changeToMonday=(date)=>{
-        return new Date(date.getTime() - ((24*60*60*1000)*(date.getDay()-1)) )
+        var amountBack=0
+        if(date.getDay()===0){
+            amountBack=6
+        }else{
+            amountBack = date.getDay()-1
+        }
+        return new Date(date.getFullYear(),date.getMonth(),date.getDate()-amountBack)
     }
 
     updateSelects=()=>{
