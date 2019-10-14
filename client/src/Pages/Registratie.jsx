@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-var API_LINK = ;
 
 class Registratie extends React.Component{
     constructor(props){
