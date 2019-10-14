@@ -59,9 +59,7 @@ class WeekKiezer extends React.Component{
 
     componentDidMount() {
         // Als de ingevoederde datum geen maandag is wordt deze meteen omgezet naar de maandag in de week
-        if(this.props.beginDatum.getDay()!==1){
             this.props.changeBeginDatum(this.changeToMonday(this.props.beginDatum))
-        }
         this.updateSelects()
     }
 
