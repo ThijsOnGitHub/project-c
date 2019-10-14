@@ -2,9 +2,9 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 var mysql = require('mysql');
 const cors= require('cors');
-serverLogin=require('./serverlogin');
+serverSecret=require('./serverSecret');
 
-var connection=mysql.createConnection(serverLogin.serverLogin);
+var connection=mysql.createConnection(serverSecret.serverSecret.databaseLogin);
 connection.connect();
 
 var app = express();
@@ -71,6 +71,17 @@ app.post("/api/addgebruiker",async (req, res) => {
         }
     });
 });
+
+app.post("/api/Login", (req,res) =>{
+    console.log(req.body)
+    connection.query("SELECT email,pass FROM gebruiker where email =?",[req.body.email],(err,values,field)=>{
+        if(err){
+            res.send("Not valid")
+        }
+        bcrypt.compare(req.body.pass,values.pass,(res)=>{
+            console.log(res)
+        })
+    })})
 
 app.listen(5000,()=> {
     console.log("listening")
