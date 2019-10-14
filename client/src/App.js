@@ -34,8 +34,7 @@ class App extends React.Component{
             <MenuUnderlay/>
             <Switch>
               <Route path="/" exact render={()=> <Login /> } />
-              <Route path="/DataTest" render={()=><DataTest/>}/>
-              <Route path="/Registratie" render={()=><Registratie/>}/>
+              <Route path="/Registratie" render={()=><Registratie apiLink={this.state.apiLink}/>}/>
               <Route path="/Rooster" render={()=><Rooster apiLink={this.state.apiLink}/>}/>
               <Route path="/Home" render={()=><Home/>}/>
             </Switch>
