@@ -21,14 +21,14 @@ class RoosterComponent extends React.Component{
     render() {
         // Hier worden alle datums die weergeven moeten worden gegenereerd
         var datums=[0,1,2,3,4,5,6].map((value,index) => {
-            var newDate=new Date(this.props.startDate.toString())
-            var newValue=newDate.getDate()+index
-            newDate.setDate(newValue)
+            var newDate=new Date(this.props.startDate.toString());
+            var newValue=newDate.getDate()+index;
+            newDate.setDate(newValue);
             return newDate
-        })
+        });
 
         // Hier wordt berekend hoeveel pixels 1 uur is
-        var hourHeight=this.props.height/(this.props.eindTijd.getHours()-this.props.beginTijd.getHours())
+        var hourHeight=this.props.height/(this.props.eindTijd.getHours()-this.props.beginTijd.getHours());
         return(
             <div>
                 <div className="rooster">

@@ -21,20 +21,20 @@ app.get("/api/bedrijf",async (req,res)=>{
 
 
 app.get("/api/getAgenda/:userId",(req,res)=>{
-    console.log("get agenda from user: "+req.params.userId)
+    console.log("get agenda from user: "+req.params.userId);
 
     connection.query('SELECT datum,beginTijd,eindTijd FROM roosterItems where userId=?',[req.params.userId],(err,values)=>{
         //Hier worden de tijden omgezet in javascript format zodat ze tot DATE object kunnen worden gemaakt
         var newValues=values.map(value => {
-            value.beginTijd=`1899-12-31T${value.beginTijd}.000`
-            value.eindTijd=`1899-12-31T${value.eindTijd}.000`
+            value.beginTijd=`1899-12-31T${value.beginTijd}.000`;
+            value.eindTijd=`1899-12-31T${value.eindTijd}.000`;
             return value
-        })
+        });
         res.json(newValues)
     })
 
 
-})
+});
 
 app.post("/api/addbedrijf",(req,res)=>{
     var data=req.body;
@@ -48,11 +48,11 @@ app.post("/api/addbedrijf",(req,res)=>{
             res.send("Done!")
         }
     })
-})
+});
 
 app.get("/api/test",(req,res)=>{
     res.status(200).send("Hello!")
-})
+});
 
 // Zend een POST request dat de data uit de front-end in de database krijgt.
 app.post("/api/addgebruiker",async (req, res) => {
@@ -70,6 +70,23 @@ app.post("/api/addgebruiker",async (req, res) => {
             console.log("Gebruiker toegevoegd.");
         }
     });
+});
+
+app.post("/api/addnotif",async (req, res) => {
+    var data = req.body;
+    console.log("Notificatie toevoegen: ");
+    connection.query("INSERT INTO notifications (userId, messageType) VALUES (?,?)", [data.userId, data.messageType],
+        (error, results, fields) => {
+        if (error) {
+            console.log(error);
+            res.status(422);
+            res.json({message:error});
+        }
+        else {
+            res.status(201).send("Notificatie toegevoegd.");
+            console.log("Notificatie toegevoegd.")
+        }
+    })
 });
 
 app.listen(5000,()=> {

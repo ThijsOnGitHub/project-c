@@ -4,8 +4,8 @@ class NotificationItem {
     constructor(person, messageId) {
         this.person = person;
         this.messageId = messageId;
+        addNotif(this);
     }
-
     sendNotif() {
         let messages = [" wil een dienst ruilen.", " heeft zich ziek gemeld.", " gaat op vakantie.", " heeft je rooster bijgewerkt."];
         return (

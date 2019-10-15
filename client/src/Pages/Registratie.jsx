@@ -25,7 +25,7 @@ class Registratie extends React.Component{
     handleSubmit() {
         var object={};
         this.lijst.forEach((value)=>{
-            var returnValue=this.state[value]
+            var returnValue=this.state[value];
             if(typeof returnValue==='boolean'){
                 returnValue=returnValue?1:0
             }else if (value==="birth"){
