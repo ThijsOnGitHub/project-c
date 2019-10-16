@@ -518,9 +518,21 @@ button:hover {
   display: block;
 }
 
+#reg table button:disabled {
+  background-color: #ad35d7;
+  opacity: .5;
+}
+
 #reg label {
   margin: auto;
 }
+
+.error {
+  border: 1px solid red;
+}
+
+/* Andere dingen */
+
 .LinebreakPrevent {
   display: flex;
   flex-direction: row;
