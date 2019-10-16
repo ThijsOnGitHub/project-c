@@ -89,7 +89,7 @@ app.post("/api/addnotif",async (req, res) => {
 
 app.get("/api/getnotifs", (req, res) => {
     console.log("Getting notifs...");
-    connection.query('SELECT firstName, lastName, messageType FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id',[],(err,result,val)=> {
+    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id',[],(err,result,val)=> {
         if (err!==null) {
             console.log(err);
             res.status(400).send()
