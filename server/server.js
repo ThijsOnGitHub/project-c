@@ -5,8 +5,6 @@ const cors= require('cors');
 serverLogin=require('./serverlogin');
 
 var connection=mysql.createConnection(serverLogin.serverLogin);
-connection.connect();
-
 var app = express();
 
 app.use(cors());
@@ -75,7 +73,7 @@ app.post("/api/addgebruiker",async (req, res) => {
 app.post("/api/addnotif",async (req, res) => {
     var data = req.body;
     console.log("Notificatie toevoegen: ");
-    connection.query("INSERT INTO notifications (userId, messageType) VALUES (?,?)", [data.userId, data.messageType],
+    connection.query("INSERT INTO Notifications (userId, messageType, bedrijfId) VALUES (?,?,?)", [data.person, data.messageId, data.bedrijfId],
         (error, results, fields) => {
         if (error) {
             console.log(error);
@@ -86,6 +84,19 @@ app.post("/api/addnotif",async (req, res) => {
             res.status(201).send("Notificatie toegevoegd.");
             console.log("Notificatie toegevoegd.")
         }
+    })
+});
+
+app.get("/api/getnotifs", (req, res) => {
+    console.log("Getting notifs...");
+    connection.query('SELECT firstName, lastName, messageType FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id',[],(err,result,val)=> {
+        if (err!==null) {
+            console.log(err);
+            res.status(400).send()
+        }
+        console.log(val);
+        console.log(result);
+        res.json(result)
     })
 });
 

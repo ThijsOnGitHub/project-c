@@ -1,26 +1,27 @@
 import React from "react"
 
-class NotificationItem {
-    constructor(person, messageId) {
-        this.person = person;
-        this.messageId = messageId;
-        addNotif(this);
+class NotificationItem extends React.Component {
+    constructor() {
+        super();
     }
+
+
     sendNotif() {
         let messages = [" wil een dienst ruilen.", " heeft zich ziek gemeld.", " gaat op vakantie.", " heeft je rooster bijgewerkt."];
+
         return (
             <div className='NotifItem'>
                 <p>{this.person}{messages[this.messageId]}</p>
             </div>
         )
     }
+
+    render() {
+        const notifToSend = new NotificationItem(this.props.person, this.props.messageId);
+        return (
+            <p>{notifToSend.sendNotif()}</p>
+        )
+    }
 }
 
-function Notification(props) {
-    const notifToSend = new NotificationItem(props.person, props.messageId);
-    return (
-        <p>{notifToSend.sendNotif()}</p>
-    )
-}
-
-export default Notification
+export default NotificationItem

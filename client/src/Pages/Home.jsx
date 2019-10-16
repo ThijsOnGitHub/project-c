@@ -14,7 +14,21 @@ class Home extends React.Component{
         };
         this.handleInputChange=this.handleInputChange.bind(this)
     }
-
+    addNotif(person, messageId, bedrijfId) {
+        fetch(
+            "http://localhost:5000/api/addnotif", {
+                method:"post",
+                headers:{
+                    "content-type":"application/json"
+                },
+                body:JSON.stringify({
+                    "person": person,
+                    "messageId": messageId,
+                    "bedrijfId": bedrijfId
+                })
+            }
+        )
+    }
 
     handleInputChange(event) {
         const target = event.target;
@@ -118,6 +132,10 @@ class Home extends React.Component{
                             <figcaption>SALARIS</figcaption>
                         </figure>
                     </Link>
+                </div>
+                <div>
+                    <button onClick={(() => {this.addNotif(2, 2, 1)})}>kut</button>
+                    <button onClick={(() => {this.removeNotif()})}>AAAAAAAAAA</button>
                 </div>
                 <div className="LinebreakPrevent">
                     <img className='ScheduleImg' src="https://imgur.com/Y8x0HaC.png" alt="schedule placeholder"/>
