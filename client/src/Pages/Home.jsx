@@ -134,8 +134,7 @@ class Home extends React.Component{
                     </Link>
                 </div>
                 <div>
-                    <button onClick={(() => {this.addNotif(2, 2, 1)})}>kut</button>
-                    <button onClick={(() => {this.removeNotif()})}>AAAAAAAAAA</button>
+                    <button onClick={(() => {this.addNotif(2, 2, 1)})}>Voeg Notificatie Toe (tijdelijk)</button>
                 </div>
                 <div className="LinebreakPrevent">
                     <img className='ScheduleImg' src="https://imgur.com/Y8x0HaC.png" alt="schedule placeholder"/>
