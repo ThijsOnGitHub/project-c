@@ -81,7 +81,7 @@ app.post("/api/addgebruiker",async (req, res) => {
 
 app.post("/api/Login", (req,res) =>{
     console.log(req.body);
-    connection.query("SELECT email,pass FROM gebruiker where email =?",[req.body.email],(err,values,fields)=>{
+    connection.query("SELECT email,pass FROM gebruiker where email = ?",[req.body.email],(err,values,fields)=>{
         if(err){
             res.send("Not valid")
         }
