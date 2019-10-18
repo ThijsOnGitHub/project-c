@@ -8,12 +8,31 @@ import Notification from "../Components/Notification";
 class Home extends React.Component{
     constructor(){
         super();
-        this.state={
-            uname:"",
-            pass:""
+        this.state= {
+            uname: "",
+            pass: "",
+            notifs: []
         };
         this.handleInputChange=this.handleInputChange.bind(this)
     }
+    componentDidMount() {
+        this.getnotifs();
+    }
+
+    getnotifs = () => {
+        fetch("http://localhost:5000/api/getnotifs")
+            .then(
+                (u) => {
+                    return u.json();
+                }
+            )
+            .then(
+                (json) => {
+                    console.log(json);
+                    this.setState({notifs:json})
+                }
+                )
+    };
     addNotif(person, messageId, bedrijfId) {
         fetch(
             "http://localhost:5000/api/addnotif", {
@@ -41,82 +60,6 @@ class Home extends React.Component{
     }
 
     render() {
-        const notifs = [{
-            "id": "1",
-            "person": "John Magellan",
-            "messageType": "2"
-        },
-            {
-                "id": "2",
-                "person": "Hendrik Groen",
-                "messageType": "1"
-            },
-            {
-                "id": "3",
-                "person": "Duikbroek Verheemst",
-                "messageType": "0"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "3"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "3"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "3"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "3"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "3"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "3"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "2"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "1"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "0"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "0"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "0"
-            },
-            {
-                "id": "40,",
-                "person": "Geel Hoofd",
-                "messageType": "2"
-            },
-        ];
         return(
             <div className="Home">
                 <div align='center' className="LinebreakPrevent">
@@ -133,15 +76,12 @@ class Home extends React.Component{
                         </figure>
                     </Link>
                 </div>
-                <div>
-                    <button onClick={(() => {this.addNotif(2, 2, 1)})}>Voeg Notificatie Toe (tijdelijk)</button>
-                </div>
                 <div className="LinebreakPrevent">
                     <img className='ScheduleImg' src="https://imgur.com/Y8x0HaC.png" alt="schedule placeholder"/>
                     <div className='Notifs'>
                         <h1>Meldingen</h1>
                         <div className="notifList">
-                            {notifs.map(notif => <Notification key={notif.id} person={notif.person} messageId={notif.messageType}/>)}
+                            {this.state.notifs.map(notif => <Notification person={notif.name} messageId={notif.messageType}/>)}
                         </div>
                     </div>
                 </div>
