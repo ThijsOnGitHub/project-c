@@ -1,15 +1,36 @@
-import React from 'react'
+import React from 'react';
 
 class Login extends React.Component{
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state={
-            uname:"",
+            email:"",
             pass:""
         }
-        this.handleInputChange=this.handleInputChange.bind(this)
+        this.lijst=["email, pass"];
+        this.handleInputChange=this.handleInputChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+
+     handleSubmit() {
+        var object = {};
+        this.lijst.forEach((value) => {
+            var returnValue = this.state[value]
+        });
+        console.log("sending");
+        console.log(object);
+        fetch(this.props.apiLink+"/api/login", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({email: this.state.email, pass: this.state.pass}) // body data type must match "Content-Type" header
+        })
+
+
+    }
 
     handleInputChange(event) {
         const target = event.target;
@@ -24,12 +45,12 @@ class Login extends React.Component{
     render() {
 
         return(
-            <div id="intro">
+            <div id="Login">
                 <form>
                     <table>
                         <tbody>
                         <tr>
-                            <td><input type="text" id="uname" name="uname" placeholder="Gebruikersnaam" value={this.state.uname} onChange={this.handleInputChange} /></td>
+                            <td><input type="email" id="email" name="email" placeholder="Email" value={this.state.email} onChange={this.handleInputChange} /></td>
                         </tr>
                         <tr>
                             <td><input type="password" id="pass" name="pass" placeholder="Wachtwoord" value={this.state.pass} onChange={this.handleInputChange} /></td>
@@ -38,7 +59,7 @@ class Login extends React.Component{
                             <td><a href="#">Wachtwoord vergeten?</a></td>
                         </tr>
                         <tr>
-                            <button>Inloggen</button>
+                            <button onClick={this.handleSubmit}>Login</button>
                         </tr>
                         </tbody>
                     </table>

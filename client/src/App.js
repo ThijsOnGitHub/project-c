@@ -12,6 +12,7 @@ import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 
 
+
 class App extends React.Component{
 
   constructor(){
@@ -33,11 +34,12 @@ class App extends React.Component{
             <Menu/>
             <MenuUnderlay/>
             <Switch>
-              <Route path="/" exact render={()=> <Login /> } />
+              <Route path="/" exact render={()=> <Login apiLink={this.state.apiLink}/> } />
               <Route path="/DataTest" render={()=><DataTest/>}/>
-              <Route path="/Registratie" render={()=><Registratie/>}/>
-              <Route path="/Rooster" render={()=><Rooster apiLink={this.state.apiLink}/>}/>
-              <Route path="/Home" render={()=><Home/>}/>
+                <Route path="/Login" render={()=><Login/>}/>
+                <Route path="/Registratie" render={()=><Registratie/>}/>
+                <Route path="/Rooster" render={()=><Rooster apiLink={this.state.apiLink}/>}/>
+                <Route path="/Home" render={()=><Home/>}/>
             </Switch>
           </BrowserRouter>
         </div>
