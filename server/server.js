@@ -86,7 +86,10 @@ app.post("/api/Login", (req,res) =>{
             res.send("Not valid")
         }
 
-        bcrypt.compare(req.body.pass,values.pass,(res)=>{
+        bcrypt.compare(req.body.pass,values[0].pass,(err,res)=>{
+            if(err){
+                console.error(err)
+            }
             console.log(res)
 
         })
