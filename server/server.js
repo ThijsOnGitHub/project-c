@@ -82,17 +82,21 @@ app.post("/api/addgebruiker",async (req, res) => {
 app.post("/api/Login", (req,res) =>{
     console.log(req.body);
     connection.query("SELECT email,pass FROM gebruiker where email = ?",[req.body.email],(err,values,fields)=>{
-        if(err){
-            res.send("Not valid")
-        }
+        console.log(values.length)
+        console.log(err)
+        if (err|| values.length === 0){
 
-        bcrypt.compare(req.body.pass,values[0].pass,(err,res)=>{
+            res.status(400).send("Not valid")
+        }
+        else (bcrypt.compare(req.body.pass,values[0].pass,(err,res)=>{
             if(err){
                 console.error(err)
             }
             console.log(res)
 
-        })
+        }))
+
+
 
     })});
 
