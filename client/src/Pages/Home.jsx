@@ -23,7 +23,12 @@ class Home extends React.Component{
         fetch("http://localhost:5000/api/getnotifs")
             .then(
                 (u) => {
-                    return u.json();
+                    try{
+                        return u.json()
+                    }
+                    catch(error){
+                        console.error(error)
+                    }
                 }
             )
             .then(
@@ -80,6 +85,8 @@ class Home extends React.Component{
                     <img className='ScheduleImg' src="https://imgur.com/Y8x0HaC.png" alt="schedule placeholder"/>
                     <div className='Notifs'>
                         <h1>Meldingen</h1>
+                        <button onClick={this.addNotif(2, 2, 1)}>Vakantienotificatie</button>
+                        <button onClick={this.addNotif(1, 0, 1)}>Dienstruil notif</button>
                         <div className="notifList">
                             {this.state.notifs.map(notif => <Notification person={notif.name} messageId={notif.messageType}/>)}
                         </div>
