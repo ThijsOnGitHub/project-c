@@ -58,7 +58,7 @@ class Registratie extends React.Component{
         return(
         <>
             <div className="underlay">
-                <h1><span className="weighted">WELKOM</span> GEBRUIKER</h1>
+                <h1><span className="weighted">Registratie</span> pagina</h1>
             </div>
 
             <div id="reg">
@@ -97,7 +97,9 @@ class Registratie extends React.Component{
                         <label>Account voor werkgever</label>
                         <td><input type='checkbox' name="isWerkgever" value={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange}/></td>
                     </tr>
-                    <button onClick={this.handleSubmit}>Registreer</button>
+                    <tr>
+                    <td><button onClick={this.handleSubmit}>Registreer</button></td>
+                    </tr>
                     </tbody>
                 </table>
                 </form>

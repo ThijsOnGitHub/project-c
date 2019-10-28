@@ -13,12 +13,12 @@ class Menu extends React.Component{
                     <li><img id='logo' src="https://i.imgur.com/HVmQHos.png" alt="Logo RoosterIT"/></li>
                     <li><Link to={'/'} className="active">Inloggen</Link></li>
                     <li><Link to={'/Registratie'} >Registreren</Link></li>
+                    <li><Link to={"/MyAccount"}>Mijn account</Link></li>
                     <li><Link to={"/DataTest"}>Contact</Link></li>
                     <li><Link to={"/Rooster"}>Rooster</Link></li>
                     <li><Link to={"/Home"}>Home(Temp)</Link></li>
                 </ul>
             </div>
-
         )
     }
 }
