@@ -3,7 +3,6 @@ import logo from './logo.svg';
 import './App.css';
 import {BrowserRouter,Switch,Route} from "react-router-dom";
 import Menu from "./Components/Menu/Menu";
-import MenuUnderlay from "./Components/Menu/MenuUnderlay";
 import DataTest from "./Pages/DataTest";
 import Registratie from "./Pages/Registratie";
 import Rooster from "./Pages/Rooster";
@@ -31,7 +30,6 @@ class App extends React.Component{
         <div>
         <BrowserRouter>
             <Menu/>
-            <MenuUnderlay/>
             <Switch>
               <Route path="/" exact render={()=> <Login /> } />
               <Route path="/Registratie" render={()=><Registratie apiLink={this.state.apiLink}/>}/>
