@@ -6,6 +6,7 @@ class Registratie extends React.Component{
         super(props);
         this.state = {
             // Globale variabelen.
+            test: '',
             firstName: '',
             lastName: '',
             email: '',
@@ -14,6 +15,9 @@ class Registratie extends React.Component{
             birth: '',
             img_link: '',
             isWerkgever: false,
+            // Beschrijf de toegestane symbolen voor de inputvelden.
+            letters: /^[A-Za-z]+$/,
+            numbers: /^[0-9]+$/,
             // Sla op of inputvelden al zijn aangeraakt door de gebruiker.
             touched: {
                 firstName: false,
@@ -36,6 +40,20 @@ class Registratie extends React.Component{
         const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.img_link);
         const isDisabled = Object.keys(errors).some(x => errors[x]);
         return !isDisabled;
+    }
+
+    //TO DO: Voeg pattern matching toe aan de inputvalidatie.
+    checkInputType(input, type) {
+        if (type === this.letters) {
+            if (input.value.match(this.letters)) {
+                return true
+            } else {
+                return false
+            }
+        if (type === this.numbers) {
+            return !!this.match(this.numbers);
+        }
+        }
     }
 
     // Converteer de waarden uit de state naar een JSON string om die in een POST request te plaatsen en te versturen.
@@ -80,11 +98,11 @@ class Registratie extends React.Component{
     validate(firstName, lastName, email, pass, phone, birth, img_link) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
         return {
-            firstName: firstName.length === 0,
-            lastName: lastName.length === 0,
-            email: email.length === 0,
-            pass: pass.length === 0,
-            phone: phone.length === 0,
+            firstName: firstName.length === 0 || firstName.length >= 30 || this.checkInputType(firstName, this.letters),
+            lastName: lastName.length === 0 || lastName.length >= 30,
+            email: email.length === 0 || email.length >= 30,
+            pass: pass.length === 0 || pass.length >= 30,
+            phone: phone.length === 0 || phone.length >= 20,
             birth: birth.length === 0,
             img_link: img_link.length === 0
         };
