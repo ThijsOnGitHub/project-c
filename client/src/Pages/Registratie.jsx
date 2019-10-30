@@ -67,7 +67,7 @@ class Registratie extends React.Component{
                     <tbody>
                     <tr>
                         <label>Voornaam</label>
-                        <td><input type='text' name="firstName" value={this.state.firstName} placeholder="Voornaam" onChange={this.handleInputChange}/></td>
+                        <td><input type='text' name="firstName" value={this.state.firstName} placeholder="Voornaam"charset="ISO-8859-1" pattern="[^0-9\x22]+"/></td>
                     </tr>
                     <tr>
                         <label>Achternaam</label>
