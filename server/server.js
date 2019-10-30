@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 var mysql = require('mysql');
 const cors= require('cors');
 serverLogin=require('./serverlogin');

@@ -6,7 +6,6 @@ class Registratie extends React.Component{
         super(props);
         this.state = {
             // Globale variabelen.
-            test: '',
             firstName: '',
             lastName: '',
             email: '',
@@ -43,17 +42,53 @@ class Registratie extends React.Component{
     }
 
     //TO DO: Voeg pattern matching toe aan de inputvalidatie.
-    checkInputType(input, type) {
-        if (type === this.letters) {
-            if (input.value.match(this.letters)) {
+    checkInputLetters(input) {
+        if (input.match(this.letters)) {
+            return true
+        } else {
+            alert('Your Registration number has not accepted....');
+            return false
+        }
+    }
+        /*
+        if (type === this.numbers) {
+            if (input.match(this.numbers)) {
                 return true
             } else {
                 return false
             }
-        if (type === this.numbers) {
-            return !!this.match(this.numbers);
         }
-        }
+    }
+*/
+
+    // Ververs de waarden wanneer deze veranderd worden door de gebruiker.
+    handleInputChange(event) {
+        const target = event.target;
+        // Laat de waarde de waarde zijn van het actieve veld. Als het input-type een checkbox is is de waarde of deze aangevinkt is of niet.
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.img_link);
+        this.setState({[name]: value});
+    }
+
+    // Verander de waarde van touched voor een inputveld naar true.
+    handleBlur = (field) => (event) => {
+        this.setState({
+            touched: {...this.state.touched, [field]: true},
+        });
+    };
+
+    validate(firstName, lastName, email, pass, phone, birth, img_link) {
+        // Als een waarde hier true is betekent dat dat het veld niet valide is.
+        return {
+            firstName: firstName.length === 0 || firstName.length >= 30, // || !this.checkInputLetters(this.state.firstName), // || this.checkInputType(firstName, this.letters),
+            lastName: lastName.length === 0 || lastName.length >= 30,
+            email: email.length === 0 || email.length >= 30,
+            pass: pass.length === 0 || pass.length >= 30,
+            phone: phone.length === 0 || phone.length >= 20,
+            birth: birth.length === 0,
+            img_link: img_link.length === 0
+        };
     }
 
     // Converteer de waarden uit de state naar een JSON string om die in een POST request te plaatsen en te versturen.
@@ -85,35 +120,6 @@ class Registratie extends React.Component{
             value.json().then(value1 => {console.log(value1.message)})
         });
     }
-
-    // Ververs de waarden wanneer deze veranderd worden door de gebruiker.
-    handleInputChange(event) {
-        const target = event.target;
-        // Laat de waarde de waarde zijn van het actieve veld. Als het input-type een checkbox is is de waarde of deze aangevinkt is of niet.
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        this.setState({[name]: value});
-    }
-
-    validate(firstName, lastName, email, pass, phone, birth, img_link) {
-        // Als een waarde hier true is betekent dat dat het veld niet valide is.
-        return {
-            firstName: firstName.length === 0 || firstName.length >= 30 || this.checkInputType(firstName, this.letters),
-            lastName: lastName.length === 0 || lastName.length >= 30,
-            email: email.length === 0 || email.length >= 30,
-            pass: pass.length === 0 || pass.length >= 30,
-            phone: phone.length === 0 || phone.length >= 20,
-            birth: birth.length === 0,
-            img_link: img_link.length === 0
-        };
-    }
-
-    // Verander de waarde van touched voor een inputveld naar true.
-    handleBlur = (field) => (event) => {
-        this.setState({
-            touched: {...this.state.touched, [field]: true},
-        });
-    };
 
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
