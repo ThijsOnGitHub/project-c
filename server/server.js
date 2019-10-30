@@ -60,7 +60,7 @@ app.post("/api/addgebruiker",async (req, res) => {
     var data = req.body;
     data.pass = await bcrypt.hash(data.pass, 10 );
     console.log("Toevoeging gebruiker:");
-    connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, img_link, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth, data.img_link, data.isWerkgever],
+    connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, isWerkgever) VALUES (?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth, data.isWerkgever],
         (error, results, fields) => {
         if (error) {
             console.log(error);
