@@ -5,7 +5,7 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 
 module.exports = app => {
-    app.post('./ForgotPassword', req, res, next) =>{
+    app.post('./ForgotPassword', (req, res, next) =>{
         if (req.body.email === '') {
             res.json('email required');
         }
@@ -58,8 +58,3 @@ module.exports = app => {
 };
 
 
-              }
-            }
-
-
-}
