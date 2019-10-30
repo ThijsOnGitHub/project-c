@@ -13,17 +13,16 @@ import Home from "./Pages/Home";
 
 
 
+
 class App extends React.Component{
 
-  constructor(){
-    super();
-  var options=["http://145.24.222.80:5000","http://localhost:5000"]
-    this.state={
-        apiLink:options[1]
-    }
+  constructor() {
+      super();
+      var options = ["http://145.24.222.80:5000", "http://localhost:5000"]
+      this.state = {
+          apiLink: options[1]
+      };
   }
-
-
 
   render(){
       // this programm adds new string functions
