@@ -85,8 +85,10 @@ class Home extends React.Component{
                     <img className='ScheduleImg' src="https://imgur.com/Y8x0HaC.png" alt="schedule placeholder"/>
                     <div className='Notifs'>
                         <h1>Meldingen</h1>
-                        <button onClick={this.addNotif(2, 2, 1)}>Vakantienotificatie</button>
-                        <button onClick={this.addNotif(1, 0, 1)}>Dienstruil notif</button>
+                        <button onClick={() => this.addNotif(2, 2, 1)}>Vakantienotificatie</button>
+                        <button onClick={() => this.addNotif(1, 0, 1)}>Dienstruil notif</button>
+                        <button onClick={() => this.addNotif(3, 1, 1)}>Ziek melden</button>
+                        <button onClick={() => this.addNotif(27, 3, 1)}>Rooster Bijgewerkt</button>
                         <div className="notifList">
                             {this.state.notifs.map(notif => <Notification person={notif.name} messageId={notif.messageType}/>)}
                         </div>
