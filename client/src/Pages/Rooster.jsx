@@ -52,7 +52,6 @@ class Rooster extends React.Component{
                     */
                 renderItems={ this.state.agendaJSON.map(value => {return {[new Date(value.datum).getTime()]: ((roosterData)=>{
                             return (
-
                                 <RoosterItem roosterData={roosterData} beginTijd={new Date(value.beginTijd)} eindTijd={new Date(value.eindTijd)}>
                                 {/* Hier komen de items in het rooster component*/}
                                     <WerknemerItem itemData={value}/>

@@ -11,8 +11,18 @@ body{
   background: var(--background);
 }
 /*global css*/
+.clickAble{
+  cursor: pointer;
+}
 
+.moveAble{
+  cursor: move;
+}
 
+.center >*{
+  align-items: center;
+  margin: auto;
+}
 
 /*--------------Global Menu--------------*/
 .menu{
