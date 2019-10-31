@@ -97,7 +97,7 @@ app.post("/api/Login", (req,res) =>{
 
 
     console.log(req.body);
-    connection.query("SELECT email,pass FROM gebruiker where email = ?",[req.body.email],(err,values,fields)=>{
+    connection.query("SELECT email,pass,id FROM gebruiker where email = ?",[req.body.email],(err,values,fields)=>{
         console.log(values.length)
         console.log(err)
 
@@ -105,19 +105,18 @@ app.post("/api/Login", (req,res) =>{
 
             res.status(400).send("Not valid")
         }
-        else (bcrypt.compare(req.body.pass,values[0].pass,(err,res)=>{
+        else (bcrypt.compare(req.body.pass,values[0].pass,(err,result)=>{
             if(err){
                 console.error(err)
             }
-
-
-            console.log(res)
-
-            jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-            res.header('auth-token', token).send(token
-            );
-
-            res.send('Logged in');
+            console.log(result)
+            var payLoad={id:values[0].id}
+            var token=jwt.sign(payLoad, serverSecret.serverSecret.secret,{expiresIn:"1h"});
+            jwt.verify(token,"123",(err1, decoded) => {
+                console.log(err1)
+                console.log(decoded)
+            })
+            res.status(200).send(token)
 }))
 
     })});

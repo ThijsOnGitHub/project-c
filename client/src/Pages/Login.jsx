@@ -13,14 +13,14 @@ class Login extends React.Component{
     }
 
 
-     handleSubmit() {
+     handleSubmit=async (event)=> {
         var object = {};
         this.lijst.forEach((value) => {
             var returnValue = this.state[value]
         });
         console.log("sending");
         console.log(object);
-        fetch(this.props.apiLink+"/api/login", {
+        var result=await fetch(this.props.apiLink+"/api/login", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -28,6 +28,7 @@ class Login extends React.Component{
             },
             body: JSON.stringify({email: this.state.email, pass: this.state.pass}) // body data type must match "Content-Type" header
         })
+         console.log(object)
 
 
     }
