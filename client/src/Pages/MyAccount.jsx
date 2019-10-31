@@ -1,6 +1,6 @@
 import React from 'react'
-import User from "../Components/User";
-import Bedrijf from "../Components/Bedrijf";
+import User from "../Components/User"
+import "../Components/User";
 var API_LINK='http://localhost:5000/api'
 
 class MyAccount extends React.Component{
@@ -12,8 +12,6 @@ class MyAccount extends React.Component{
             lastName: ""
         }
         this.lijst=["firstName","lastName"]
-        this.handleInputChange= this.handleInputChange.bind(this)
-        this.submit=this.submit.bind(this)
         this.refreshData=this.refreshData.bind(this)
     }
 
@@ -21,6 +19,7 @@ class MyAccount extends React.Component{
         console.log("get data")
         var request= await fetch(API_LINK+"/getgebruikerinfo")
         var json= await request.json()
+        console.log(json)
         this.setState({
             content:json
         })
@@ -45,4 +44,4 @@ class MyAccount extends React.Component{
                 )
             }
 }
-export default User
+export default MyAccount
