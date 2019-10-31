@@ -1,15 +1,24 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 var mysql = require('mysql');
+const { loginValidation } = require('./validation');
 const cors= require('cors');
 
+const schema ={
+    email: Joi.string()
+        .min(6)
+        .required()
+        .email(),
+    password: Joi.string()
+        .min(6)
+        .required()
 
+};
 
 serverSecret=require('./serverSecret');
 
 var connection=mysql.createConnection(serverSecret.serverSecret.databaseLogin);
 connection.connect();
-
 
 
 
@@ -79,12 +88,17 @@ app.post("/api/addgebruiker",async (req, res) => {
     });
 });
 
-app.post("/api/Login", (req,res) =>{
+app.post("/api/Login", async (req,res) =>{
+
     console.log(req.body);
     connection.query("SELECT email,pass FROM gebruiker where email = ?",[req.body.email],(err,values,fields)=>{
         console.log(values.length)
         console.log(err)
-        if (err|| values.length === 0){
+
+        const {error} = loginValidation(req.body);
+        if(error) return res.status(400).send(error.details[0].message);
+
+        if (err|| values.length === 0) {
 
             res.status(400).send("Not valid")
         }
@@ -94,9 +108,9 @@ app.post("/api/Login", (req,res) =>{
             }
             console.log(res)
 
-        }))
 
-
+            res.send('Logged in');
+}))
 
     })});
 
