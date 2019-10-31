@@ -69,6 +69,29 @@ app.post("/api/addgebruiker",async (req, res) => {
         }else{
             res.status(201).send("Gebruiker toegevoegd.");
             console.log("Gebruiker toegevoegd.");
+
+            // Hier wordt het verificatie-email verstuurd. Wanneer we ook op andere plekken email gaan gebruiken kan deze code centraler opgeslagen worden.
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'roosteritHRO@gmail.com',
+                    pass: 'hogeschoolr'
+                }
+            });
+            const mailOptions = {
+                from: 'roosteritHRO@gmail.com',
+                to: data.email,
+                subject: 'Verificatie RoosterIt',
+                html: '<h1>Welcome</h1><p>Hier komt een link naar de pagina die je account op actief zet.</p>'
+            };
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email verstuurd: ' + info.response);
+                }
+            });
+
         }
     });
 });
