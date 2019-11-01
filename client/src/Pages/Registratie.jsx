@@ -14,7 +14,6 @@ class Registratie extends React.Component{
             phone: '',
             birth: '',
             foto:"",
-            img_link: '',
             isWerkgever: false,
             // Beschrijf de toegestane symbolen voor de inputvelden.
             letters: /^[A-Za-z]+$/,
@@ -26,8 +25,7 @@ class Registratie extends React.Component{
                 email: false,
                 pass: false,
                 phone: false,
-                birth: false,
-                img_link: false
+                birth: false
             },
             fotoFile:[],
             blackCircle:true,
@@ -39,34 +37,12 @@ class Registratie extends React.Component{
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-
-
     // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
     canBeSubmitted() {
         const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.img_link);
         const isDisabled = Object.keys(errors).some(x => errors[x]);
         return !isDisabled;
     }
-
-    //TO DO: Voeg pattern matching toe aan de inputvalidatie.
-    checkInputLetters(input) {
-        if (input.match(this.letters)) {
-            return true
-        } else {
-            alert('Your Registration number has not accepted....');
-            return false
-        }
-    }
-        /*
-        if (type === this.numbers) {
-            if (input.match(this.numbers)) {
-                return true
-            } else {
-                return false
-            }
-        }
-    }
-*/
 
     // Ververs de waarden wanneer deze veranderd worden door de gebruiker.
     handleInputChange(event) {
@@ -93,19 +69,22 @@ class Registratie extends React.Component{
     validate(firstName, lastName, email, pass, phone, birth, img_link) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
         return {
-            firstName: firstName.length === 0 || firstName.length >= 30, // || !this.checkInputLetters(this.state.firstName), // || this.checkInputType(firstName, this.letters),
-            lastName: lastName.length === 0 || lastName.length >= 30,
+            firstName: firstName.length === 0 || firstName.length >= 30 || !firstName.match(this.state.letters),
+            lastName: lastName.length === 0 || lastName.length >= 30 || !lastName.match(this.state.letters),
             email: email.length === 0 || email.length >= 30,
             pass: pass.length === 0 || pass.length >= 30,
-            phone: phone.length === 0 || phone.length >= 20,
-            birth: birth.length === 0,
-            img_link: img_link.length === 0
+            phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
+            birth: birth.length === 0
         };
     }
 
     // Converteer de waarden uit de state naar een JSON string om die in een POST request te plaatsen en te versturen.
     handleSubmit =async (event)=> {
-        event.preventDefault()
+        // Laat de data niet verstuurd worden wanneer de input validatie niet succesvol is.
+        if (!this.canBeSubmitted()) {
+            event.preventDefault();
+            return;
+        }
         var object={};
 
         this.lijst.forEach((value)=>{
@@ -122,6 +101,8 @@ class Registratie extends React.Component{
         var image=await this.state.getImage()
         console.log("sending");
         console.log(object);
+
+
         var formData=new FormData()
         formData.append("profielFoto",image)
         this.lijst.forEach(value => {
@@ -132,9 +113,9 @@ class Registratie extends React.Component{
             method:'POST',
             body:formData
         }).then(value => console.log(value))
+        //TO DO: Wat was er mis met de bestaande POST?
         /*
-        fetch(this.props.apiLink+"/api/addgebruiker",{
-            method:"POST",
+        fetch(this.props.apiLink+"/api/addgebruiker",{method:"POST",
             body:JSON.stringify(object),
             headers:{
                 "content-type":"application/json"
@@ -146,7 +127,7 @@ class Registratie extends React.Component{
 
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
-        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.img_link);
+        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth);
         const isDisabled = Object.keys(errors).some(x => errors[x]);
 
         // Valideer of een fout getoond zou moeten worden.
@@ -156,7 +137,7 @@ class Registratie extends React.Component{
             return hasError ? shouldShow : false;
         };
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
-        //Als er een foto is geselecteerd word image gemaakt
+    // Als er een foto is geselecteerd wordt hieruit een afbeelding aangemaakt.
         return(
         <div id="reg">
                 <form>
@@ -202,12 +183,6 @@ class Registratie extends React.Component{
                     <td><input className={shouldMarkError('birth') ? "error" : ""}
                                onBlur={this.handleBlur('birth')}
                                type='date' name="birth" value={this.state.birth} placeholder="Geboortedatum" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>URL gebruikersafbeelding</label>
-                    <td><input className={shouldMarkError('img_link') ? "error" : ""}
-                               onBlur={this.handleBlur('img_link')}
-                               type='text' name="img_link" value={this.state.img_link} placeholder="URL gebruikersafbeelding" onChange={this.handleInputChange}/></td>
                 </tr>
                 <tr>
                     <label>Wachtwoord</label>
