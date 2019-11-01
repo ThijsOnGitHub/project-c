@@ -122,8 +122,6 @@ class Registratie extends React.Component{
         var image=await this.state.getImage()
         console.log("sending");
         console.log(object);
-
-
         var formData=new FormData()
         formData.append("profielFoto",image)
         this.lijst.forEach(value => {
@@ -135,7 +133,8 @@ class Registratie extends React.Component{
             body:formData
         }).then(value => console.log(value))
         /*
-        fetch(this.props.apiLink+"/api/addgebruiker",{method:"POST",
+        fetch(this.props.apiLink+"/api/addgebruiker",{
+            method:"POST",
             body:JSON.stringify(object),
             headers:{
                 "content-type":"application/json"

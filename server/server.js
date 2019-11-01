@@ -83,7 +83,7 @@ app.get("/api/getImage/:name",(req,res)=>{
 
 
 // Zend een POST request dat de data uit de front-end in de database krijgt.
-app.post("/api/addgebruiker",upload.single('profielFoto'),async (req, res) => {
+app.post("/api/addgebruiker", upload.single('profielFoto'), async (req, res) => {
     var data = req.body;
     console.log(data.firstName)
     data.pass = await bcrypt.hash(data.pass, 10 );
@@ -97,10 +97,45 @@ app.post("/api/addgebruiker",upload.single('profielFoto'),async (req, res) => {
         }else{
             res.status(201).send("Gebruiker toegevoegd.");
             console.log("Gebruiker toegevoegd.");
+
+            // Hier wordt het verificatie-email verstuurd. Wanneer we ook op andere plekken email gaan gebruiken kan deze code centraler opgeslagen worden.
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'roosteritHRO@gmail.com',
+                    pass: 'hogeschoolr'
+                }
+            });
+
+            const mailOptions = {
+                from: 'roosteritHRO@gmail.com',
+                to: data.email,
+                subject: 'Verificatie RoosterIt',
+                html: ` 
+                    <h1>Geachte meneer/mevrouw ${data.lastName},</h1><p>Volg deze link om uw registratie te voltooien:</p>
+                    <p><a href='http://localhost:3000/emailverificatie/${data.email}'>Verifieer email</a></p>
+                    `
+            };
+
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email verstuurd: ' + info.response);
+                }
+            });
         }
     })
 });
 
+app.put("/api/activeergebruiker", (req, res) => {
+    let data = req.body;
+    console.log("Activeren gebruiker:");
+    connection.query("UPDATE gebruiker SET verificatie = 1 WHERE email = (?)", [data.email], (error, results, fields) =>{
+        res.json(results);
+        console.log("Gebruiker geactiveerd.");
+    });
+});
 
 app.listen(5000,()=> {
     console.log("listening")
