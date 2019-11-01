@@ -3,7 +3,6 @@ import logo from './logo.svg';
 import './App.css';
 import {BrowserRouter,Switch,Route} from "react-router-dom";
 import Menu from "./Components/Menu/Menu";
-import MenuUnderlay from "./Components/Menu/MenuUnderlay";
 import Registratie from "./Pages/Registratie";
 import Rooster from "./Pages/Rooster";
 import addFunctions from "./Values/addFunctions";
