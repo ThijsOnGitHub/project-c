@@ -56,7 +56,7 @@ app.get("/api/test",(req,res)=>{
 })
 
 // Zend een POST request dat de data uit de front-end in de database krijgt.
-app.post("/api/addgebruiker",async (req, res) => {
+app.post("/api/addgebruiker", async (req, res) => {
     var data = req.body;
     data.pass = await bcrypt.hash(data.pass, 10 );
     console.log("Toevoeging gebruiker:");
@@ -78,12 +78,17 @@ app.post("/api/addgebruiker",async (req, res) => {
                     pass: 'hogeschoolr'
                 }
             });
+
             const mailOptions = {
                 from: 'roosteritHRO@gmail.com',
                 to: data.email,
                 subject: 'Verificatie RoosterIt',
-                html: '<h1>Welcome</h1><p>Hier komt een link naar de pagina die je account op actief zet.</p>'
+                html: ` 
+                    <h1>Geachte meneer/mevrouw ${data.lastName},</h1><p>Volg deze link om uw registratie te voltooien:</p>
+                    <p><a href='http://localhost:3000/emailverificatie/${data.email}'>Verifieer email</a></p>
+                    `
             };
+
             transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
                     console.log(error);
@@ -91,8 +96,16 @@ app.post("/api/addgebruiker",async (req, res) => {
                     console.log('Email verstuurd: ' + info.response);
                 }
             });
-
         }
+    });
+});
+
+app.put("/api/activeergebruiker", (req, res) => {
+    let data = req.body;
+    console.log("Activeren gebruiker:");
+    connection.query("UPDATE gebruiker SET verificatie = 1 WHERE email = (?)", [data.email], (error, results, fields) =>{
+        res.json(results);
+        console.log("Gebruiker geactiveerd.");
     });
 });
 

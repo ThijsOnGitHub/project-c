@@ -88,7 +88,8 @@ class Registratie extends React.Component{
 
         console.log("sending");
         console.log(object);
-        fetch(this.props.apiLink+"/api/addgebruiker",{method:"POST",
+        fetch(this.props.apiLink+"/api/addgebruiker",{
+            method:"POST",
             body:JSON.stringify(object),
             headers:{
                 "content-type":"application/json"
