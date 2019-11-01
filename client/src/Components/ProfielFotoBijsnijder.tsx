@@ -40,7 +40,7 @@ class ProfielFotoBijsnijder extends Component<IProps,IState>{
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any): void {
         if(this.props.image!==prevProps.image){
             var fileReader=new FileReader()
-            fileReader.onload= (event:ProgressEvent<FileReader>)=>{
+            fileReader.onload= (event:ProgressEvent)=>{
                 var image= new Image()
                 image.onload=()=>{
                     console.log("Rezise")

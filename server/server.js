@@ -156,8 +156,8 @@ app.post("/api/addnotif",async (req, res) => {
 
 app.get("/api/getnotifs", (req, res) => {
     console.log("Getting notifs...");
-    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id',[],(err,result,val)=> {
-        if (err!==null) {
+    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id', [], (err, result, val) => {
+        if (err !== null) {
             console.log(err);
             res.status(400).send()
         }
@@ -165,9 +165,10 @@ app.get("/api/getnotifs", (req, res) => {
         console.log(result);
         res.json(result)
     })
+})
 app.get("/api/getgebruikerinfo",async (req,res)=>{
     console.log("Get user info");
-    connection.query('SELECT firstName, lastName, email, phone, birth, profielFotoLink FROM roosterit.gebruiker where firstname="Delano"', (error, results, fields) =>{
+    connection.query("SELECT firstName, lastName, email, phone, birth, profielFotoLink FROM roosterit.gebruiker where firstname='Delano'", (error, results, fields) =>{
         res.json(results)
     });
 });
