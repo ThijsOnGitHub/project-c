@@ -1,10 +1,33 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 var mysql = require('mysql');
 const cors= require('cors');
 serverLogin=require('./serverlogin');
+const path = require('path');
+const multer = require('multer');
 
-var connection=mysql.createConnection(serverLogin.serverLogin);
+
+
+var storage= multer.diskStorage({
+    destination: function(req,file,cb){
+        cb(null,'uploads/')
+    },
+    filename: (req,file,cb) =>{
+        //
+        console.log(file.fieldname==="profielFoto")
+        if(file.fieldname === "profielFoto"){
+            cb(null,"Profielfoto"+Date.now()+".png")
+        }else{
+            cb(null,"randow "+new Date().toDateString()+".png")
+        }
+    }
+})
+
+var upload=multer({storage:storage})
+
+var connection=mysql.createConnection(serverLogin.serverLogin)
+
 var app = express();
 
 app.use(cors());
@@ -52,21 +75,65 @@ app.get("/api/test",(req,res)=>{
     res.status(200).send("Hello!")
 });
 
+
+app.get("/api/getImage/:name",(req,res)=>{
+    res.sendFile(__dirname+"/uploads/"+req.params.name)
+})
+
+
+
 // Zend een POST request dat de data uit de front-end in de database krijgt.
-app.post("/api/addgebruiker",async (req, res) => {
+app.post("/api/addgebruiker", upload.single('profielFoto'), async (req, res) => {
     var data = req.body;
+    console.log(data.firstName)
     data.pass = await bcrypt.hash(data.pass, 10 );
     console.log("Toevoeging gebruiker:");
-    connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, img_link, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth, data.img_link, data.isWerkgever],
+    connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, profielFotoLink, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth, req.file.filename,data.isWerkgever?1:0],
         (error, results, fields) => {
         if (error) {
             console.log(error);
-            res.status(422);
+            res.status(422).json;
             res.json({message:error});
         }else{
             res.status(201).send("Gebruiker toegevoegd.");
             console.log("Gebruiker toegevoegd.");
+
+            // Hier wordt het verificatie-email verstuurd. Wanneer we ook op andere plekken email gaan gebruiken kan deze code centraler opgeslagen worden.
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'roosteritHRO@gmail.com',
+                    pass: 'hogeschoolr'
+                }
+            });
+
+            const mailOptions = {
+                from: 'roosteritHRO@gmail.com',
+                to: data.email,
+                subject: 'Verificatie RoosterIt',
+                html: ` 
+                    <h1>Geachte meneer/mevrouw ${data.lastName},</h1><p>Volg deze link om uw registratie te voltooien:</p>
+                    <p><a href='http://localhost:3000/emailverificatie/${data.email}'>Verifieer email</a></p>
+                    `
+            };
+
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email verstuurd: ' + info.response);
+                }
+            });
         }
+    })
+});
+
+app.put("/api/activeergebruiker", (req, res) => {
+    let data = req.body;
+    console.log("Activeren gebruiker:");
+    connection.query("UPDATE gebruiker SET verificatie = 1 WHERE email = (?)", [data.email], (error, results, fields) =>{
+        res.json(results);
+        console.log("Gebruiker geactiveerd.");
     });
 });
 

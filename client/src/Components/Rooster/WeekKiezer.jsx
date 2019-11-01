@@ -67,7 +67,7 @@ class WeekKiezer extends React.Component{
         return(
             <div className="row WeekKiezer">
                 <select name="week"  value={this.state.week} onChange={this.handleInputChange}>
-                        {this.state.kiesbareWeken.map((value)=><option style={{backgroundColor:this.state.week===value? "lightgray":undefined}} value={value} name='week'>Week {value}</option> )}
+                        {this.state.kiesbareWeken.map((value)=><option style={{backgroundColor:this.state.week===value? "lightgray":undefined}} value={value} name='week'>Week {value} {Functions.getDateOfISOWeek(value,this.state.year).toLocaleDateString("nl-NL",{day:"numeric",month:"short"})} </option> )}
                 </select>
                 <select name="year"  value={this.state.year} onChange={this.handleInputChange}>
                         {this.state.kiesbareJaren.map((value)=><option style={{backgroundColor:this.state.year===value? "lightgray":undefined}} value={value} name='year'>{value}</option> )}

@@ -4,8 +4,18 @@ import {Link} from "react-router-dom";
 class Menu extends React.Component{
     constructor(){
         super()
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
+    }
     render() {
         return(
             <div className="menu">
