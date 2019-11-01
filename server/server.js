@@ -74,7 +74,7 @@ app.post("/api/addgebruiker",async (req, res) => {
 
 app.get("/api/getgebruikerinfo",async (req,res)=>{
     console.log("Get user info");
-    connection.query('SELECT firstName, lastName FROM roosterit.gebruiker WHERE firstName = "Delano"', (error, results, fields) =>{
+    connection.query('SELECT firstName, lastName, email, phone, birth, profielFotoLink FROM roosterit.gebruiker where firstname="Delano"', (error, results, fields) =>{
         res.json(results)
     });
 });

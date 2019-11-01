@@ -9,9 +9,14 @@ class MyAccount extends React.Component{
         this.state={
             content:[],
             firstName: "",
-            lastName: ""
+            lastName: "",
+            email: "",
+            phone: "",
+            birth: "",
+            profielFotoLink: "",
+            isWerkgever: ""
         }
-        this.lijst=["firstName","lastName"]
+        this.lijst=["firstName","lastName","email","phone","birth","profielfoto","isWerkgever"]
         this.refreshData=this.refreshData.bind(this)
     }
 
@@ -30,18 +35,15 @@ class MyAccount extends React.Component{
 
     render() {
         return(
-                <div>
-                    {this.state.content.map(value =>{ return <User naam={value.firstName} achternaam={value.lastName}/>})}
-                    {this.lijst.map(value=>{
-                        return (
-                            <div>
-                                <label>{value}</label>
-                                <input type='text' name={value} value={this.state[value]}  placeholder={value} onChange={this.handleInputChange}/>
-                            </div>
-                        )
-                    })}
+            <div>
+                <div className="underlay">
+                    <h1><span className="weighted">Delano's</span> account informatie</h1>
                 </div>
-                )
-            }
+
+                {this.state.content.map(value =>{ return<User naam={value.firstName} achternaam={value.lastName} mail={value.email} telefoon={value.phone} geboorte={value.birth} avatar={value.profielFotoLink}/>})}
+
+            </div>
+        )
+    }
 }
 export default MyAccount
