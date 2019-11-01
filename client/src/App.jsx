@@ -29,7 +29,6 @@ class App extends React.Component{
         <div>
         <BrowserRouter>
             <Menu/>
-            <MenuUnderlay/>
             <Switch>
               <Route path="/" exact render={()=> <Login /> } />
               <Route path="/Registratie" render={()=><Registratie apiLink={this.state.apiLink}/>}/>
