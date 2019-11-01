@@ -11,8 +11,18 @@ body{
   background: var(--background);
 }
 /*global css*/
+.clickAble{
+  cursor: pointer;
+}
 
+.moveAble{
+  cursor: move;
+}
 
+.center >*{
+  align-items: center;
+  margin: auto;
+}
 
 /*--------------Global Menu--------------*/
 .menu{
@@ -518,9 +528,21 @@ button:hover {
   display: block;
 }
 
+#reg table button:disabled {
+  background-color: #ad35d7;
+  opacity: .5;
+}
+
 #reg label {
   margin: auto;
 }
+
+.error {
+  border: 1px solid red;
+}
+
+/* Andere dingen */
+
 .LinebreakPrevent {
   display: flex;
   flex-direction: row;
@@ -573,4 +595,46 @@ button:hover {
   display: block;
   padding-left: 20px;
   padding-right: 20px;
+}
+
+/*My Account page*/
+#reg img{
+  margin: auto;
+  width: 150px;
+  display: block;
+}
+
+.leftInfo{
+  width: 170px;
+  font-weight: 600;
+}
+
+.rightValue{
+  color: grey;
+  width: 250px;
+  font-weight: 600;
+}
+.avatar{
+  border-radius: 100px;
+}
+
+#account input{
+  margin: auto;
+  border-radius: 10px;
+  width: 250px;
+  display: block;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  text-align: left;
+  color: #585858;
+  font-size: 16px;
+}
+#account input:focus{
+  border: 2px solid #ccc;
 }

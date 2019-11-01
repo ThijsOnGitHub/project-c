@@ -17,7 +17,7 @@ class DagField extends React.Component{
 
                 <div className="DagField" style={{height:this.props.height}}>
                     <div className="DagLijnen absolute">
-                        <TimeMarker interval={this.props.markerInterval}beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={this.props.hourHeight} height={this.props.height} type="line"/>
+                        <TimeMarker interval={this.props.markerInterval} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={this.props.hourHeight} height={this.props.height} type="line"/>
                     </div>
                     <div className="Items absolute">
                         {

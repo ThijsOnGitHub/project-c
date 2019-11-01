@@ -5,7 +5,7 @@ import WerknemerItem from "../Components/Rooster/RoosterItems/WerknemerItem";
 import WeekKiezer from "../Components/Rooster/WeekKiezer";
 class Rooster extends React.Component{
     constructor(){
-        super()
+        super();
         this.state={
             agendaJSON:[],
             beginDatum:new Date()
@@ -14,12 +14,12 @@ class Rooster extends React.Component{
 
     componentDidMount=async ()=> {
         //Hier wordt de data uit de server gehaald en in de state gezet
-        var res=await fetch(this.props.apiLink+"/api/getAgenda/2").catch(reason => {console.log(reason)})
-        var agendaJSON=await res.json()
+        var res=await fetch(this.props.apiLink+"/api/getAgenda/2").catch(reason => {console.log(reason)});
+        var agendaJSON=await res.json();
         this.setState({
             agendaJSON:agendaJSON
         })
-    }
+    };
 
     changeBeginDatum=(datum)=>{
         return new Promise((resolve => {
@@ -27,7 +27,7 @@ class Rooster extends React.Component{
             })
         )
 
-    }
+    };
 
 
     render() {
@@ -52,7 +52,6 @@ class Rooster extends React.Component{
                     */
                 renderItems={ this.state.agendaJSON.map(value => {return {[new Date(value.datum).getTime()]: ((roosterData)=>{
                             return (
-
                                 <RoosterItem roosterData={roosterData} beginTijd={new Date(value.beginTijd)} eindTijd={new Date(value.eindTijd)}>
                                 {/* Hier komen de items in het rooster component*/}
                                     <WerknemerItem itemData={value}/>
