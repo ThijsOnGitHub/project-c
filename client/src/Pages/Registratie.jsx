@@ -56,47 +56,55 @@ class Registratie extends React.Component{
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
         return(
-        <div id="reg">
-            <form>
-            <table>
-                <tbody>
-                <tr>
-                    <label>Voornaam</label>
-                    <td><input type='text' name="firstName" value={this.state.firstName} placeholder="Voornaam" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Achternaam</label>
-                    <td><input type='text' name="lastName" value={this.state.lastName} placeholder="Achternaam" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Email</label>
-                    <td><input type='email' name="email" value={this.state.email} placeholder="Email" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Telefoonnummer</label>
-                    <td><input type='text' name="phone" value={this.state.phone} placeholder="Telefoonnummer" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Geboortedatum</label>
-                    <td><input type='date' name="birth" value={this.state.birth} placeholder="Geboortedatum" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>URL gebruikersafbeelding</label>
-                    <td><input type='text' name="img_link" value={this.state.img_link} placeholder="URL gebruikersafbeelding" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Wachtwoord</label>
-                    <td><input type='password' name="pass" value={this.state.pass} placeholder="Wachtwoord" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Account voor werkgever</label>
-                    <td><input type='checkbox' name="isWerkgever" value={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange}/></td>
-                </tr>
-                <button onClick={this.handleSubmit}>Registreer</button>
-                </tbody>
-            </table>
-            </form>
-        </div>
+        <>
+            <div className="underlay">
+                <h1><span className="weighted">Registratie</span> pagina</h1>
+            </div>
+
+            <div id="reg">
+                <form>
+                <table>
+                    <tbody>
+                    <tr>
+                        <label>Voornaam</label>
+                        <td><input type='text' name="firstName" value={this.state.firstName} placeholder="Voornaam"charset="ISO-8859-1" pattern="[^0-9\x22]+"/></td>
+                    </tr>
+                    <tr>
+                        <label>Achternaam</label>
+                        <td><input type='text' name="lastName" value={this.state.lastName} placeholder="Achternaam" onChange={this.handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <label>Email</label>
+                        <td><input type='email' name="email" value={this.state.email} placeholder="Email" onChange={this.handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <label>Telefoonnummer</label>
+                        <td><input type='text' name="phone" value={this.state.phone} placeholder="Telefoonnummer" onChange={this.handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <label>Geboortedatum</label>
+                        <td><input type='date' name="birth" value={this.state.birth} placeholder="Geboortedatum" onChange={this.handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <label>URL gebruikersafbeelding</label>
+                        <td><input type='text' name="img_link" value={this.state.img_link} placeholder="URL gebruikersafbeelding" onChange={this.handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <label>Wachtwoord</label>
+                        <td><input type='password' name="pass" value={this.state.pass} placeholder="Wachtwoord" onChange={this.handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <label>Account voor werkgever</label>
+                        <td><input type='checkbox' name="isWerkgever" value={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                    <td><button onClick={this.handleSubmit}>Registreer</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+                </form>
+            </div>
+        </>
         )
     }
 }

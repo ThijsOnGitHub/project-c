@@ -98,6 +98,11 @@ app.get("/api/getnotifs", (req, res) => {
         console.log(result);
         res.json(result)
     })
+app.get("/api/getgebruikerinfo",async (req,res)=>{
+    console.log("Get user info");
+    connection.query('SELECT firstName, lastName, email, phone, birth, profielFotoLink FROM roosterit.gebruiker where firstname="Delano"', (error, results, fields) =>{
+        res.json(results)
+    });
 });
 
 app.listen(5000,()=> {
