@@ -1,20 +1,9 @@
 //This page creates new String Functions
 
-declare global {
-   interface String {
-        capitalFirst:()=>String
-    }
-    interface Date {
-        toTime:()=>Date
-        getWeekNumber:()=>number
-    }
 
-}
 
 
 export default function () {
-
-
 
     //String functie
     String.prototype.capitalFirst =function () {

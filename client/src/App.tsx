@@ -24,12 +24,9 @@ class App extends React.Component<{},IState>{
       super(props);
       var options = ["http://145.24.222.80:5000", "http://localhost:5000"]
       this.state = {
-          apiLink: options[1]+"/api/",
+          apiLink: options[1]+"/api",
           loggedIn:false
       };
-  }
-
-  componentDidMount(): void {
       // this programm adds new string functions
       addFunctions()
   }

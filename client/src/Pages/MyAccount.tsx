@@ -38,7 +38,7 @@ class MyAccount extends React.Component<IProps,IState>{
 
     refreshData= async ()=>{
         console.log("get data")
-        var request= await fetch(this.props.apiLink+"getgebruikerinfo")
+        var request= await fetch(this.props.apiLink+"/getgebruikerinfo")
         var json= await request.json()
         console.log(json)
         this.setState({
