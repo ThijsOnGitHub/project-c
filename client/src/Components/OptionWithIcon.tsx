@@ -1,6 +1,11 @@
 import React from 'react'
 
-function OptionWithIcon(props) {
+interface IProps {
+    icon:string
+    text:string
+}
+
+function OptionWithIcon(props:IProps) {
     return(
         <div className="row">
             <img width="40px" src={require("../icons/"+props.icon)}/>

@@ -1,26 +1,30 @@
 import React from 'react';
+import {IState as AppState} from "../App";
 
-class Login extends React.Component{
-    constructor(props){
+interface IProps {
+    apiLink:string
+    changeHigherState:(functie:(oldState:AppState)=>Partial<AppState>)=>void
+}
+
+interface IState {
+    email:string
+    pass:string
+}
+
+
+class Login extends React.Component<IProps,IState>{
+    constructor(props:IProps){
         super(props)
         this.state={
             email:"",
             pass:""
         }
-        this.lijst=["email, pass"];
-        this.handleInputChange=this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
 
-     handleSubmit=async (event)=> {
-        var object = {};
-        this.lijst.forEach((value) => {
-            var returnValue = this.state[value]
-        });
-        console.log("sending");
-        console.log(object);
-        var result=await fetch(this.props.apiLink+"/api/login", {
+     handleSubmit=async (event:React.MouseEvent<HTMLButtonElement,MouseEvent>)=> {
+        event.preventDefault()
+        var result=await fetch(this.props.apiLink+"/login", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -28,17 +32,27 @@ class Login extends React.Component{
             },
             body: JSON.stringify({email: this.state.email, pass: this.state.pass}) // body data type must match "Content-Type" header
         })
-         console.log(object)
+         console.log(result.status)
+         alert(result.status)
+
+         if(result.status===200){
+             alert("I hope you can pass")
+             this.props.changeHigherState((oldstate)=>{
+                 return {loggedIn:true}
+             })
+         }else{
+             alert("You shall not pass")
+         }
 
 
     }
 
-    handleInputChange(event) {
-        const target = event.target;
+    handleInputChange(event:React.ChangeEvent<HTMLInputElement>) {
+        const target = event.currentTarget;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
-        this.setState({
+        this.setState<never>({
             [name]: value
         });
     }

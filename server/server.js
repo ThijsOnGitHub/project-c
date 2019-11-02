@@ -194,22 +194,21 @@ app.post("/api/Login", (req,res) =>{
 
         if (err|| values.length === 0) {
 
-            res.status(400).send("Not valid")
+            res.status(401).send("Not valid")
         }
         else (bcrypt.compare(req.body.pass,values[0].pass,(err,result)=>{
             if(err){
                 console.error(err)
             }
             console.log(result)
-            var payLoad={id:values[0].id}
-            var token=jwt.sign(payLoad, serverSecret.serverSecret.secret,{expiresIn:"1h"});
-            jwt.verify(token,"123",(err1, decoded) => {
-                console.log(err1)
-                console.log(decoded)
-            })
-            res.status(200).send(token)
+            if(result){
+                var payLoad={id:values[0].id}
+                var token=jwt.sign(payLoad, serverSecret.serverSecret.secret,{expiresIn:"1h"});
+                res.status(200).send(token)
+            }else{
+                res.status(401).send("Not valid")
+            }
 }))
-
     })});
 
 app.listen(5000,()=> {

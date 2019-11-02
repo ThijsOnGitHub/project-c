@@ -3,9 +3,25 @@ import User from "../Components/User"
 import "../Components/User";
 var API_LINK='http://localhost:5000/api'
 
-class MyAccount extends React.Component{
-    constructor(){
-        super()
+interface IState {
+    content:{firstName:string,lastName:string,email:string,phone:string,birth:string,profielFotoLink:string}[],
+    firstName: string,
+    lastName:string,
+    email: string,
+    phone: string,
+    birth: string,
+    profielFotoLink: string,
+    isWerkgever: string
+}
+
+interface IProps {
+    apiLink:string
+}
+class MyAccount extends React.Component<IProps,IState>{
+    lijst:string[]
+
+    constructor(props:IProps){
+        super(props)
         this.state={
             content:[],
             firstName: "",
@@ -22,7 +38,7 @@ class MyAccount extends React.Component{
 
     refreshData= async ()=>{
         console.log("get data")
-        var request= await fetch(API_LINK+"/getgebruikerinfo")
+        var request= await fetch(this.props.apiLink+"getgebruikerinfo")
         var json= await request.json()
         console.log(json)
         this.setState({
@@ -40,7 +56,7 @@ class MyAccount extends React.Component{
                     <h1><span className="weighted">Delano's</span> account informatie</h1>
                 </div>
 
-                {this.state.content.map(value =>{ return<User naam={value.firstName} achternaam={value.lastName} mail={value.email} telefoon={value.phone} geboorte={value.birth} avatar={value.profielFotoLink}/>})}
+                {this.state.content.map(value =>{ return<User firstName={value.firstName} lastName={value.lastName} mail={value.email} telefoon={value.phone} geboorte={value.birth} avatar={value.profielFotoLink}/>})}
 
             </div>
         )

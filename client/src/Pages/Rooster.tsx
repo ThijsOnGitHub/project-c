@@ -1,11 +1,25 @@
-import React from 'react'
+import React, {ReactElement} from 'react'
 import RoosterComponent from "../Components/Rooster/RoosterStructuur/RoosterComponent";
 import RoosterItem from "../Components/Rooster/RoosterItems/RoosterItem";
 import WerknemerItem from "../Components/Rooster/RoosterItems/WerknemerItem";
 import WeekKiezer from "../Components/Rooster/WeekKiezer";
-class Rooster extends React.Component{
-    constructor(){
-        super();
+import {DagData} from "../Components/Rooster/RoosterStructuur/DagField";
+
+export type ItemData={datum:string,beginTijd:string,eindTijd:string}
+
+interface IState {
+    agendaJSON:ItemData[],
+    beginDatum:Date
+}
+
+interface IProps {
+    apiLink:string
+}
+
+class Rooster extends React.Component<IProps,IState>{
+
+    constructor(props:IProps){
+        super(props);
         this.state={
             agendaJSON:[],
             beginDatum:new Date()
@@ -14,16 +28,19 @@ class Rooster extends React.Component{
 
     componentDidMount=async ()=> {
         //Hier wordt de data uit de server gehaald en in de state gezet
-        var res=await fetch(this.props.apiLink+"/api/getAgenda/2").catch(reason => {console.log(reason)});
-        var agendaJSON=await res.json();
+        var res=await fetch(this.props.apiLink+"/getAgenda/2").catch(reason => {console.log(reason)});
+        var agendaJSON=[]
+        if(typeof res !=="undefined"){
+            agendaJSON=await res.json();
+        }
         this.setState({
             agendaJSON:agendaJSON
         })
     };
 
-    changeBeginDatum=(datum)=>{
+    changeBeginDatum=(datum:Date)=>{
         return new Promise((resolve => {
-            this.setState({beginDatum:datum},resolve())
+            this.setState({beginDatum:datum},resolve)
             })
         )
 
@@ -50,13 +67,12 @@ class Rooster extends React.Component{
                     Zo kan het roosterComponent ook worden gebruikt voor de baas
                     (let op de roosterItems worden pas in 'DagField echt geplaatst nu zijn ze nog functies
                     */
-                renderItems={ this.state.agendaJSON.map(value => {return {[new Date(value.datum).getTime()]: ((roosterData)=>{
+                renderItems={ this.state.agendaJSON.map(value => {return {[new Date(value.datum).getTime()]: ((roosterData:DagData):ReactElement<RoosterItem>=>{
                             return (
                                 <RoosterItem roosterData={roosterData} beginTijd={new Date(value.beginTijd)} eindTijd={new Date(value.eindTijd)}>
                                 {/* Hier komen de items in het rooster component*/}
                                     <WerknemerItem itemData={value}/>
                                 </RoosterItem>
-
                             )})}})} />
             </div>
         );

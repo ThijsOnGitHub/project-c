@@ -1,11 +1,11 @@
 import React from 'react'
 
+interface IProps {
+    datum:Date
+}
 
 
-class DagTitel extends React.Component{
-    constructor(){
-        super()
-    }
+class DagTitel extends React.Component<IProps>{
 
     render() {
 

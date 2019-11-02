@@ -1,47 +1,56 @@
-import React from 'react'
+import React from'react'
+import {inflate} from "zlib";
 
-function User(props) {
+interface IProps {
+    avatar:string
+    firstName:string
+    lastName:string
+    mail:string
+    telefoon:string
+    geboorte:string
+}
 
+function User(props:IProps) {
     return(
         <div id="reg">
         <form id="account">
                 <table>
                 <tbody>
                     <tr>
-                        <td colspan="3">
+                        <td colSpan={3} >
                             {/*Check if the user has an avatar picture, if not -> standard avatar for users*/}
                             {props.avatar===undefined ?
                             <img src='https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/3_avatar-512.png'/> :
-                            <img class='avatar' src={props.avatar}/>}
+                            <img className='avatar' src={props.avatar}/>}
                         </td>
                     </tr>
                     <tr>
-                        <td class="leftInfo"><p>Voornaam:</p></td>
-                        <td class="rightValue"><p>{props.naam}</p></td>
+                        <td className="leftInfo"><p>Voornaam:</p></td>
+                        <td className="rightValue"><p>{props.firstName}</p></td>
                         <td><input type='text' name="newVoornaam"/></td>
                     </tr>
                     <tr>
-                        <td class="leftInfo"><p>Achternaam:</p></td>
-                        <td class="rightValue"><p>{props.achternaam}</p></td>
+                        <td className="leftInfo"><p>Achternaam:</p></td>
+                        <td className="rightValue"><p>{props.lastName}</p></td>
                         <td><input type='text' name="newAchternaam"/></td>
                     </tr>
                     <tr>
-                        <td class="leftInfo"><p>Email:</p></td>
-                        <td class="rightValue"><p>{props.mail}</p></td>
+                        <td className="leftInfo"><p>Email:</p></td>
+                        <td className="rightValue"><p>{props.mail}</p></td>
                         <td><input type='text' name="newEmail"/></td>
                     </tr>
                     <tr>
-                        <td class="leftInfo"><p>Telefoonnummer:</p></td>
-                        <td class="rightValue"><p>{props.telefoon}</p></td>
+                        <td className="leftInfo"><p>Telefoonnummer:</p></td>
+                        <td className="rightValue"><p>{props.telefoon}</p></td>
                         <td><input type='text' name="newTelefoon"/></td>
                     </tr>
                     <tr>
-                        <td class="leftInfo"><p>Geboortedatum:</p></td>
-                        <td class="rightValue"><p>{props.geboorte}</p></td>
+                        <td className="leftInfo"><p>Geboortedatum:</p></td>
+                        <td className="rightValue"><p>{props.geboorte}</p></td>
                         <td><input type='text' name="newGeboorte"/></td>
                     </tr>
                     <tr>
-                        <td colSpan="3"><button>Wijzigen</button></td>
+                        <td colSpan={3}><button>Wijzigen</button></td>
                     </tr>
                 </tbody>
                 </table>

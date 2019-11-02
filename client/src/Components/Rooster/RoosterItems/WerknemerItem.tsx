@@ -1,12 +1,13 @@
 import React from 'react'
 import {ReactComponent as MoreOptions} from "../../../icons/more_horiz-24px.svg";
 import OptionWithIcon from "../../OptionWithIcon";
+import {ItemData} from "../../../Pages/Rooster";
 
+interface IProps {
+    itemData:ItemData
+}
 
-class WerknemerItem extends React.Component{
-    constructor(){
-        super()
-    }
+class WerknemerItem extends React.Component<IProps>{
 
     render() {
         return(

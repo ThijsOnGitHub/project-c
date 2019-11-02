@@ -12,7 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@hapi/joi": "^16.1.7",
     "@types/jsonwebtoken": "^8.3.5",
     "bcrypt": "^3.0.6",
     "cors": "^2.8.5",

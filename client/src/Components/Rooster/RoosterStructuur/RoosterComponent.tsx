@@ -1,9 +1,20 @@
-import React from 'react'
-import DagField from "./DagField";
+import React, {ReactElement} from 'react'
+import DagField, {DagData} from "./DagField";
 import TimeMarker from "./TimeMarker";
 import '../Rooster.css'
 import DagTitel from "./DagTitel";
+import RoosterItem from "../RoosterItems/RoosterItem";
+import {TimeMarkerTypes} from './TimeMarkerTypes';
 
+
+interface IProps {
+    startDate:Date
+    eindTijd:Date
+    beginTijd: Date
+    height:number
+    markerInterval:Date
+    renderItems:{[datum:string]:(RoosterData:DagData)=>ReactElement<RoosterItem>}[]
+}
 
 
 /*
@@ -11,12 +22,7 @@ import DagTitel from "./DagTitel";
     Daarnaast zorgt hij ervoor dat de begintijden en eindtijden op alle velden hetzelfde zijn
     En dat de roosterItems verdeeld worden over de dagen
  */
-class RoosterComponent extends React.Component{
-
-    constructor(){
-        super()
-    }
-
+class RoosterComponent extends React.Component<IProps>{
 
     render() {
         // Hier worden alle datums die weergeven moeten worden gegenereerd
@@ -39,15 +45,15 @@ class RoosterComponent extends React.Component{
                     </div>
                     <div className="roosterVelden ">
                         {/*Hier wordt de zijkant met de tijden gegenereerd  */}
-                    <TimeMarker interval={this.props.markerInterval} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} />
+                    <TimeMarker type={TimeMarkerTypes.time} interval={this.props.markerInterval} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} />
                     <div className="row dag dagTijden">
                     {
                         datums.map(value => <DagField datum={value} renderItems={
                             /* *1 Hier worden alle roosterItems verdeeld over de dagen d.m.v. de datum die in het object stond */
                             this.props.renderItems.filter(value1=>{
                             return Number.parseInt(Object.keys(value1)[0])===value.getTime()
-
-                        })} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} markerInterval={this.props.markerInterval}/>)
+                        }
+                        )} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} markerInterval={this.props.markerInterval}/>)
                     }
                     </div>
                     </div>
