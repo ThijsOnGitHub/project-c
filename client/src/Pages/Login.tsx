@@ -47,7 +47,7 @@ class Login extends React.Component<IProps,IState>{
 
     }
 
-    handleInputChange(event:React.ChangeEvent<HTMLInputElement>) {
+    handleInputChange=(event:React.ChangeEvent<HTMLInputElement>)=> {
         const target = event.currentTarget;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
