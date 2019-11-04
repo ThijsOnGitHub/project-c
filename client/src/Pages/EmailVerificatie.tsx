@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from "react-router-dom";
 
 interface IState {
     email:string
@@ -17,7 +16,7 @@ class EmailVerificatie extends React.Component<IProps,IState> {
     }
 
     verify() {
-        fetch(this.props.apiLink + "/api/activeergebruiker", {
+        fetch(this.props.apiLink + "/activeergebruiker", {
             method: 'PUT',
             body: JSON.stringify({
                 email: window.location.pathname.split('/')[2]
