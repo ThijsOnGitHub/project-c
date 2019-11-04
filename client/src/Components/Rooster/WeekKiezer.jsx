@@ -6,13 +6,13 @@ import {ReactComponent as BackIcon} from "../../icons/arrow_back.svg";
 
 class WeekKiezer extends React.Component{
     constructor(){
-        super()
+        super();
        this.state={
             week:1,
            year:2019,
            kiesbareWeken:Functions.range(52,1),
            kiesbareJaren:Functions.range(new Date().getFullYear(),2000)
-       }
+       };
         this.handleInputChange = this.handleInputChange.bind(this);
     }
 
@@ -25,41 +25,41 @@ class WeekKiezer extends React.Component{
     }
 
     changeWeek=(amount)=>{
-        var week=parseInt(this.state.week)
-        var year=this.state.year
+        var week=parseInt(this.state.week);
+        var year=this.state.year;
 
-        week+=amount
+        week+=amount;
         if (week>52){
-            week=week-52
+            week=week-52;
             year+=1
         }else if (week<1){
-            week=52-week
+            week=52-week;
             year-=1
         }
         this.setState({week:week,year:year},this.updateDate)
-    }
+    };
 
     updateDate=()=>{
         this.props.changeBeginDatum(Functions.getDateOfISOWeek(this.state.week,this.state.year))
-    }
+    };
 
     changeToMonday=(date)=>{
-        var amountBack=0
+        var amountBack=0;
         if(date.getDay()===0){
             amountBack=6
         }else{
             amountBack = date.getDay()-1
         }
         return new Date(date.getFullYear(),date.getMonth(),date.getDate()-amountBack)
-    }
+    };
 
     updateSelects=()=>{
         this.setState({year:this.props.beginDatum.getFullYear(),week:this.props.beginDatum.getWeekNumber()})
-    }
+    };
 
     componentDidMount() {
         // Als de ingevoederde datum geen maandag is wordt deze meteen omgezet naar de maandag in de week
-            this.props.changeBeginDatum(this.changeToMonday(this.props.beginDatum))
+            this.props.changeBeginDatum(this.changeToMonday(this.props.beginDatum));
         this.updateSelects()
     }
 
@@ -67,7 +67,7 @@ class WeekKiezer extends React.Component{
         return(
             <div className="row WeekKiezer">
                 <select name="week"  value={this.state.week} onChange={this.handleInputChange}>
-                        {this.state.kiesbareWeken.map((value)=><option style={{backgroundColor:this.state.week===value? "lightgray":undefined}} value={value} name='week'>Week {value}</option> )}
+                        {this.state.kiesbareWeken.map((value)=><option style={{backgroundColor:this.state.week===value? "lightgray":undefined}} value={value} name='week'>Week {value} {Functions.getDateOfISOWeek(value,this.state.year).toLocaleDateString("nl-NL",{day:"numeric",month:"short"})} </option> )}
                 </select>
                 <select name="year"  value={this.state.year} onChange={this.handleInputChange}>
                         {this.state.kiesbareJaren.map((value)=><option style={{backgroundColor:this.state.year===value? "lightgray":undefined}} value={value} name='year'>{value}</option> )}
