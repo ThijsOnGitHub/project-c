@@ -1,18 +1,32 @@
 import React from 'react'
-import {Link} from "react-router-dom";
+import MenuItem from "./MenuItem";
 
-class Menu extends React.Component{
+
+interface IProps {
+    loggedIn:boolean
+    logoutFunction:()=>void
+}
+
+class Menu extends React.Component <IProps>{
+
     render() {
         return(
             <div className="menu">
                 <ul>
                     <li><img id='logo' src="https://i.imgur.com/HVmQHos.png" alt="Logo RoosterIT"/></li>
-                    <li><Link to={'/'} className="active">Inloggen</Link></li>
-                    <li><Link to={'/Registratie'} >Registreren</Link></li>
-                    <li><Link to={"/MyAccount"}>Mijn account</Link></li>
-                    <li><Link to={"/DataTest"}>Contact</Link></li>
-                    <li><Link to={"/Rooster"}>Rooster</Link></li>
-                    <li><Link to={"/Home"}>Home(Temp)</Link></li>
+                    <MenuItem tekst={this.props.loggedIn?"Home":"Inloggen"} path={"/"}/>
+                {
+                    this.props.loggedIn?
+                        <div>
+                            <MenuItem tekst={"Mijn Account"} path={"/MyAccount"}/>
+                            <MenuItem  path={"/Rooster"} tekst={"Rooster"}/>
+                            <li ><a onClick={this.props.logoutFunction}>Uitloggen</a></li>
+                        </div>:
+                        <div>
+                            <MenuItem tekst={"Registeren"} path={'/Registratie'}/>.
+                        </div>
+
+                }
                 </ul>
             </div>
         )

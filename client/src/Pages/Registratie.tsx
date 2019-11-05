@@ -26,7 +26,7 @@ interface IState {
         birth: boolean,
         img_link:boolean
     },
-    fotoFile:FileList|[],
+    fotoFile:File,
     blackCircle:boolean,
     getImage:()=>Promise<Blob>
 }
@@ -64,7 +64,7 @@ class Registratie extends React.Component<IProps,IState>{
                 birth: false,
                 img_link:false
             },
-            fotoFile:[],
+            fotoFile:null,
             blackCircle:true,
             getImage:null
         };
@@ -118,8 +118,9 @@ class Registratie extends React.Component<IProps,IState>{
     // Converteer de waarden uit de state naar een JSON string om die in een POST request te plaatsen en te versturen.
     handleSubmit = async (event:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         // Laat de data niet verstuurd worden wanneer de input validatie niet succesvol is.
+        event.preventDefault();
         if (!this.canBeSubmitted()) {
-            event.preventDefault();
+
             return;
         }
         var object={};
@@ -153,6 +154,7 @@ class Registratie extends React.Component<IProps,IState>{
             method:'POST',
             body:formData
         }).then(value => console.log(value))
+
         //TO DO: Wat was er mis met de bestaande POST?
         /*
         fetch(this.props.apiLink+"/api/addgebruiker",{method:"POST",
@@ -194,7 +196,7 @@ class Registratie extends React.Component<IProps,IState>{
                 </tr>
                 <tr>
                     <label>Preview Profielfoto</label>
-                    <td><ProfielFotoBijsnijder size={350} blackCircle={this.state.blackCircle} setImageGetFunction={(functie)=>{this.setState({getImage:functie})}} image={this.state.fotoFile[0]}/></td>
+                    <td><ProfielFotoBijsnijder size={350} blackCircle={this.state.blackCircle} setImageGetFunction={(functie)=>{this.setState({getImage:functie})}} image={this.state.fotoFile}/></td>
                 </tr>
                 <tr>
                     <label>Upload Profielfoto</label>

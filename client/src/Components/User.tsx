@@ -8,6 +8,7 @@ interface IProps {
     mail:string
     telefoon:string
     geboorte:string
+    serverLink:string
 }
 
 function User(props:IProps) {
@@ -19,9 +20,9 @@ function User(props:IProps) {
                     <tr>
                         <td colSpan={3} >
                             {/*Check if the user has an avatar picture, if not -> standard avatar for users*/}
-                            {props.avatar===undefined ?
+                            {props.avatar.match("^http")?
                             <img src='https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/3_avatar-512.png'/> :
-                            <img className='avatar' src={props.avatar}/>}
+                            <img className='avatar' src={props.serverLink+"/api/avatar/"+props.avatar}/>}
                         </td>
                     </tr>
                     <tr>

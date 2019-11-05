@@ -1,14 +1,17 @@
 import React from 'react';
 import {IState as AppState} from "../App";
+import * as jsonwebtoken from 'jsonwebtoken'
 
 interface IProps {
     apiLink:string
+    serverLink:string
     changeHigherState:(functie:(oldState:AppState)=>Partial<AppState>)=>void
 }
 
 interface IState {
     email:string
     pass:string
+    loading:boolean
 }
 
 
@@ -17,33 +20,39 @@ class Login extends React.Component<IProps,IState>{
         super(props)
         this.state={
             email:"",
-            pass:""
+            pass:"",
+            loading:false
         }
     }
 
 
      handleSubmit=async (event:React.MouseEvent<HTMLButtonElement,MouseEvent>)=> {
+        this.setState({loading:true})
         event.preventDefault()
-        var result=await fetch(this.props.apiLink+"/login", {
+        var result=await fetch(this.props.serverLink+"/auth/login", {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({email: this.state.email, pass: this.state.pass}) // body data type must match "Content-Type" header
+            credentials:"include",
+            body: JSON.stringify({email: this.state.email, pass: this.state.pass})// body data type must match "Content-Type" header
         })
+         var token= await result.json()
          console.log(result.status)
-         alert(result.status)
-
          if(result.status===200){
-             alert("I hope you can pass")
-             this.props.changeHigherState((oldstate)=>{
-                 return {loggedIn:true}
-             })
+             localStorage.setItem("refreshToken",token.refreshToken)
+             sessionStorage.setItem("authToken",token.sessionToken)
+             let tokenObject= jsonwebtoken.decode(token.sessionToken)
+             if(typeof tokenObject !== "string"){
+                 var exp=tokenObject.exp
+                 this.props.changeHigherState((oldstate)=>{
+                     return {authEnd:exp,loggedIn:true}
+                 })
+             }
          }else{
              alert("You shall not pass")
-         }
-
+     }
+     this.setState({loading:true})
 
     }
 
@@ -74,8 +83,15 @@ class Login extends React.Component<IProps,IState>{
                             <td><a href="#">Wachtwoord vergeten?</a></td>
                         </tr>
                         <tr>
-                            <button onClick={this.handleSubmit}>Login</button>
-                        </tr>
+                        {
+                            this.state.loading
+                                ?
+                                <p>Loading...</p>
+                                :
+                                <button onClick={this.handleSubmit}>Login</button>
+
+                        }
+                            </tr>
                         </tbody>
                     </table>
                 </form>
