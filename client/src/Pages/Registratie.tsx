@@ -1,4 +1,4 @@
-import React, {MouseEventHandler} from 'react';
+import React from 'react';
 import {Link} from "react-router-dom";
 import ProfielFotoBijsnijder from "../Components/ProfielFotoBijsnijder";
 
@@ -116,7 +116,7 @@ class Registratie extends React.Component<IProps,IState>{
     }
 
     // Converteer de waarden uit de state naar een JSON string om die in een POST request te plaatsen en te versturen.
-    handleSubmit = async (event:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    handleSubmit =async (event:React.MouseEvent)=> {
         // Laat de data niet verstuurd worden wanneer de input validatie niet succesvol is.
         if (!this.canBeSubmitted()) {
             event.preventDefault();
@@ -149,7 +149,8 @@ class Registratie extends React.Component<IProps,IState>{
                 var val=this.state[value];
                 formData.append(value,val.toString())
             })
-        fetch(this.props.apiLink+"/addgebruiker",{
+
+        fetch(this.props.apiLink+"/api/addgebruiker",{
             method:'POST',
             body:formData
         }).then(value => console.log(value))
