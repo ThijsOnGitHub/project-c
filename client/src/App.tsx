@@ -4,6 +4,7 @@ import './App.css';
 import {BrowserRouter,Switch,Route} from "react-router-dom";
 import Menu from "./Components/Menu/Menu";
 import Registratie from "./Pages/Registratie";
+import EmailVerificatie from "./Pages/EmailVerificatie";
 import Rooster from "./Pages/Rooster";
 import addFunctions from "./Values/addFunctions";
 import Login from "./Pages/Login";
@@ -43,6 +44,7 @@ class App extends React.Component<{},IState>{
                 <Switch>
                     <Route path="/" exact render={()=> <Login apiLink={this.state.apiLink} changeHigherState={this.changeState}/> } />
                     <Route path="/Registratie" render={()=><Registratie apiLink={this.state.apiLink}/>}/>
+                    <Route path="/EmailVerificatie" render={()=><EmailVerificatie apiLink={this.state.apiLink}/>}/>
                     <Route path="/MyAccount" render={()=><MyAccount apiLink={this.state.apiLink}/>}/>
                     <Route path="/Rooster" render={()=><Rooster apiLink={this.state.apiLink}/>}/>
                     <Route path="/Home" render={()=><Home/>}/>
