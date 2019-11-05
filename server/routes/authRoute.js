@@ -7,37 +7,46 @@ var {serverSecret}=require('../serverSecret');
 var connection=mysql.createConnection(serverSecret.databaseLogin);
 
 
-router.post("/Login", (req,res) =>{
+router.post("/Login", (req,res) => {
     console.log(req.body);
-    connection.query("SELECT email,pass,id FROM gebruiker where email = ?",[req.body.email],(err,values,fields)=>{
+    connection.query("SELECT email,pass,id,verificatie=1 as verificatie FROM gebruiker where email = ?", [req.body.email], (err, values, fields) => {
         console.log(values.length)
         console.log(values)
-        if (err|| values.length === 0) {
 
-            res.status(401).send("Not valid")
-        }
-        else (bcrypt.compare(req.body.pass,values[0].pass,(err,result)=>{
-            if(err){
-                console.error(err)
+            if (err || values.length === 0) {
+                res.status(401).send("Wachtwoord of E-mail niet geldig")
+            } else {
+                console.log(values[0].verificatie)
+                if (values[0].verificatie) {
+                    (bcrypt.compare(req.body.pass, values[0].pass, (err, result) => {
+                        if (err) {
+                            console.error(err)
+                        }
+                        console.log(result)
+                        if (result) {
+                            var payLoad = {id: values[0].id}
+                            var sessionToken = jwt.sign(payLoad, serverSecret.sessionSecret, {expiresIn: "5m"});
+                            var refreshToken = jwt.sign(payLoad, serverSecret.refreshSecret)
+                            connection.query("INSERT INTO authSessions value (?,?)", [refreshToken, values[0].id], (err, values, fiels) => {
+                                if (err) {
+                                    console.log(err)
+                                    res.status(502).send(err)
+                                } else {
+                                    res.status(200).json({sessionToken: sessionToken, refreshToken: refreshToken})
+                                }
+                            })
+                        } else {
+                            res.status(401).send("Wachtwoord of E-mail niet geldig")
+                        }
+                    }))
+                } else {
+                    res.status(401).send("Mail is niet geverifieerd")
+                }
             }
-            console.log(result)
-            if(result){
-                var payLoad={id:values[0].id}
-                var sessionToken=jwt.sign(payLoad, serverSecret.sessionSecret,{expiresIn:"5m"});
-                var refreshToken=jwt.sign(payLoad,serverSecret.refreshSecret)
-                connection.query("INSERT INTO authSessions value (?,?)",[refreshToken,values[0].id],(err,values,fiels)=>{
-                    if(err){
-                        console.log(err)
-                        res.status(502).send(err)
-                    }else{
-                        res.status(200).json({sessionToken:sessionToken,refreshToken:refreshToken})
-                    }
-                })
-            }else{
-                res.status(401).send("Not valid")
-            }
-        }))
-    })});
+
+    });
+
+})
 
 router.get("/refresh",(req, res) => {
     connection.query("SELECT *  FROM authSessions WHERE refreshToken=?",[req.header("refreshToken")],(err,values)=>{

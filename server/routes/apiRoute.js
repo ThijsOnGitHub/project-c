@@ -170,5 +170,5 @@ app.get("/getgebruikerinfo",auth,async (req,res)=>{
         res.json(results)
     });
 });
-
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports=app

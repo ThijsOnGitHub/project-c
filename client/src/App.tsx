@@ -109,6 +109,7 @@ class App extends React.Component<{},IState>{
             <BrowserRouter>
                 <Menu logoutFunction={this.logout} loggedIn={this.state.loggedIn}/>
                 <Switch>
+                    <Route path={"/emailverificatie/:email"} render={(props:{match:{params:{email:string}}}) => <EmailVerificatie apiLink={this.state.apiLink} email={props.match.params.email}/>}/>
                     {
                         this.state.loggedIn ?
                             <Switch>
