@@ -27,7 +27,7 @@ router.post("/Login", (req,res) => {
                             var payLoad = {id: values[0].id}
                             var sessionToken = jwt.sign(payLoad, serverSecret.sessionSecret, {expiresIn: "5m"});
                             var refreshToken = jwt.sign(payLoad, serverSecret.refreshSecret)
-                            connection.query("INSERT INTO authSessions(refreshToken, gebruikerId, tokenCreated) value (?,?,?)", [refreshToken, values[0].id,Date.now()], (err, values, fiels) => {
+                            connection.query("INSERT INTO authSessions(refreshToken, gebruikerId, tokenCreated) value (?,?,?)", [refreshToken, values[0].id,new Date()], (err, values, fiels) => {
                                 if (err) {
                                     console.log(err)
                                     res.status(502).send(err)
