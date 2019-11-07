@@ -36,7 +36,7 @@ interface IProps {
 }
 
 class Registratie extends React.Component<IProps,IState>{
-    private lijst:(keyof IState)[]
+    private lijst:(keyof IState)[];
 
     constructor(props:IProps){
         super(props);
@@ -127,7 +127,7 @@ class Registratie extends React.Component<IProps,IState>{
 
         this.lijst.forEach(value=>{
             var val=this.state[value];
-            var returnValue
+            var returnValue;
             if(typeof returnValue==='boolean'){
                 returnValue=val ? 1 : 0
             }else if (value==="birth" && typeof val=== "string"){
@@ -137,19 +137,19 @@ class Registratie extends React.Component<IProps,IState>{
             }
             object = returnValue;
         });
-        var wachten=await this.setState({blackCircle:false})
+        var wachten=await this.setState({blackCircle:false});
 
-        var image=await this.state.getImage()
+        var image=await this.state.getImage();
         console.log("sending");
         console.log(object);
 
 
-        var formData=new FormData()
-        formData.append("profielFoto",image)
+        var formData=new FormData();
+        formData.append("profielFoto",image);
             this.lijst.forEach( value => {
                 var val=this.state[value];
                 formData.append(value,val.toString())
-            })
+            });
         fetch(this.props.apiLink+"/addgebruiker",{
             method:'POST',
             body:formData
@@ -165,14 +165,14 @@ class Registratie extends React.Component<IProps,IState>{
             value.json().then(value1 => {console.log(value1.message)})
         });
         */
-    }
+    };
 
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
         type fields={birth: boolean, email: boolean, firstName: boolean, lastName: boolean, pass: boolean,phone: boolean}
         const errors:fields = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth,this.state.img_link);
         const isDisabled = Object.values(errors).some(value => value);
-        console.log(errors)
+        console.log(errors);
 
 
         // Valideer of een fout getoond zou moeten worden.

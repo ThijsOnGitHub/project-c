@@ -32,7 +32,7 @@ class Rooster extends React.Component<IProps,IState>{
     componentDidMount=async ()=> {
         //Hier wordt de data uit de server gehaald en in de state gezet
         var res=await fetch(this.props.apiLink+"/getAgenda",{headers:{"authToken":sessionStorage.getItem("authToken")}}).catch(reason => {console.log(reason)});
-        var agendaJSON=[]
+        var agendaJSON=[];
         if(typeof res !=="undefined"){
             agendaJSON=await res.json();
         }
