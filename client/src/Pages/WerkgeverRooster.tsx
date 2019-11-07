@@ -25,18 +25,6 @@ class WerkgeverRooster extends React.Component<{}, IState>{
         }
     }
 
-    componentDidMount=async ()=> {
-        //Hier wordt de data uit de server gehaald en in de state gezet
-        var res=await fetch(this.props.apiLink+"/getAgenda",{headers:{"authToken":sessionStorage.getItem("authToken")}}).catch(reason => {console.log(reason)});
-        var agendaJSON=[];
-        if(typeof res !=="undefined"){
-            agendaJSON=await res.json();
-        }
-        this.setState({
-            agendaJSON:agendaJSON,
-            loading:false
-        })
-    };
 
     changeBeginDatum=(datum:Date)=>{
         return new Promise((resolve => {
