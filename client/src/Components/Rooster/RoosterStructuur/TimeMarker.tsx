@@ -1,10 +1,24 @@
 import React from 'react'
-import functions from "../../../Values/functions";
+import {TimeMarkerTypes} from "./TimeMarkerTypes";
 
-class TimeMarker extends React.Component{
+interface IProps {
+    beginTijd:Date
+    eindTijd:Date
+    interval:Date
+    hourHeight:number
+    height:number
+    type:TimeMarkerTypes
+}
 
-    constructor(){
-        super();
+interface IState {
+    uren:{tijd:Date,y:number}[]
+    beginTijd:null,
+    eindTijd:null
+}
+class TimeMarker extends React.Component<IProps,IState>{
+
+    constructor(props:IProps){
+        super(props);
         this.state={
             uren:[],
             beginTijd:null,
@@ -24,7 +38,7 @@ class TimeMarker extends React.Component{
     }
 
     //Deze functie zorgt ervoor dat de datum niet meeteld bij getTime on je bij 00:00:00 ook 0 ms krijgt
-    makeDateZero(date){
+    makeDateZero(date:number){
         return new Date(new Date(1970,0,1,1).getTime()+date)
     }
 
@@ -35,10 +49,10 @@ class TimeMarker extends React.Component{
                     // Hier worden voor alle tijden of lijnen op de uren geplaatst
                     this.state.uren.map((value,index,list) =>{
                         var item=<div/>;
-                    var data={position:"absolute",left:0,top:value.y,textAlign:"center",margin:0};
+                    var data:React.CSSProperties={position:"absolute",left:0,top:value.y,textAlign:"center",margin:0};
 
                     //Hier wordt gedefineerd of er een lijn of een tijd wordt weergegeven
-                    if (this.props.type==="line"){
+                    if (this.props.type===TimeMarkerTypes.line){
                         if(index!==0 && index!==list.length-1) {
                             Object.assign(data, {marginTop: -2});
                             item = <div className="lineMarker" style={data}/>

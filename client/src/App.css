@@ -19,10 +19,7 @@ body{
   cursor: move;
 }
 
-.center >*{
-  align-items: center;
-  margin: auto;
-}
+
 
 /*--------------Global Menu--------------*/
 .menu{
@@ -393,6 +390,15 @@ nav {
   margin-top: 50px;
 }
 
+.center,.centerContent > *{
+    display: flex!important;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    margin-left: auto!important;
+    margin-right: auto!important;
+}
+
 #intro table{
   margin: auto;
   padding-top: 30px;
@@ -540,7 +546,9 @@ button:hover {
 .error {
   border: 1px solid red;
 }
-
+.errorMessage{
+  color: red;
+}
 /* Andere dingen */
 
 .LinebreakPrevent {
@@ -615,7 +623,7 @@ button:hover {
   font-weight: 600;
 }
 .avatar{
-  border-radius: 100px;
+  border-radius: 50%;
 }
 
 #account input{
