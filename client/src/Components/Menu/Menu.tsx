@@ -21,6 +21,7 @@ class Menu extends React.Component <IProps>{
                             <MenuItem tekst={"Mijn Account"} path={"/MyAccount"}/>
                             <MenuItem  path={"/Rooster"} tekst={"Rooster"}/>
                             <li ><a onClick={this.props.logoutFunction}>Uitloggen</a></li>
+                            <MenuItem tekst={"Werkgeverrooster"} path={"/WerkgeverRooster"}/>
                         </div>:
                         <div>
                             <MenuItem tekst={"Registeren"} path={'/Registratie'}/>.

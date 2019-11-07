@@ -10,6 +10,7 @@ import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import MyAccount from "./Pages/MyAccount";
 import * as jsonwebtoken from 'jsonwebtoken'
+import WerkgeverRooster from "./Pages/WerkgeverRooster";
 
 export interface IState {
     apiLink:string
@@ -115,6 +116,7 @@ class App extends React.Component<{},IState>{
                             <Switch>
                                 <Route path="/MyAccount" render={() => <MyAccount apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
                                 <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink}/>}/>
+                                <Route path="/WerkgeverRooster" render={() => <WerkgeverRooster/>}/>
                                 <Route path="/" render={() => <Home/>}/>
                             </Switch>
                             :
