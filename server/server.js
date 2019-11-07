@@ -1,12 +1,12 @@
 const express = require('express');
 const cors= require('cors');
 serverLogin=require('./serverlogin');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 
 serverSecret=require('./serverSecret');
 
-authRoute=require('./routes/authRoute')
-apiRoute=require("./routes/apiRoute")
+authRoute=require('./routes/authRoute');
+apiRoute=require("./routes/apiRoute");
 
 
 
@@ -14,12 +14,12 @@ apiRoute=require("./routes/apiRoute")
 var app = express();
 app.use(cors({origin:"http://localhost:3000",credentials:true}));
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
 
 
 
-app.use("/api",apiRoute)
-app.use("/auth",authRoute)
+app.use("/api",apiRoute);
+app.use("/auth",authRoute);
 
 
 /*

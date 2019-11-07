@@ -8,13 +8,13 @@ export default function () {
     //String functie
     String.prototype.capitalFirst =function () {
         return this.charAt(0).toUpperCase() +this.slice(1)
-    }
+    };
 
     //Date Functies
 
     Date.prototype.toTime = function () {
         return new Date(this.getTime()+2209076372000)
-    }
+    };
 
     Date.prototype.getWeekNumber = function(){
         var d:Date = new Date(Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()));

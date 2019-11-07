@@ -36,7 +36,7 @@ class WeekKiezer extends React.Component<IProps,IState>{
         }
         this.setState<never>({[name]:value}, this.updateDate  )
 
-    }
+    };
 
     changeWeek=(amount:number)=>{
         var week=this.state.week;
