@@ -10,6 +10,7 @@ import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import MyAccount from "./Pages/MyAccount";
 import * as jsonwebtoken from 'jsonwebtoken'
+import loadingIcon from "./img/Loding-Icon-zwart.gif";
 
 export interface IState {
     apiLink:string
@@ -17,6 +18,7 @@ export interface IState {
     authEnd:number
     loggedIn:boolean
     logoutTimeout:number
+    loading:boolean
 }
 
 class App extends React.Component<{},IState>{
@@ -29,14 +31,18 @@ class App extends React.Component<{},IState>{
           serverLink:server,
           authEnd:0,
           loggedIn:false,
-          logoutTimeout:null
+          logoutTimeout:null,
+          loading:false
+
       };
       // this programm adds new string functions
       addFunctions()
   }
 
   componentDidMount=async ():Promise<void>=> {
-      this.updateAuth()
+      this.setState({loading:true})
+      await this.updateAuth()
+      this.setState({loading:false})
 
   }
 
@@ -49,12 +55,12 @@ class App extends React.Component<{},IState>{
   }
 
   updateAuth=async ()=>{
+      console.log("update")
+      const refreshToken=localStorage.getItem("refreshToken")
       const authToken=sessionStorage.getItem("authToken")
       if(authToken!==null){
           this.setState({loggedIn:true,authEnd:this.getExp(authToken)})
-      }else{
-          const refreshToken=localStorage.getItem("refreshToken")
-          if(refreshToken!==null){
+      }else if(refreshToken!==null){
               const result=await fetch(this.state.serverLink+"/auth/refresh",{
                   headers:{
                       refreshToken:refreshToken
@@ -69,8 +75,10 @@ class App extends React.Component<{},IState>{
                   this.setState({loggedIn:false})
                   localStorage.removeItem("refreshToken")
               }
-          }
+      }else{
+          this.setState({loggedIn:false})
       }
+
   }
 
   changeState=(functie:(oldState:IState)=>Partial<IState>)=>{
@@ -108,22 +116,32 @@ class App extends React.Component<{},IState>{
         <div>
             <BrowserRouter>
                 <Menu logoutFunction={this.logout} loggedIn={this.state.loggedIn}/>
-                <Switch>
-                    <Route path={"/emailverificatie/:email"} render={(props:{match:{params:{email:string}}}) => <EmailVerificatie apiLink={this.state.apiLink} email={props.match.params.email}/>}/>
-                    {
-                        this.state.loggedIn ?
-                            <Switch>
-                                <Route path="/MyAccount" render={() => <MyAccount apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
-                                <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink}/>}/>
-                                <Route path="/" render={() => <Home/>}/>
-                            </Switch>
-                            :
-                            <Switch>
-                                <Route path="/registratie" render={() => <Registratie apiLink={this.state.apiLink}/>}/>
-                                <Route path="/" render={() => <Login apiLink={this.state.apiLink} changeHigherState={this.changeState} serverLink={this.state.serverLink}/>}/>
-                            </Switch>
-                    }
-                </Switch>
+                {
+                    this.state.loading?
+                    <div className="center">
+                        <img src={loadingIcon} width={300} style={{margin:"auto"}}/>
+                    </div>:
+                    <div>
+
+                        <Switch>
+                            <Route path={"/emailverificatie/:email"} render={(props:{match:{params:{email:string}}}) => <EmailVerificatie apiLink={this.state.apiLink} email={props.match.params.email}/>}/>
+                            {
+                                this.state.loggedIn ?
+                                    <Switch>
+                                        <Route path="/MyAccount" render={() => <MyAccount apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
+                                        <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink}/>}/>
+                                        <Route path="/" render={() => <Home/>}/>
+                                    </Switch>
+                                    :
+                                    <Switch>
+                                        <Route path="/registratie" render={() => <Registratie apiLink={this.state.apiLink}/>}/>
+                                        <Route path="/" render={() => <Login apiLink={this.state.apiLink} changeHigherState={this.changeState} serverLink={this.state.serverLink}/>}/>
+                                    </Switch>
+                            }
+                        </Switch>
+                    </div>
+                }
+
               </BrowserRouter>
         </div>
     );
