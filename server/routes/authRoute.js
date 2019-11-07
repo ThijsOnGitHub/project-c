@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 var {serverSecret}=require('../serverSecret');
 var connection=mysql.createConnection(serverSecret.databaseLogin);
 
+const expireTime="3m"
 
 router.post("/Login", (req,res) => {
     console.log(req.body);
@@ -25,9 +26,9 @@ router.post("/Login", (req,res) => {
                         console.log(result)
                         if (result) {
                             var payLoad = {id: values[0].id}
-                            var sessionToken = jwt.sign(payLoad, serverSecret.sessionSecret, {expiresIn: "5m"});
+                            var sessionToken = jwt.sign(payLoad, serverSecret.sessionSecret, {expiresIn: expireTime});
                             var refreshToken = jwt.sign(payLoad, serverSecret.refreshSecret)
-                            connection.query("INSERT INTO authSessions(refreshToken, gebruikerId, tokenCreated) value (?,?,?)", [refreshToken, values[0].id,new Date()], (err, values, fiels) => {
+                            connection.query("INSERT INTO authSessions(refreshToken, gebruikerId, tokenCreated,tokenLastUsed) value (?,?,current_timestamp,current_timestamp)", [refreshToken, values[0].id], (err, values, fiels) => {
                                 if (err) {
                                     console.log(err)
                                     res.status(502).send(err)
@@ -49,6 +50,7 @@ router.post("/Login", (req,res) => {
 })
 
 router.get("/refresh",(req, res) => {
+    console.log("Refresh")
     connection.query("SELECT *  FROM authSessions WHERE refreshToken=?",[req.header("refreshToken")],(err,values)=>{
         if(err){
             res.status(401).send()
@@ -59,7 +61,9 @@ router.get("/refresh",(req, res) => {
                 if(err1){
                     res.status(401).send()
                 }else{
-                    const authToken=jwt.sign({id:decoded.id},serverSecret.sessionSecret,{expiresIn:"5m"})
+
+                    connection.query("UPDATE authSessions SET tokenLastUsed=CURRENT_TIMESTAMP WHERE refreshToken=?",[values[0].refreshToken])
+                    const authToken=jwt.sign({id:decoded.id},serverSecret.sessionSecret,{expiresIn:expireTime})
                     res.status(200).send(authToken)
                 }
             })
