@@ -1,11 +1,23 @@
 import React from 'react'
+import {DagData} from "../RoosterStructuur/DagField";
 
-class RoosterItem extends React.Component{
-    constructor(){
-        super();
+interface IState {
+    top:number
+    length:number
+}
+
+interface IProps {
+    beginTijd:Date
+    eindTijd:Date
+    roosterData:DagData
+}
+
+class RoosterItem extends React.Component<IProps,IState>{
+    constructor(props:IProps){
+        super(props);
         this.state={
             top:0,
-            lengte:0
+            length:0
         }
     }
 
@@ -14,7 +26,7 @@ class RoosterItem extends React.Component{
 
     }
 
-    calcHeightfromHours(beginTijd,eindTijd){
+    calcHeightfromHours(beginTijd:Date,eindTijd:Date){
         var miliseconden=eindTijd.getTime()-beginTijd.getTime();
         var aantalUur=miliseconden/1000/60/60;
         return this.props.roosterData.hourHeight*aantalUur

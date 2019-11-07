@@ -2,15 +2,20 @@ import React from 'react'
 import {Link} from "react-router-dom";
 import { ReactComponent as CalendarIcon } from "../calendar.svg";
 import { ReactComponent as MoneyIcon } from "../money.svg";
-
 import Notification from "../Components/Notification";
 
-class Home extends React.Component{
-    constructor(){
-        super();
+
+
+
+interface IState {
+  notifs:{name:string,messageType:number}[]
+}
+
+
+class Home extends React.Component<{},IState>{
+    constructor(props:{}){
+        super(props);
         this.state= {
-            uname: "",
-            pass: "",
             notifs: []
         };
         this.handleInputChange=this.handleInputChange.bind(this)
@@ -38,7 +43,7 @@ class Home extends React.Component{
                 }
                 )
     };
-    addNotif(person, messageId, bedrijfId) {
+    addNotif(person:number, messageId:number, bedrijfId:number) {
         fetch(
             "http://localhost:5000/api/addnotif", {
                 method:"post",
@@ -54,12 +59,12 @@ class Home extends React.Component{
         )
     }
 
-    handleInputChange(event) {
+    handleInputChange(event:React.ChangeEvent<HTMLInputElement>) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
-        this.setState({
+        this.setState<never>({
             [name]: value
         });
     }
@@ -67,7 +72,7 @@ class Home extends React.Component{
     render() {
         return(
             <div className="Home">
-                <div align='center' className="LinebreakPrevent">
+                <div style={{textAlign: "center"}} className="LinebreakPrevent">
                     <Link to='./Rooster'>
                         <figure>
                             <CalendarIcon width="150" height="150"/>
