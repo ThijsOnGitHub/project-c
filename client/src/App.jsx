@@ -8,6 +8,7 @@ import Rooster from "./Pages/Rooster";
 import addFunctions from "./Values/addFunctions";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
+import MyAccount from "./Pages/MyAccount";
 
 
 class App extends React.Component{
@@ -32,6 +33,7 @@ class App extends React.Component{
             <Switch>
               <Route path="/" exact render={()=> <Login /> } />
               <Route path="/Registratie" render={()=><Registratie apiLink={this.state.apiLink}/>}/>
+              <Route path="/MyAccount" render={()=><MyAccount />}/>
               <Route path="/Rooster" render={()=><Rooster apiLink={this.state.apiLink}/>}/>
               <Route path="/Home" render={()=><Home/>}/>
             </Switch>
