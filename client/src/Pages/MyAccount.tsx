@@ -16,6 +16,7 @@ interface IState {
 
 interface IProps {
     apiLink:string
+    serverLink:string
 }
 class MyAccount extends React.Component<IProps,IState>{
     lijst:string[]
@@ -38,7 +39,7 @@ class MyAccount extends React.Component<IProps,IState>{
 
     refreshData= async ()=>{
         console.log("get data")
-        var request= await fetch(this.props.apiLink+"/getgebruikerinfo")
+        var request= await fetch(this.props.apiLink+"/getgebruikerinfo",{headers:{authToken:sessionStorage.getItem("authToken")}})
         var json= await request.json()
         console.log(json)
         this.setState({
@@ -53,10 +54,10 @@ class MyAccount extends React.Component<IProps,IState>{
         return(
             <div>
                 <div className="underlay">
-                    <h1><span className="weighted">Delano's</span> account informatie</h1>
+                    <h1><span className="weighted">{this.state.content.length>0 && this.state.content[0].firstName}'s</span> account informatie</h1>
                 </div>
 
-                {this.state.content.map(value =>{ return<User firstName={value.firstName} lastName={value.lastName} mail={value.email} telefoon={value.phone} geboorte={value.birth} avatar={value.profielFotoLink}/>})}
+                {this.state.content.map(value =>{ return<User serverLink={this.props.serverLink} firstName={value.firstName} lastName={value.lastName} mail={value.email} telefoon={value.phone} geboorte={value.birth} avatar={value.profielFotoLink}/>})}
 
             </div>
         )
