@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 var mysql = require('mysql');
 const cors= require('cors');
-serverLogin=require('./serverlogin');
 const multer = require('multer');
 const jwt = require  ('jsonwebtoken');
 
@@ -32,7 +31,7 @@ var storage= multer.diskStorage({
 
 var upload=multer({storage:storage})
 
-var connection=mysql.createConnection(serverLogin.serverLogin)
+
 
 
 
