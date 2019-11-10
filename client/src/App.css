@@ -563,7 +563,6 @@ button:hover {
   background: #eeeeee;
   align-content: center;
   justify-content: center;
-  padding-top: 30px;
 }
 .Home figcaption {
   color: white;
@@ -590,7 +589,9 @@ button:hover {
   padding-left: 50px;
   padding-right: 50px;
   max-width: 250px;
+  margin-left: 40px;
 }
+
 .notifList {
   overflow: auto;
   max-height: 300px;
@@ -603,6 +604,17 @@ button:hover {
   display: block;
   padding-left: 20px;
   padding-right: 20px;
+}
+
+.HomeInfo {
+  background: #dddddd;
+  display: flex;
+  margin: auto;
+  border-radius: 50px;
+  padding-left: 50px;
+}
+.HomeContents {
+  display: block;
 }
 
 /*My Account page*/
