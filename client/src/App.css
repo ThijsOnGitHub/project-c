@@ -490,6 +490,14 @@ button:hover {
 }
 
 /*---------------Registratie---------------*/
+#msg{
+    display: block;
+    width: auto;
+    margin: auto;
+    color: #622081;
+    font-weight: 600;
+    text-align: center;
+}
 #reg, #Login {
   border-radius: 40px;
   background:#f7f7f7;
