@@ -76,8 +76,6 @@ app.get("/avatar/:name",(req,res)=>{
     res.sendFile(__dirname.split("\\").slice(0,-1).join("\\")+"/uploads/"+req.params.name)
 })
 
-
-
 // Zend een POST request dat de data uit de front-end in de database krijgt.
 app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
     var data = req.body;
