@@ -1,6 +1,6 @@
 const express = require('express');
 const cors= require('cors');
-serverLogin=require('./serverlogin');
+
 const cookieParser = require('cookie-parser')
 
 serverSecret=require('./serverSecret');
