@@ -1,10 +1,10 @@
 const express = require('express');
-app=express.Router()
+app=express.Router();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 var mysql = require('mysql');
 const multer = require('multer');
-const auth=require("../verifytoken")
+const auth=require("../verifytoken");
 var {serverSecret}=require('../serverSecret');
 
 
@@ -15,16 +15,16 @@ var storage= multer.diskStorage({
     },
     filename: (req,file,cb) =>{
         //
-        console.log(file.fieldname==="profielFoto")
+        console.log(file.fieldname==="profielFoto");
         if(file.fieldname === "profielFoto"){
             cb(null,"Profielfoto"+Date.now()+".png")
         }else{
             cb(null,"randow "+new Date().toDateString()+".png")
         }
     }
-})
+});
 
-var upload=multer({storage:storage})
+var upload=multer({storage:storage});
 
 var connection=mysql.createConnection(serverSecret.databaseLogin);
 
@@ -37,7 +37,7 @@ app.get("/bedrijf",async (req,res)=>{
 
 
 app.get("/getAgenda",auth,(req,res)=>{
-    console.log(req.user)
+    console.log(req.user);
     console.log("get agenda from user: "+req.user.id);
     connection.query('SELECT datum,beginTijd,eindTijd FROM roosterItems where userId=?',[req.user.id],(err,values)=>{
         //Hier worden de tijden omgezet in javascript format zodat ze tot DATE object kunnen worden gemaakt
@@ -72,16 +72,16 @@ app.get("/test",(req,res)=>{
 
 
 app.get("/avatar/:name",(req,res)=>{
-    console.log(__dirname.split("/"))
+    console.log(__dirname.split("/"));
     res.sendFile(__dirname.split("\\").slice(0,-1).join("\\")+"/uploads/"+req.params.name)
-})
+});
 
 
 
 // Zend een POST request dat de data uit de front-end in de database krijgt.
 app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
     var data = req.body;
-    console.log(data.firstName)
+    console.log(data.firstName);
     data.pass = await bcrypt.hash(data.pass, 10 );
     console.log("Toevoeging gebruiker:");
     connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, profielFotoLink, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth, req.file.filename,data.isWerkgever?1:0],
@@ -154,7 +154,7 @@ app.post("/addnotif",async (req, res) => {
 
 app.get("/getnotifs", (req, res) => {
     console.log("Getting notifs...");
-    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id', [], (err, result, val) => {
+    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id', [], (err, result, val) => {
         if (err !== null) {
             console.log(err);
             res.status(400).send()
@@ -163,7 +163,7 @@ app.get("/getnotifs", (req, res) => {
         console.log(result);
         res.json(result)
     })
-})
+});
 app.get("/getgebruikerinfo",auth,async (req,res)=>{
     console.log("Get user info");
     connection.query("SELECT firstName, lastName, email, phone, birth, profielFotoLink FROM roosterit.gebruiker where id= ?",[req.user.id], (error, results, fields) =>{
@@ -171,4 +171,4 @@ app.get("/getgebruikerinfo",auth,async (req,res)=>{
     });
 });
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-module.exports=app
+module.exports=app;

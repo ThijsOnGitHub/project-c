@@ -564,7 +564,7 @@ button:hover {
   align-content: center;
   justify-content: center;
 }
-.Home figcaption {
+.Button {
   color: white;
   background: #622081;
   font-weight: bold;

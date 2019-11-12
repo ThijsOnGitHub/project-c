@@ -39,13 +39,13 @@ class MyAccount extends React.Component<IProps,IState>{
 
     refreshData= async ()=>{
         console.log("get data");
-        var request= await fetch(this.props.apiLink+"/getgebruikerinfo",{headers:{authToken:sessionStorage.getItem("authToken")}});
-        var json= await request.json();
-        console.log(json);
-        this.setState({
-            content:json
-        })
-    };
+    var request= await fetch(this.props.apiLink+"/getgebruikerinfo",{headers:{authToken:sessionStorage.getItem("authToken")}});
+    var json= await request.json();
+    console.log(json);
+    this.setState({
+                      content:json
+                  })
+};
     componentDidMount= async ()=> {
         this.refreshData()
     };

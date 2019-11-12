@@ -2,11 +2,10 @@ import React from 'react'
 import {Link} from "react-router-dom";
 import { ReactComponent as CalendarIcon } from "../calendar.svg";
 import { ReactComponent as MoneyIcon } from "../money.svg";
-import Notification from "../Components/Notification";
+import NotifList from "../Components/NotifList";
 var API_LINK='http://localhost:5000/api';
 
 interface IState {
-    notifs:{name:string,messageType:number}[],
     content:{firstName:string,lastName:string,email:string,phone:string,birth:string,profielFotoLink:string}[],
     firstName: string,
     lastName:string,
@@ -25,7 +24,6 @@ class Home extends React.Component<IProps,IState>{
     constructor(props:IProps){
         super(props);
         this.state= {
-            notifs:[],
             content:[],
             firstName: "",
             lastName: "",
@@ -50,43 +48,7 @@ class Home extends React.Component<IProps,IState>{
         })
     };
     componentDidMount() {
-        this.getnotifs();
         this.refreshData();
-    }
-
-    getnotifs = () => {
-        fetch("http://localhost:5000/api/getnotifs")
-            .then(
-                (u) => {
-                    try{
-                        return u.json()
-                    }
-                    catch(error){
-                        console.error(error)
-                    }
-                }
-            )
-            .then(
-                (json) => {
-                    console.log(json);
-                    this.setState({notifs:json})
-                }
-                )
-    };
-    addNotif(person:number, messageId:number, bedrijfId:number) {
-        fetch(
-            "http://localhost:5000/api/addnotif", {
-                method:"post",
-                headers:{
-                    "content-type":"application/json"
-                },
-                body:JSON.stringify({
-                    "person": person,
-                    "messageId": messageId,
-                    "bedrijfId": bedrijfId
-                })
-            }
-        )
     }
 
     handleInputChange(event:React.ChangeEvent<HTMLInputElement>) {
@@ -109,13 +71,13 @@ class Home extends React.Component<IProps,IState>{
                     <Link to='./Rooster'>
                         <figure>
                             <CalendarIcon width="150" height="150"/>
-                            <figcaption>ROOSTER</figcaption>
+                            <figcaption className='Button'>ROOSTER</figcaption>
                         </figure>
                     </Link>
                     <Link to='./Salaris'>
                         <figure>
                             <MoneyIcon width="150" height="150"/>
-                            <figcaption>SALARIS</figcaption>
+                            <figcaption className='Button'>SALARIS</figcaption>
                         </figure>
                     </Link>
                 </div>
@@ -125,22 +87,16 @@ class Home extends React.Component<IProps,IState>{
                             <h1>Info</h1>
                             <p>Ingelogd als: {this.state.content.length>0 && this.state.content[0].firstName} {this.state.content.length>0 && this.state.content[0].lastName}</p>
                             <p>Volgende dienst:</p>
+                            <Link to='./MyAccount'>
+                                <figcaption className='Button'>Accountinstellingen</figcaption>
+                            </Link>
                         </div>
-                        <img src={this.state.content.length>0 && this.state.content[0].profielFotoLink} alt='profielfoto'/>
-                        <div className='Notifs'>
-                            <h1>Meldingen</h1>
-                            <button onClick={() => this.addNotif(2, 2, 1)}>Vakantienotificatie</button>
-                            <button onClick={() => this.addNotif(1, 0, 1)}>Dienstruil notif</button>
-                            <button onClick={() => this.addNotif(3, 1, 1)}>Ziek melden</button>
-                            <button onClick={() => this.addNotif(27, 3, 1)}>Rooster Bijgewerkt</button>
-                            <div className="notifList">
-                                {this.state.notifs.map(notif => <Notification person={notif.name} messageId={notif.messageType}/>)}
-                            </div>
+                        <img className='avatar' width='80' height='80' src={this.state.content.length>0 && this.props.apiLink+"/avatar/"+ this.state.content[0].profielFotoLink} alt='profielfoto'/>
+                        <NotifList apiLink={this.props.apiLink} />
                         </div>
                     </div>
 
                 </div>
-            </div>
         )
     }
 
