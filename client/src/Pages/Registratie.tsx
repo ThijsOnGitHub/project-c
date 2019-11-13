@@ -242,6 +242,21 @@ class Registratie extends React.Component<IProps,IState>{
                     <label>Account voor werkgever</label>
                     <td><input type='checkbox' name="isWerkgever" checked={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange}/></td>
                 </tr>
+                {
+                    this.state.isWerkgever?
+                        <tr>
+                            <label>Bedrijfsnaam</label>
+                            <td><input type='text' name="lastName" value={this.state.lastName} placeholder="Bedrijfsnaam" onChange={this.handleInputChange}/></td><br/>
+                            <label>Bedrijfscode:</label>
+                            <td><input type='text' name="lastName" value={this.state.lastName} placeholder="92nDF!" onChange={this.handleInputChange}/></td>
+                        </tr>
+
+                        :
+                        <tr>
+                            <label>Koppelcode</label>
+                            <td><input type='text' name="lastName" value={this.state.lastName} placeholder="XU!9F" onChange={this.handleInputChange}/></td>
+                        </tr>
+                }
                 <button disabled={isDisabled} onClick={this.handleSubmit}>Registreer</button>
                 </tbody>
             </table>
