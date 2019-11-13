@@ -15,7 +15,6 @@ var storage= multer.diskStorage({
     },
     filename: (req,file,cb) =>{
         //
-        console.log(file.fieldname==="profielFoto");
         if(file.fieldname === "profielFoto"){
             cb(null,"Profielfoto"+Date.now()+".png")
         }else{
@@ -37,7 +36,6 @@ app.get("/bedrijf",async (req,res)=>{
 
 
 app.get("/getAgenda",auth,(req,res)=>{
-    console.log(req.user);
     console.log("get agenda from user: "+req.user.id);
     connection.query('SELECT datum,beginTijd,eindTijd FROM roosterItems where userId=?',[req.user.id],(err,values)=>{
         //Hier worden de tijden omgezet in javascript format zodat ze tot DATE object kunnen worden gemaakt
@@ -159,8 +157,24 @@ app.get("/getnotifs", (req, res) => {
             console.log(err);
             res.status(400).send()
         }
+        res.json(result)
+    })
+});
+app.get("/getNextShift", auth, (req, res) => {
+    console.log("Getting next shift...");
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = yyyy + '/' + mm + '/' + dd;
+    connection.query('SELECT * FROM roosterItems WHERE (datum > ?) AND (userId = ?) LIMIT 1', [today, req.user.id], (err, result, val) => {
+        if (err !== null) {
+            console.log(err);
+            res.status(500).send()
+        }
         console.log(val);
         console.log(result);
+        console.log("Next shift received!");
         res.json(result)
     })
 });

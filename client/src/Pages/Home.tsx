@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import { ReactComponent as CalendarIcon } from "../calendar.svg";
 import { ReactComponent as MoneyIcon } from "../money.svg";
 import NotifList from "../Components/NotifList";
+import NextShift from "../Components/NextShift";
 var API_LINK='http://localhost:5000/api';
 
 interface IState {
@@ -87,6 +88,7 @@ class Home extends React.Component<IProps,IState>{
                             <h1>Info</h1>
                             <p>Ingelogd als: {this.state.content.length>0 && this.state.content[0].firstName} {this.state.content.length>0 && this.state.content[0].lastName}</p>
                             <p>Volgende dienst:</p>
+                            <NextShift apiLink={this.props.apiLink}/>
                             <Link to='./MyAccount'>
                                 <figcaption className='Button'>Accountinstellingen</figcaption>
                             </Link>
