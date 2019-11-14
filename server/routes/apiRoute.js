@@ -112,7 +112,7 @@ app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
                     <p><a href='http://localhost:3000/emailverificatie/${data.email}'>Verifieer email</a></p>
                     `
                 };
-/*
+
                 transporter.sendMail(mailOptions, function(error, info){
                     if (error) {
                         console.log(error);
@@ -120,7 +120,7 @@ app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
                         console.log('Email verstuurd: ' + info.response);
                     }
                 });
-*/
+
 
             }
         })
