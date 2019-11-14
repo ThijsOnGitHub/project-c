@@ -4,9 +4,16 @@ interface IProps {
     apiLink:string
 }
 
-class NextShift extends React.Component<IProps> {
+interface IState {
+    NextShift:{datum:string, beginTijd:string, eindTijd:string}[]
+}
+
+class NextShift extends React.Component<IProps, IState> {
     constructor(props:IProps){
         super(props);
+        this.state={
+            NextShift:null
+        }
     }
     componentDidMount() {
         this.getNextShift()
@@ -27,13 +34,15 @@ class NextShift extends React.Component<IProps> {
             .then(
                 (json) => {
                     console.log(json);
-                    this.setState({notifs:json})
+                    this.setState({NextShift:json})
                 }
             )
     };
     render() {
         return(
-            <p>Placeholder</p>
+            <div>
+                <p>{this.state.NextShift[0].datum} fjck</p>
+            </div>
         )
     }
 }
