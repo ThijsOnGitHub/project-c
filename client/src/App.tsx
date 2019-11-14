@@ -4,7 +4,7 @@ import {BrowserRouter,Switch,Route} from "react-router-dom";
 import Menu from "./Components/Menu/Menu";
 import Registratie from "./Pages/Registratie";
 import EmailVerificatie from "./Pages/EmailVerificatie";
-import Rooster from "./Pages/Rooster";
+import RoosterView from "./Pages/RoosterView";
 import addFunctions from "./Values/addFunctions";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
@@ -15,10 +15,11 @@ import loadingIcon from "./img/Loding-Icon-zwart.gif";
 export interface IState {
     apiLink:string
     serverLink:string
-    authEnd:number
     loggedIn:boolean
     logoutTimeout:number
     loading:boolean
+    exp:number
+    isWerkgever:boolean
 }
 
 class App extends React.Component<{},IState>{
@@ -29,11 +30,11 @@ class App extends React.Component<{},IState>{
       this.state = {
           apiLink: server+"/api",
           serverLink:server,
-          authEnd:0,
+          exp:0,
           loggedIn:false,
           logoutTimeout:null,
-          loading:false
-
+          loading:false,
+          isWerkgever:false
       };
       // this programm adds new string functions
       addFunctions()
@@ -46,12 +47,17 @@ class App extends React.Component<{},IState>{
 
   }
 
-  getExp=(jwt:string)=>{
+  getJWTOjbect=(jwt:string)=>{
       const jwtObject=jsonwebtoken.decode(jwt)
+      console.log(jwtObject)
       if(typeof jwtObject!=="string"){
-          return jwtObject.exp
+          return jwtObject
       }
       return null
+  }
+
+  updateStateFromJWT=(jwt:string)=>{
+      this.setState<never>(this.getJWTOjbect(jwt))
   }
 
   updateAuth=async ()=>{
@@ -59,7 +65,8 @@ class App extends React.Component<{},IState>{
       const refreshToken=localStorage.getItem("refreshToken")
       const authToken=sessionStorage.getItem("authToken")
       if(authToken!==null){
-          this.setState({loggedIn:true,authEnd:this.getExp(authToken)})
+          this.setState({loggedIn:true})
+          this.updateStateFromJWT(authToken)
       }else if(refreshToken!==null){
               const result=await fetch(this.state.serverLink+"/auth/refresh",{
                   headers:{
@@ -69,7 +76,8 @@ class App extends React.Component<{},IState>{
               const status=result.status
               if(status===200){
                   var tekst=await result.text()
-                  this.setState({loggedIn:true,authEnd:this.getExp(tekst)})
+                  this.setState({loggedIn:true})
+                  this.updateStateFromJWT(tekst)
                   sessionStorage.setItem("authToken",tekst)
               }else{
                   this.setState({loggedIn:false})
@@ -78,7 +86,6 @@ class App extends React.Component<{},IState>{
       }else{
           this.setState({loggedIn:false})
       }
-
   }
 
   changeState=(functie:(oldState:IState)=>Partial<IState>)=>{
@@ -86,15 +93,15 @@ class App extends React.Component<{},IState>{
   }
 
   componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<IState>, snapshot?: any): void {
-      if (prevState.authEnd!==this.state.authEnd){
+      if (prevState.exp!==this.state.exp){
           if(this.state.logoutTimeout!==null){
               clearTimeout(this.state.logoutTimeout)
           }
-          if(this.state.authEnd!==0){
+          if(this.state.exp!==0){
               var timeOut=window.setTimeout(()=>{
                   sessionStorage.removeItem("authToken")
                   this.updateAuth()
-              },this.state.authEnd*1000-Date.now())
+              },this.state.exp*1000-Date.now())
               this.setState({logoutTimeout:timeOut})
           }
       }
@@ -129,13 +136,21 @@ class App extends React.Component<{},IState>{
                                 this.state.loggedIn ?
                                     <Switch>
                                         <Route path="/MyAccount" render={() => <MyAccount apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
-                                        <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink}/>}/>
-                                        <Route path="/" render={() => <Home/>}/>
+                                        <Route path="/" exact render={() => <Home/>}/>
+                                        {
+                                            this.state.isWerkgever?
+                                                <Switch>
+
+                                                </Switch>:
+                                                <Switch>
+                                                    <Route path="/Rooster" render={() => <RoosterView apiLink={this.state.apiLink}/>}/>
+                                                </Switch>
+                                        }
                                     </Switch>
                                     :
                                     <Switch>
                                         <Route path="/registratie" render={() => <Registratie apiLink={this.state.apiLink}/>}/>
-                                        <Route path="/" render={() => <Login apiLink={this.state.apiLink} changeHigherState={this.changeState} serverLink={this.state.serverLink}/>}/>
+                                        <Route path="/" render={() => <Login updateAuth={this.updateAuth} apiLink={this.state.apiLink} changeHigherState={this.changeState} serverLink={this.state.serverLink}/>}/>
                                     </Switch>
                             }
                         </Switch>
