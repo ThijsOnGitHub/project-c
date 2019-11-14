@@ -18,7 +18,7 @@ interface IProps {
     apiLink:string
 }
 
-class Rooster extends React.Component<IProps,IState>{
+class RoosterView extends React.Component<IProps,IState>{
 
     constructor(props:IProps){
         super(props);
@@ -93,5 +93,5 @@ class Rooster extends React.Component<IProps,IState>{
         );
     }
 }
-export default Rooster
+export default RoosterView
 
