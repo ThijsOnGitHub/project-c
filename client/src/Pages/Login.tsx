@@ -95,7 +95,7 @@ class Login extends React.Component<IProps,IState>{
                         {
                             this.state.loading
                                 ?
-                                <p>Loading...</p>
+                                <p id='msg'>Loading...</p>
                                 :
                                 <button onClick={this.handleSubmit}>Login</button>
 
