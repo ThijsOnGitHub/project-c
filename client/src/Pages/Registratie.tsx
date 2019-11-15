@@ -10,7 +10,7 @@ interface IState {
     pass: string,
     phone: string,
     birth: string,
-    foto:string,
+    foto: string,
     isWerkgever: boolean,
     roosterName: string,
     koppelCodeWerknemer: string,
@@ -29,9 +29,9 @@ interface IState {
         roosterName: boolean,
         koppelCodeWerknemer: boolean
     },
-    fotoFile:File,
-    blackCircle:boolean,
-    getImage:()=>Promise<Blob>
+    fotoFile: File,
+    blackCircle: boolean,
+    getImage: () => Promise <Blob>
 }
 
 interface IProps {
@@ -45,17 +45,17 @@ class Registratie extends React.Component<IProps,IState>{
         super(props);
         this.state = {
             // Globale variabelen.
-            firstName: 'Berend',
-            lastName: 'Doornbos',
-            email: 'roosteritHRO@gmail.com',
-            pass: '123',
-            phone: '0616794973',
-            birth: '1998-01-18',
-            foto:"",
-            isWerkgever: true,
-            roosterName: 'AYE',
-            koppelCodeWerknemer: '1',
-            koppelCodeWerkgever: '12345',
+            firstName: '',
+            lastName: '',
+            email: '',
+            pass: '',
+            phone: '',
+            birth: '',
+            foto: '',
+            isWerkgever: false,
+            roosterName: '',
+            koppelCodeWerknemer: '',
+            koppelCodeWerkgever: '',
             // Beschrijf de toegestane symbolen voor de inputvelden.
             letters: /^[A-Za-z]+$/,
             numbers: /^[0-9]+$/,
@@ -70,14 +70,24 @@ class Registratie extends React.Component<IProps,IState>{
                 roosterName: false,
                 koppelCodeWerknemer: false
             },
-            fotoFile:null,
-            blackCircle:true,
-            getImage:null
+            fotoFile: null,
+            blackCircle: true,
+            getImage: null
         };
         // Lijst om uit te lezen voor het POST request.
         this.lijst = ["firstName", "lastName", "email", "pass", "phone", "birth", "isWerkgever"];
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        let value = this.generateKoppelCode();
+        this.setState({koppelCodeWerkgever: value});
+    };
+
+    generateKoppelCode() {
+        let value = (Math.floor(Math.random() * 100000) + 1).toString();
+        return value;
     }
 
     // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
@@ -93,10 +103,11 @@ class Registratie extends React.Component<IProps,IState>{
         // Laat de waarde de waarde zijn van het actieve veld. Als het input-type een checkbox is is de waarde of deze aangevinkt is of niet.
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-        if(target.type==="file"){
-            this.setState<never>({[name+"File"]:target.files[0]})
+
+        if (target.type === "file"){
+            this.setState<never> ({[name+"File"]: target.files[0]})
         }
-        this.setState<never>({[name]: value});
+        this.setState<never> ({[name]: value});
     }
 
     // Verander de waarde van touched voor een inputveld naar true.
@@ -116,7 +127,7 @@ class Registratie extends React.Component<IProps,IState>{
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
             birth: birth.length === 0,
             roosterName: this.state.isWerkgever && roosterName.length === 0,
-            koppelCodeWerknemer: koppelCodeWerknemer.length === 0
+            koppelCodeWerknemer: !this.state.isWerkgever && koppelCodeWerknemer.length === 0
         };
     }
 
@@ -127,23 +138,9 @@ class Registratie extends React.Component<IProps,IState>{
         // Laat de data niet verstuurd worden wanneer de input validatie niet succesvol is.
         if (!this.canBeSubmitted()) {return;}
 
-        let object= {};
-        this.lijst.forEach(value=>{
-            let val = this.state[value];
-            let returnValue;
-            if (typeof returnValue === 'boolean') {
-                returnValue = val ? 1 : 0
-            } else if (value === "birth" && typeof val === "string") {
-                returnValue = new Date(returnValue).toLocaleDateString('en-US',{year:'2-digit', month:"2-digit", day:"2-digit", timeZone:"UTC"})
-            } else {
-                returnValue = val.toString()
-            }
-            object = returnValue;
-        });
-
         let wachten = await this.setState({blackCircle:false});
-        let image = await this.state.getImage();
-        console.log("sending");
+        let image = null;
+        if (this.state.foto != "") {image = await this.state.getImage();}
 
         let formData = new FormData();
         formData.append("profielFoto",image);
@@ -153,7 +150,8 @@ class Registratie extends React.Component<IProps,IState>{
         });
 
         // Voeg de gebruiker toe aan de database.
-        fetch(this.props.apiLink+"/addgebruiker",{
+        console.log("sending");
+        await fetch(this.props.apiLink+"/addgebruiker",{
             method:'POST',
             body:formData
         }).then(value => console.log(value));
@@ -163,8 +161,15 @@ class Registratie extends React.Component<IProps,IState>{
             fetch(this.props.apiLink + "/addrooster", {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
-                body: JSON.stringify({roosterName: this.state.roosterName})
-            }).then(value => console.log(value));
+                body: JSON.stringify({roosterName: this.state.roosterName, koppelCodeWerkgever: this.state.koppelCodeWerkgever, email: this.state.email})
+            });
+        }
+        if (!this.state.isWerkgever) {
+            fetch(this.props.apiLink + "/koppelgebruiker", {
+                headers: {'Content-Type': 'application/json'},
+                method: 'PUT',
+                body: JSON.stringify({email: this.state.email, koppelCodeWerknemer: this.state.koppelCodeWerknemer})
+            });
         }
     };
 
@@ -237,7 +242,7 @@ class Registratie extends React.Component<IProps,IState>{
                 </tr>
                 <tr>
                     <label>Account voor werkgever</label>
-                    <td><input type='checkbox' name="isWerkgever" checked={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange}/></td>
+                    <td><input type='checkbox' name="isWerkgever" checked={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange} /></td>
                 </tr>
 
                 { this.state.isWerkgever ?
@@ -263,6 +268,7 @@ class Registratie extends React.Component<IProps,IState>{
                 }
 
                 <button disabled={isDisabled} onClick={this.handleSubmit}>Registreer</button>
+
                 </tbody>
             </table>
             </form>
