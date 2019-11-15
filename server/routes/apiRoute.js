@@ -76,9 +76,11 @@ app.get("/avatar/:name",(req,res)=>{
     res.sendFile(__dirname.split("\\").slice(0,-1).join("\\")+"/uploads/"+req.params.name)
 })
 
+// ---------------- REGISTRATIE ----------------
+
 // Zend een POST request dat de data uit de front-end in de database krijgt.
 app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
-    var data = req.body;
+    let data = req.body;
     data.pass = await bcrypt.hash(data.pass, 10 );
     console.log("Toevoeging gebruiker:");
     connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, profielFotoLink, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth, req.file.filename,data.isWerkgever?1:0],
@@ -117,10 +119,24 @@ app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
                         console.log('Email verstuurd: ' + info.response);
                     }
                 });
-
-
             }
         })
+});
+
+// addrooster. Roosternaam > database > roostertabel. Koppelcode /*
+app.post("/addrooster", (req, res) => {
+    let data = req.body;
+    console.log("Aanmaken rooster " + data.roosterName);
+    connection.query("INSERT INTO rooster (roosterName) VALUES (?)", [data.roosterName], (error, results, fields) => {
+        if (error) {
+            console.log(error);
+            res.status(422);
+            res.json({message:error});
+        } else {
+            res.status(201).send("Rooster toegevoegd.");
+            console.log("Rooster toegevoegd.");
+        }
+    });
 });
 
 app.put("/activeergebruiker", (req, res) => {
@@ -132,10 +148,12 @@ app.put("/activeergebruiker", (req, res) => {
     });
 });
 
+// ---------------- REGISTRATIE ----------------
+
 app.post("/addnotif",async (req, res) => {
     var data = req.body;
     console.log("Notificatie toevoegen: ");
-    connection.query("INSERT INTO Notifications (userId, messageType, bedrijfId) VALUES (?,?,?)", [data.person, data.messageId, data.bedrijfId],
+    connection.query("INSERT INTO Notifications (userId, messageType, roosterId) VALUES (?,?,?)", [data.person, data.messageId, data.roosterId],
         (error, results, fields) => {
             if (error) {
                 console.log(error);
