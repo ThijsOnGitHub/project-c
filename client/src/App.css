@@ -589,10 +589,6 @@ button:hover {
 .Home figure {
   border-radius: 20px;
 }
-.Home img {
-  display: block;
-  margin-left: auto;
-}
 
 .Notifs {
   margin-right: auto;
@@ -643,7 +639,12 @@ button:hover {
   padding: 0 20px;
   margin-bottom: 5px;
 }
-
+.NotifItem img {
+  min-width: 40px;
+  min-height: 40px;
+  width: 40px;
+  height: 40px;
+}
 .NotifItem p {
   margin-left: 10px;
 }
