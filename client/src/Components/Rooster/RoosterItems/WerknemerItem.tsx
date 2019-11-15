@@ -1,7 +1,7 @@
 import React from 'react'
 import {ReactComponent as MoreOptions} from "../../../icons/more_horiz-24px.svg";
 import OptionWithIcon from "../../OptionWithIcon";
-import {ItemData} from "../../../Pages/Rooster";
+import {ItemData} from "../../../Pages/RoosterView";
 
 interface IProps {
     itemData:ItemData

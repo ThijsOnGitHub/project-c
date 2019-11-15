@@ -1,8 +1,7 @@
 const express = require('express');
 const cors= require('cors');
-serverLogin=require('./serverlogin');
-const cookieParser = require('cookie-parser');
-
+const cookieParser = require('cookie-parser')
+const path = require("path")
 serverSecret=require('./serverSecret');
 
 authRoute=require('./routes/authRoute');
@@ -15,13 +14,15 @@ var app = express();
 app.use(cors({origin:"http://localhost:3000",credentials:true}));
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 
 app.use("/api",apiRoute);
 app.use("/auth",authRoute);
 
-
+app.get('*', (req,res) =>{
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
 /*
 app.post("/api/Login", (req,res) =>{
     console.log(req.body);
