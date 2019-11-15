@@ -11,8 +11,9 @@ interface IState {
     phone: string,
     birth: string,
     foto:string,
-    img_link:string,
     isWerkgever: false,
+    roosterNaam: string,
+    koppelCode: string,
     // Beschrijf de toegestane symbolen voor de inputvelden.
     letters: RegExp,
     numbers: RegExp,
@@ -24,7 +25,8 @@ interface IState {
         pass: boolean,
         phone: boolean,
         birth: boolean,
-        img_link:boolean
+        roosterNaam: boolean,
+        koppelCode: boolean
     },
     fotoFile:File,
     blackCircle:boolean,
@@ -36,7 +38,7 @@ interface IProps {
 }
 
 class Registratie extends React.Component<IProps,IState>{
-    private lijst:(keyof IState)[]
+    private lijst:(keyof IState)[];
 
     constructor(props:IProps){
         super(props);
@@ -50,10 +52,11 @@ class Registratie extends React.Component<IProps,IState>{
             birth: '',
             foto:"",
             isWerkgever: false,
+            roosterNaam: '',
+            koppelCode: '12345',
             // Beschrijf de toegestane symbolen voor de inputvelden.
             letters: /^[A-Za-z]+$/,
             numbers: /^[0-9]+$/,
-            img_link:"",
             // Sla op of inputvelden al zijn aangeraakt door de gebruiker.
             touched: {
                 firstName: false,
@@ -62,22 +65,23 @@ class Registratie extends React.Component<IProps,IState>{
                 pass: false,
                 phone: false,
                 birth: false,
-                img_link:false
+                roosterNaam: false,
+                koppelCode: false
             },
             fotoFile:null,
             blackCircle:true,
             getImage:null
         };
         // Lijst om uit te lezen voor het POST request.
-        this.lijst = ["firstName","lastName","email","pass","phone","birth","img_link", "isWerkgever"];
+        this.lijst = ["firstName", "lastName", "email", "pass", "phone", "birth", "isWerkgever"];
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
     canBeSubmitted() {
-        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.img_link);
-        const isDisabled = Object.values(errors).some(value => value );
+        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterNaam, this.state.koppelCode);
+        const isDisabled = Object.values(errors).some(value => value);
         return !isDisabled;
     }
 
@@ -90,9 +94,6 @@ class Registratie extends React.Component<IProps,IState>{
         if(target.type==="file"){
             this.setState<never>({[name+"File"]:target.files[0]})
         }
-
-
-        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.img_link);
         this.setState<never>({[name]: value});
     }
 
@@ -103,7 +104,7 @@ class Registratie extends React.Component<IProps,IState>{
         });
     };
 
-    validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, img_link:string) {
+    validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterNaam:string, koppelCode:string) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
         return {
             firstName: firstName.length === 0 || firstName.length >= 30 || !firstName.match(this.state.letters),
@@ -111,78 +112,61 @@ class Registratie extends React.Component<IProps,IState>{
             email: email.length === 0 || email.length >= 30,
             pass: pass.length === 0 || pass.length >= 30,
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
-            birth: birth.length === 0
+            birth: birth.length === 0,
+            roosterNaam: this.state.isWerkgever && roosterNaam.length === 0,
+            koppelCode: koppelCode.length === 0
         };
     }
 
     // Converteer de waarden uit de state naar een JSON string om die in een POST request te plaatsen en te versturen.
     handleSubmit = async (event:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        // Laat de data niet verstuurd worden wanneer de input validatie niet succesvol is.
         event.preventDefault();
-        if (!this.canBeSubmitted()) {
 
-            return;
-        }
-        var object={};
+        // Laat de data niet verstuurd worden wanneer de input validatie niet succesvol is.
+        if (!this.canBeSubmitted()) {return;}
 
+        let object= {};
         this.lijst.forEach(value=>{
-            var val=this.state[value];
-            var returnValue
-            if(typeof returnValue==='boolean'){
-                returnValue=val ? 1 : 0
-            }else if (value==="birth" && typeof val=== "string"){
-                returnValue=new Date(returnValue).toLocaleDateString('en-US',{year:'2-digit',month:"2-digit",day:"2-digit",timeZone:"UTC"})
-            }else{
-                returnValue=val.toString()
+            let val = this.state[value];
+            let returnValue;
+            if (typeof returnValue === 'boolean') {
+                returnValue = val ? 1 : 0
+            } else if (value === "birth" && typeof val === "string") {
+                returnValue = new Date(returnValue).toLocaleDateString('en-US',{year:'2-digit', month:"2-digit", day:"2-digit", timeZone:"UTC"})
+            } else {
+                returnValue = val.toString()
             }
             object = returnValue;
         });
-        var wachten=await this.setState({blackCircle:false})
 
-        var image=await this.state.getImage()
+        let wachten = await this.setState({blackCircle:false});
+        let image = await this.state.getImage();
         console.log("sending");
-        console.log(object);
 
-
-        var formData=new FormData()
-        formData.append("profielFoto",image)
-            this.lijst.forEach( value => {
-                var val=this.state[value];
-                formData.append(value,val.toString())
-            })
+        let formData = new FormData();
+        formData.append("profielFoto",image);
+        this.lijst.forEach( value => {
+            let val = this.state[value];
+            formData.append(value, val.toString())
+        });
         fetch(this.props.apiLink+"/addgebruiker",{
             method:'POST',
             body:formData
         }).then(value => console.log(value))
-
-        //TO DO: Wat was er mis met de bestaande POST?
-        /*
-        fetch(this.props.apiLink+"/api/addgebruiker",{method:"POST",
-            body:JSON.stringify(object),
-            headers:{
-                "content-type":"application/json"
-            }}).then((value)=>{
-            value.json().then(value1 => {console.log(value1.message)})
-        });
-        */
-    }
+    };
 
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
-        type fields={birth: boolean, email: boolean, firstName: boolean, lastName: boolean, pass: boolean,phone: boolean}
-        const errors:fields = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth,this.state.img_link);
+        type fields = {birth: boolean, email: boolean, firstName: boolean, lastName: boolean, pass: boolean, phone: boolean, roosterNaam: boolean, koppelCode: boolean}
+        const errors:fields = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterNaam, this.state.koppelCode);
         const isDisabled = Object.values(errors).some(value => value);
-        console.log(errors)
-
 
         // Valideer of een fout getoond zou moeten worden.
-        const shouldMarkError = (field:keyof typeof errors) => {
+        const shouldMarkError = (field: keyof typeof errors) => {
             const hasError = errors[field];
             const shouldShow = this.state.touched[field];
             return hasError ? shouldShow : false;
-
         };
-
 
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     // Als er een foto is geselecteerd wordt hieruit een afbeelding aangemaakt.
@@ -242,6 +226,29 @@ class Registratie extends React.Component<IProps,IState>{
                     <label>Account voor werkgever</label>
                     <td><input type='checkbox' name="isWerkgever" checked={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange}/></td>
                 </tr>
+
+                { this.state.isWerkgever ?
+                    <div id="reg">
+                        <tr>
+                            <label>Roosternaam</label>
+                            <td><input className={shouldMarkError('roosterNaam') ? "error" : ""}
+                                       onBlur={this.handleBlur('roosterNaam')}
+                                       type='text' name="roosterNaam" value={this.state.roosterNaam} placeholder="Roosternaam" onChange={this.handleInputChange}/></td>
+                        </tr>
+                        <tr>
+                            <label>Koppelcode</label>
+                            <td><input name="koppelCode" value={this.state.koppelCode}/></td>
+                        </tr>
+                    </div>
+                    :
+                    <tr>
+                        <label>Koppelcode</label>
+                        <td><input className={shouldMarkError('koppelCode') ? "error" : ""}
+                                   onBlur={this.handleBlur('koppelCode')}
+                                   type='text' name="koppelCode" value={this.state.koppelCode} placeholder="Koppelcode" onChange={this.handleInputChange}/></td>
+                    </tr>
+                }
+
                 <button disabled={isDisabled} onClick={this.handleSubmit}>Registreer</button>
                 </tbody>
             </table>
@@ -250,6 +257,5 @@ class Registratie extends React.Component<IProps,IState>{
         )
     }
 }
-
 
 export default Registratie

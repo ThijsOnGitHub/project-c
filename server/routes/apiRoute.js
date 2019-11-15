@@ -79,7 +79,6 @@ app.get("/avatar/:name",(req,res)=>{
 // Zend een POST request dat de data uit de front-end in de database krijgt.
 app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
     var data = req.body;
-    console.log(data.firstName)
     data.pass = await bcrypt.hash(data.pass, 10 );
     console.log("Toevoeging gebruiker:");
     connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, profielFotoLink, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth, req.file.filename,data.isWerkgever?1:0],
