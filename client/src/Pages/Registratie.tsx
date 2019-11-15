@@ -13,7 +13,8 @@ interface IState {
     foto:string,
     isWerkgever: boolean,
     roosterName: string,
-    koppelCode: string,
+    koppelCodeWerknemer: string,
+    koppelCodeWerkgever: string,
     // Beschrijf de toegestane symbolen voor de inputvelden.
     letters: RegExp,
     numbers: RegExp,
@@ -26,7 +27,7 @@ interface IState {
         phone: boolean,
         birth: boolean,
         roosterName: boolean,
-        koppelCode: boolean
+        koppelCodeWerknemer: boolean
     },
     fotoFile:File,
     blackCircle:boolean,
@@ -53,7 +54,8 @@ class Registratie extends React.Component<IProps,IState>{
             foto:"",
             isWerkgever: true,
             roosterName: 'AYE',
-            koppelCode: '12345',
+            koppelCodeWerknemer: '1',
+            koppelCodeWerkgever: '12345',
             // Beschrijf de toegestane symbolen voor de inputvelden.
             letters: /^[A-Za-z]+$/,
             numbers: /^[0-9]+$/,
@@ -66,7 +68,7 @@ class Registratie extends React.Component<IProps,IState>{
                 phone: false,
                 birth: false,
                 roosterName: false,
-                koppelCode: false
+                koppelCodeWerknemer: false
             },
             fotoFile:null,
             blackCircle:true,
@@ -80,7 +82,7 @@ class Registratie extends React.Component<IProps,IState>{
 
     // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
     canBeSubmitted() {
-        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCode);
+        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCodeWerknemer);
         const isDisabled = Object.values(errors).some(value => value);
         return !isDisabled;
     }
@@ -104,7 +106,7 @@ class Registratie extends React.Component<IProps,IState>{
         });
     };
 
-    validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterName:string, koppelCode:string) {
+    validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterName:string, koppelCodeWerknemer:string) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
         return {
             firstName: firstName.length === 0 || firstName.length >= 30 || !firstName.match(this.state.letters),
@@ -114,7 +116,7 @@ class Registratie extends React.Component<IProps,IState>{
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
             birth: birth.length === 0,
             roosterName: this.state.isWerkgever && roosterName.length === 0,
-            koppelCode: koppelCode.length === 0
+            koppelCodeWerknemer: koppelCodeWerknemer.length === 0
         };
     }
 
@@ -168,8 +170,8 @@ class Registratie extends React.Component<IProps,IState>{
 
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
-        type fields = {birth: boolean, email: boolean, firstName: boolean, lastName: boolean, pass: boolean, phone: boolean, roosterName: boolean, koppelCode: boolean}
-        const errors:fields = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCode);
+        type fields = {birth: boolean, email: boolean, firstName: boolean, lastName: boolean, pass: boolean, phone: boolean, roosterName: boolean, koppelCodeWerknemer: boolean}
+        const errors:fields = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCodeWerknemer);
         const isDisabled = Object.values(errors).some(value => value);
 
         // Valideer of een fout getoond zou moeten worden.
@@ -249,14 +251,14 @@ class Registratie extends React.Component<IProps,IState>{
                 { this.state.isWerkgever ?
                     <tr>
                         <label>Koppelcode</label>
-                        <td><input name="koppelCode" value={this.state.koppelCode}/></td>
+                        <td><input name="koppelCodeWerkgever" value={this.state.koppelCodeWerkgever}/></td>
                     </tr>
                     :
                     <tr>
                         <label>Koppelcode</label>
-                        <td><input className={shouldMarkError('koppelCode') ? "error" : ""}
-                                   onBlur={this.handleBlur('koppelCode')}
-                                   type='text' name="koppelCode" value={this.state.koppelCode} placeholder="Koppelcode" onChange={this.handleInputChange}/></td>
+                        <td><input className={shouldMarkError('koppelCodeWerknemer') ? "error" : ""}
+                                   onBlur={this.handleBlur('koppelCodeWerknemer')}
+                                   type='text' name="koppelCodeWerknemer" value={this.state.koppelCodeWerknemer} placeholder="Koppelcode" onChange={this.handleInputChange}/></td>
                     </tr>
                 }
 
