@@ -165,6 +165,7 @@ class Registratie extends React.Component<IProps,IState>{
             value.json().then(value1 => {console.log(value1.message)})
         });
         */
+
     }
 
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
@@ -246,15 +247,15 @@ class Registratie extends React.Component<IProps,IState>{
                     this.state.isWerkgever?
                         <tr>
                             <label>Bedrijfsnaam</label>
-                            <td><input type='text' name="lastName" value={this.state.lastName} placeholder="Bedrijfsnaam" onChange={this.handleInputChange}/></td><br/>
+                            <td><input type='text' name="companyName" value={this.state.lastName} placeholder="Bedrijfsnaam" onChange={this.handleInputChange}/></td><br/>
                             <label>Bedrijfscode:</label>
-                            <td><input type='text' name="lastName" value={this.state.lastName} placeholder="92nDF!" onChange={this.handleInputChange}/></td>
+                            <td><input type='text' name="companyCode" value={this.state.lastName} placeholder="92nDF!" onChange={this.handleInputChange}/></td>
                         </tr>
 
                         :
                         <tr>
                             <label>Koppelcode</label>
-                            <td><input type='text' name="lastName" value={this.state.lastName} placeholder="XU!9F" onChange={this.handleInputChange}/></td>
+                            <td><input type='text' name="lastName" value={} placeholder="XU!9F" onChange={this.handleInputChange}/></td>
                         </tr>
                 }
                 <button disabled={isDisabled} onClick={this.handleSubmit}>Registreer</button>
