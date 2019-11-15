@@ -20,6 +20,8 @@ export interface IState {
     loading:boolean
     exp:number
     isWerkgever:boolean
+    avatar:string
+    naam:string
 }
 
 class App extends React.Component<{},IState>{
@@ -34,7 +36,9 @@ class App extends React.Component<{},IState>{
           loggedIn:false,
           logoutTimeout:null,
           loading:false,
-          isWerkgever:false
+          isWerkgever:false,
+          avatar:"",
+          naam:""
       };
       // this programm adds new string functions
       addFunctions()
@@ -43,8 +47,25 @@ class App extends React.Component<{},IState>{
   componentDidMount=async ():Promise<void>=> {
       this.setState({loading:true})
       await this.updateAuth()
+      if(this.state.loggedIn){
+          await this.updateUserData()
+      }
       this.setState({loading:false})
 
+  }
+
+  getUserData= async ()=>{
+      var result = await fetch(this.state.apiLink+"/getgebruikerinfo",
+          {headers:
+                  {"authToken":sessionStorage.getItem("authToken")}
+          })
+      var resultJSON= (await result.json())[0]
+
+      return {avatar:this.state.apiLink+"/avatar/"+resultJSON.profielFotoLink,naam:resultJSON.firstName+" "+resultJSON.lastName}
+  }
+
+  updateUserData=async ()=>{
+      this.setState(await this.getUserData())
   }
 
   getJWTOjbect=(jwt:string)=>{
@@ -92,7 +113,7 @@ class App extends React.Component<{},IState>{
       this.setState<never>(oldState=> {return functie(oldState)} )
   }
 
-  componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<IState>, snapshot?: any): void {
+  componentDidUpdate=async (prevProps: Readonly<{}>, prevState: Readonly<IState>, snapshot?: any) =>{
       if (prevState.exp!==this.state.exp){
           if(this.state.logoutTimeout!==null){
               clearTimeout(this.state.logoutTimeout)
@@ -104,6 +125,9 @@ class App extends React.Component<{},IState>{
               },this.state.exp*1000-Date.now())
               this.setState({logoutTimeout:timeOut})
           }
+      }
+      if(!prevState.loggedIn && this.state.loggedIn){
+          await this.updateUserData()
       }
   }
 
@@ -122,7 +146,7 @@ class App extends React.Component<{},IState>{
     return (
         <div>
             <BrowserRouter>
-                <Menu logoutFunction={this.logout} loggedIn={this.state.loggedIn}/>
+                <Menu avatar={this.state.avatar} naam={this.state.naam} isWerkgever={this.state.isWerkgever} logoutFunction={this.logout} loggedIn={this.state.loggedIn}/>
                 {
                     this.state.loading?
                     <div className="center">
