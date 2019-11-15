@@ -571,7 +571,9 @@ button:hover {
   padding: 10px;
   border-radius: 500px;
   margin: 10px;
+  text-align: center;
 }
+
 .Home figure {
   border-radius: 20px;
 }
@@ -616,7 +618,13 @@ button:hover {
 .HomeContents {
   display: block;
 }
-
+.NextShift {
+  background: darkmagenta;
+  color:white;
+  border-radius: 20px;
+  text-align: center;
+  padding: 1px 10px;
+}
 /*My Account page*/
 #reg img{
   margin: auto;

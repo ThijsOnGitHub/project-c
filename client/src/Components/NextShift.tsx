@@ -5,14 +5,18 @@ interface IProps {
 }
 
 interface IState {
-    NextShift:{datum:string, beginTijd:string, eindTijd:string}[]
+    NextShift:{datum:string, beginTijd:string, eindTijd:string}
 }
 
 class NextShift extends React.Component<IProps, IState> {
     constructor(props:IProps){
         super(props);
         this.state={
-            NextShift:null
+            NextShift:{
+                datum:"",
+                beginTijd:"",
+                eindTijd:""
+            }
         }
     }
     componentDidMount() {
@@ -34,14 +38,15 @@ class NextShift extends React.Component<IProps, IState> {
             .then(
                 (json) => {
                     console.log(json);
-                    this.setState({NextShift:json})
+                    this.setState({NextShift:json[0]})
                 }
             )
     };
     render() {
         return(
-            <div>
-                <p>{this.state.NextShift[0].datum} fjck</p>
+            <div className='NextShift'>
+                <p>{new Date(this.state.NextShift.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"})}</p>
+                <p>van {this.state.NextShift.beginTijd} tot {this.state.NextShift.eindTijd}</p>
             </div>
         )
     }
