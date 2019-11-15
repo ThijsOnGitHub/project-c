@@ -164,7 +164,7 @@ class App extends React.Component<{},IState>{
                                 this.state.loggedIn ?
                                     <Switch>
                                         <Route path="/MyAccount" render={() => <MyAccount apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
-                                        <Route path="/" exact render={() => <Home/>}/>
+                                        <Route path="/" exact render={() => <Home apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
                                         {
                                             this.state.isWerkgever?
                                                 <Switch>
