@@ -93,12 +93,13 @@ class Home extends React.Component<IProps,IState>{
                                 <figcaption className='Button'>Accountinstellingen</figcaption>
                             </Link>
                         </div>
-                        <img className='avatar' width='80' height='80' src={this.state.content.length>0 && this.props.apiLink+"/avatar/"+ this.state.content[0].profielFotoLink} alt='profielfoto'/>
-                        <NotifList apiLink={this.props.apiLink} />
+                        <div className='HomeInfoC'>
+                            <img className='avatar' width='80' height='80' src={this.state.content.length>0 && this.props.apiLink+"/avatar/"+ this.state.content[0].profielFotoLink} alt='profielfoto'/>
                         </div>
+                        <NotifList apiLink={this.props.apiLink} />
                     </div>
-
                 </div>
+            </div>
         )
     }
 

@@ -612,12 +612,40 @@ button:hover {
   margin-bottom: 20px;
   border-radius: 20px;
 }
+
+/* width */
+.notifList::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.notifList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8000px;
+}
+
+/* Handle */
+.notifList::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8000px;
+}
+
+/* Handle on hover */
+.notifList::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .NotifItem {
   background: #dddddd;
   border-radius: 20px;
   display: flex;
-  padding-left: 20px;
-  padding-right: 20px;
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 5px;
+}
+
+.NotifItem p {
+  margin-left: 10px;
 }
 
 .HomeInfo {
@@ -626,6 +654,9 @@ button:hover {
   margin: auto;
   border-radius: 50px;
   padding-left: 50px;
+}
+.HomeInfoC {
+  margin-top: 20px;
 }
 .HomeContents {
   display: block;

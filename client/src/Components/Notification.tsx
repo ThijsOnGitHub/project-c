@@ -15,7 +15,7 @@ class NotificationItem extends React.Component<IProps> {
         let messages = [" wil een dienst ruilen.", " heeft zich ziek gemeld.", " gaat op vakantie.", " heeft je rooster bijgewerkt."];
         return (
             <div className='NotifItem'>
-                <img className='avatar' width='30' height='30' src={this.props.imageLink.length>0 && this.props.apiLink+"/avatar/"+ this.props.imageLink} alt='profielfoto'/>
+                <img className='avatar' width="40px" height="40px" src={this.props.imageLink.length>0 && this.props.apiLink+"/avatar/"+ this.props.imageLink} alt='profielfoto'/>
                 <p>{this.props.person}{messages[this.props.messageId]}</p>
             </div>
         )
