@@ -603,7 +603,7 @@ button:hover {
 .NotifItem {
   background: #dddddd;
   border-radius: 20px;
-  display: block;
+  display: flex;
   padding-left: 20px;
   padding-right: 20px;
 }
