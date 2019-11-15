@@ -11,8 +11,8 @@ interface IState {
     phone: string,
     birth: string,
     foto:string,
-    isWerkgever: false,
-    roosterNaam: string,
+    isWerkgever: boolean,
+    roosterName: string,
     koppelCode: string,
     // Beschrijf de toegestane symbolen voor de inputvelden.
     letters: RegExp,
@@ -25,7 +25,7 @@ interface IState {
         pass: boolean,
         phone: boolean,
         birth: boolean,
-        roosterNaam: boolean,
+        roosterName: boolean,
         koppelCode: boolean
     },
     fotoFile:File,
@@ -44,15 +44,15 @@ class Registratie extends React.Component<IProps,IState>{
         super(props);
         this.state = {
             // Globale variabelen.
-            firstName: '',
-            lastName: '',
-            email: '',
-            pass: '',
-            phone: '',
-            birth: '',
+            firstName: 'Berend',
+            lastName: 'Doornbos',
+            email: 'roosteritHRO@gmail.com',
+            pass: '123',
+            phone: '0616794973',
+            birth: '1998-01-18',
             foto:"",
-            isWerkgever: false,
-            roosterNaam: '',
+            isWerkgever: true,
+            roosterName: 'AYE',
             koppelCode: '12345',
             // Beschrijf de toegestane symbolen voor de inputvelden.
             letters: /^[A-Za-z]+$/,
@@ -65,7 +65,7 @@ class Registratie extends React.Component<IProps,IState>{
                 pass: false,
                 phone: false,
                 birth: false,
-                roosterNaam: false,
+                roosterName: false,
                 koppelCode: false
             },
             fotoFile:null,
@@ -80,7 +80,7 @@ class Registratie extends React.Component<IProps,IState>{
 
     // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
     canBeSubmitted() {
-        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterNaam, this.state.koppelCode);
+        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCode);
         const isDisabled = Object.values(errors).some(value => value);
         return !isDisabled;
     }
@@ -104,7 +104,7 @@ class Registratie extends React.Component<IProps,IState>{
         });
     };
 
-    validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterNaam:string, koppelCode:string) {
+    validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterName:string, koppelCode:string) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
         return {
             firstName: firstName.length === 0 || firstName.length >= 30 || !firstName.match(this.state.letters),
@@ -113,7 +113,7 @@ class Registratie extends React.Component<IProps,IState>{
             pass: pass.length === 0 || pass.length >= 30,
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
             birth: birth.length === 0,
-            roosterNaam: this.state.isWerkgever && roosterNaam.length === 0,
+            roosterName: this.state.isWerkgever && roosterName.length === 0,
             koppelCode: koppelCode.length === 0
         };
     }
@@ -149,16 +149,27 @@ class Registratie extends React.Component<IProps,IState>{
             let val = this.state[value];
             formData.append(value, val.toString())
         });
+
+        // Voeg de gebruiker toe aan de database.
         fetch(this.props.apiLink+"/addgebruiker",{
             method:'POST',
             body:formData
-        }).then(value => console.log(value))
+        }).then(value => console.log(value));
+
+        // Maak een nieuw rooster aan in de database.
+        if (this.state.isWerkgever) {
+            fetch(this.props.apiLink + "/addrooster", {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify({roosterName: this.state.roosterName})
+            }).then(value => console.log(value));
+        }
     };
 
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
-        type fields = {birth: boolean, email: boolean, firstName: boolean, lastName: boolean, pass: boolean, phone: boolean, roosterNaam: boolean, koppelCode: boolean}
-        const errors:fields = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterNaam, this.state.koppelCode);
+        type fields = {birth: boolean, email: boolean, firstName: boolean, lastName: boolean, pass: boolean, phone: boolean, roosterName: boolean, koppelCode: boolean}
+        const errors:fields = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCode);
         const isDisabled = Object.values(errors).some(value => value);
 
         // Valideer of een fout getoond zou moeten worden.
@@ -228,18 +239,18 @@ class Registratie extends React.Component<IProps,IState>{
                 </tr>
 
                 { this.state.isWerkgever ?
-                    <div id="reg">
-                        <tr>
-                            <label>Roosternaam</label>
-                            <td><input className={shouldMarkError('roosterNaam') ? "error" : ""}
-                                       onBlur={this.handleBlur('roosterNaam')}
-                                       type='text' name="roosterNaam" value={this.state.roosterNaam} placeholder="Roosternaam" onChange={this.handleInputChange}/></td>
-                        </tr>
-                        <tr>
-                            <label>Koppelcode</label>
-                            <td><input name="koppelCode" value={this.state.koppelCode}/></td>
-                        </tr>
-                    </div>
+                    <tr>
+                        <label>Roosternaam</label>
+                        <td><input className={shouldMarkError('roosterName') ? "error" : ""}
+                                   onBlur={this.handleBlur('roosterName')}
+                                   type='text' name="roosterName" value={this.state.roosterName} placeholder="Roosternaam" onChange={this.handleInputChange}/></td>
+                    </tr> : ''
+                }
+                { this.state.isWerkgever ?
+                    <tr>
+                        <label>Koppelcode</label>
+                        <td><input name="koppelCode" value={this.state.koppelCode}/></td>
+                    </tr>
                     :
                     <tr>
                         <label>Koppelcode</label>
