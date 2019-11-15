@@ -33,7 +33,6 @@ class Login extends React.Component<IProps,IState>{
         this.setState({loading:true})
         event.preventDefault()
          if(localStorage.getItem("refreshToken")===null) {
-
              var result = await fetch(this.props.serverLink + "/auth/login", {
                  method: 'POST',
                  headers: {
