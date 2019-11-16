@@ -74,54 +74,98 @@ app.get("/avatar/:name",(req,res)=>{
     res.sendFile(__dirname.split("\\").slice(0,-1).join("\\")+"/uploads/"+req.params.name)
 });
 
-// Zend een POST request dat de data uit de front-end in de database krijgt.
+// ---------------- REGISTRATIE ----------------
+
+// Zend een POST request dat de data uit de front-end in de database krijgt en daarmee een nieuwe gebruiker aanmaakt.
 app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
-    var data = req.body;
-    console.log(data.firstName);
+    let data = req.body;
+    let image = "defaultAvatar.png";
+
+    if (req.file !== undefined) {image = req.file.filename;}
     data.pass = await bcrypt.hash(data.pass, 10 );
-    console.log("Toevoeging gebruiker:");
-    connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, profielFotoLink, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth, req.file.filename,data.isWerkgever?1:0],
-        (error, results, fields) => {
-            if (error) {
-                console.log(error);
-                res.status(422).json;
-                res.json({message:error});
-            }else{
-                res.status(201).send("Gebruiker toegevoegd.");
-                console.log("Gebruiker toegevoegd.");
+console.log(data)
+    connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, profielFotoLink, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth,image ,data.isWerkgever==='true'],
+    (error, results, fields) => {
+        if (error) {
+            console.log(error);
+            res.status(422).json;
+            res.json({message:error});
+        } else {
+            res.status(201).send(data.firstName + " toegevoegd.");
+            console.log(data.firstName + " toegevoegd.");
 
-                // Hier wordt het verificatie-email verstuurd. Wanneer we ook op andere plekken email gaan gebruiken kan deze code centraler opgeslagen worden.
-                const transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                        user: 'roosteritHRO@gmail.com',
-                        pass: 'hogeschoolr'
-                    }
-                });
+            // Hier wordt het verificatie-email verstuurd. Wanneer we ook op andere plekken email gaan gebruiken kan deze code centraler opgeslagen worden.
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'roosteritHRO@gmail.com',
+                    pass: 'hogeschoolr'
+                }
+            });
 
-                const mailOptions = {
-                    from: 'roosteritHRO@gmail.com',
-                    to: data.email,
-                    subject: 'Verificatie RoosterIt',
-                    html: ` 
-                    <h1>Geachte meneer/mevrouw ${data.lastName},</h1><p>Volg deze link om uw registratie te voltooien:</p>
-                    <p><a href='http://localhost:3000/emailverificatie/${data.email}'>Verifieer email</a></p>
-                    `
-                };
+            const mailOptions = {
+                from: 'roosteritHRO@gmail.com',
+                to: data.email,
+                subject: 'Verificatie RoosterIt',
+                html: ` 
+                <h1>Geachte meneer/mevrouw ${data.lastName},</h1><p>Volg deze link om uw registratie te voltooien:</p>
+                <p><a href='http://localhost:3000/emailverificatie/${data.email}'>Verifieer email</a></p>
+                `
+            };
 
-                transporter.sendMail(mailOptions, function(error, info){
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log('Email verstuurd: ' + info.response);
-                    }
-                });
-
-
-            }
-        })
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email verstuurd: ' + info.response);
+                }
+            });
+        }
+    })
 });
 
+// Voeg een rooster toe aan de database met de verstuurde naam.
+app.post("/addrooster", (req, res) => {
+    let data = req.body;
+    connection.query("INSERT INTO rooster (roosterName) VALUES (?)", [data.roosterName], (error, results, fields) => {
+        if (error) {
+            console.log(error);
+            res.status(422);
+            res.json({message: error});
+        } else {
+            console.log("Rooster " + data.roosterName + " toegevoegd.");
+        }
+    });
+
+    // Haal het roosterId op van het zojuist aangemaakte rooster.
+    connection.query("SELECT roosterId FROM rooster WHERE roosterName = (?)", [data.roosterName], (error, results, fields) => {
+        let roosterId = results[0].roosterId;
+
+        // Voeg de gegenereerde koppelcode toe aan de database.
+        connection.query("INSERT INTO koppelCode (koppelCode, roosterId) VALUES (?,?)", [data.koppelCodeWerkgever, roosterId], (error, results, fields) => {
+            console.log("Koppelcode toegevoegd.");
+
+            // Update in de gebruikerstabel de werkgever met het roosterId van het rooster dat hij heeft aangemaakt.
+            connection.query("UPDATE gebruiker SET roosterId = ? WHERE email = ?", [roosterId, data.email], (error, results, fields) => {});
+        });
+    });
+});
+
+app.put("/koppelgebruiker", (req, res) => {
+    let data = req.body;
+
+    // Haal het roosterId op van het rooster dat bij de ingevoerde koppelcode hoort.
+    connection.query("SELECT roosterId FROM koppelCode WHERE koppelCode = ?", [data.koppelCodeWerknemer], (error, results, fields) => {
+       let roosterId = results[0].roosterId;
+
+        // Update in de gebruikerstabel de werknemer met het roosterId dat bij de ingevoerde koppelcode past.
+       connection.query("UPDATE gebruiker SET roosterId = ? WHERE email = ?", [roosterId, data.email], (error, results, fields) => {
+           console.log("Gebruiker gekoppeld aan rooster " + roosterId);
+       });
+    });
+});
+
+// Activeer een gebruiker in de database nadat deze de link in de verificatie-email heeft gevolgd.
 app.put("/activeergebruiker", (req, res) => {
     let data = req.body;
     console.log("Activeren gebruiker:");
@@ -131,10 +175,12 @@ app.put("/activeergebruiker", (req, res) => {
     });
 });
 
+// ---------------- NOTIFICATIES ----------------
+
 app.post("/addnotif",async (req, res) => {
     var data = req.body;
     console.log("Notificatie toevoegen: ");
-    connection.query("INSERT INTO Notifications (userId, messageType, bedrijfId) VALUES (?,?,?)", [data.person, data.messageId, data.bedrijfId],
+    connection.query("INSERT INTO Notifications (userId, messageType, roosterId) VALUES (?,?,?)", [data.person, data.messageId, data.roosterId],
         (error, results, fields) => {
             if (error) {
                 console.log(error);
