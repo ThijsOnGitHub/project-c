@@ -8,6 +8,6 @@ interface IProps {
 }
 
 function MenuItem(props:IProps) {
-    return (<li><NavLink activeClassName={"active"} exact={true} to={props.path}>{props.tekst}</NavLink></li>)
+    return (<li><NavLink activeClassName={"active"} exact={true} className="menuItem" to={props.path}>{props.tekst}</NavLink></li>)
 }
 export default MenuItem

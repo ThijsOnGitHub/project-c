@@ -6,6 +6,7 @@ interface IProps {
     apiLink:string
     serverLink:string
     changeHigherState:(functie:(oldState:AppState)=>Partial<AppState>)=>void
+    updateAuth: ()=>void
 }
 
 interface IState {
@@ -45,20 +46,14 @@ class Login extends React.Component<IProps,IState>{
                  console.log(result.status)
                  localStorage.setItem("refreshToken", token.refreshToken)
                  sessionStorage.setItem("authToken", token.sessionToken)
-                 let tokenObject = jsonwebtoken.decode(token.sessionToken)
-                 if (typeof tokenObject !== "string") {
-                     var exp = tokenObject.exp
-                     this.props.changeHigherState((oldstate) => {
-                         return {authEnd: exp, loggedIn: true}
-                     })
-                 }
+                 this.props.updateAuth()
              } else {
                  var text = await result.text()
                  console.log(text)
                  this.setState({error: text})
              }
          }else {
-             this.props.changeHigherState(oldState => {return{loggedIn:true,authEnd:(Date.now()+200)/1000}})
+             this.props.updateAuth()
          }
      this.setState({loading:false})
     }
@@ -86,9 +81,13 @@ class Login extends React.Component<IProps,IState>{
                         <tr>
                             <td><input type="password" className={this.state.error.length!==0 && "error"} id="pass" name="pass" placeholder="Wachtwoord" value={this.state.pass} onChange={this.handleInputChange} /></td>
                         </tr>
-                        <tr>
-                            <td><a href="#">Wachtwoord vergeten?</a></td>
-                        </tr>
+                        {
+                            /* Dit is nog niet geïmplementeerd
+                            <tr>
+                                <td><a href="#">Wachtwoord vergeten?</a></td>
+                            </tr>
+                            */
+                        }
                         <tr>
                             <td className="center errorMessage">{this.state.error}</td>
                         </tr>
