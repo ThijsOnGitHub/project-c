@@ -175,6 +175,16 @@ app.put("/activeergebruiker", (req, res) => {
     });
 });
 
+// Update user
+app.put("/updategebruiker", (req, res) => {
+    let data = req.body;
+    console.log("Updaten gebruiker...:");
+    connection.query("UPDATE gebruiker SET firstName = (?), lastName = (?), email = (?), phone = (?), birth = (?) WHERE userId = (?)", [data.person, data.newVoornaam, data.newAchternaam, data.newEmail, data.newPhone, data.email], (error, results, fields) =>{
+        res.json(results);
+        console.log("Gebruiker geupdatet.");
+    });
+});
+
 // ---------------- NOTIFICATIES ----------------
 
 app.post("/addnotif",async (req, res) => {
