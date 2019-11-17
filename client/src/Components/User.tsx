@@ -42,7 +42,7 @@ class User extends React.Component<IProps,IState> {
         });
     };
 
-
+render(){
     return(
         <div id="reg">
         <form id="account">
@@ -88,7 +88,7 @@ class User extends React.Component<IProps,IState> {
                 </table>
             </form>
         </div>
-    )
-};
+    )}
+}
 
 export default User
