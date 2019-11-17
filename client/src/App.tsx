@@ -11,6 +11,7 @@ import Home from "./Pages/Home";
 import MyAccount from "./Pages/MyAccount";
 import * as jsonwebtoken from 'jsonwebtoken'
 import loadingIcon from "./img/Loding-Icon-zwart.gif";
+import RuilPagina from "./Pages/RuilPagina";
 
 export interface IState {
     apiLink:string
@@ -128,6 +129,7 @@ class App extends React.Component<{},IState>{
                             {
                                 this.state.loggedIn ?
                                     <Switch>
+                                        <Route path={"/ruilpagina/:id"} render={(props:{match:{params:{id:string}}}) => <RuilPagina id={props.match.params.id}/>}/>
                                         <Route path="/MyAccount" render={() => <MyAccount apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
                                         <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink}/>}/>
                                         <Route path="/" render={() => <Home/>}/>
