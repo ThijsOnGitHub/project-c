@@ -64,7 +64,7 @@ class MyAccount extends React.Component<IProps,IState>{
                                                               mail={value.email}
                                                               telefoon={value.phone}
                                                               geboorte={value.birth}
-                                                              avatar={value.profielFotoLink}/>})}
+                                                              avatar={value.profielFotoLink} apiLink={this.props.apiLink}/>})}
             </div>
         )
     }

@@ -176,11 +176,14 @@ app.put("/activeergebruiker", (req, res) => {
 });
 
 // Update user
-app.put("/updategebruiker", (req, res) => {
+app.put("/updategebruiker",auth, (req, res) => {
     let data = req.body;
     console.log("Updaten gebruiker...:");
-    connection.query("UPDATE gebruiker SET firstName = (?), lastName = (?), email = (?), phone = (?), birth = (?) WHERE userId = (?)", [data.person, data.newVoornaam, data.newAchternaam, data.newEmail, data.newPhone, data.email], (error, results, fields) =>{
+    connection.query("UPDATE gebruiker SET firstName = (?), lastName = (?), email = (?), phone = (?) WHERE Id = (?)", [data.newVoornaam, data.newAchternaam, data.newEmail, data.newTelefoon, req.user.id], (error, results, fields) =>{
         res.json(results);
+        if (error) {
+            console.log(error);
+        }
         console.log("Gebruiker geupdatet.");
     });
 });
