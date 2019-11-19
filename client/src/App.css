@@ -349,9 +349,8 @@ nav {
     display: flex!important;
     text-align: center;
     justify-content: center;
-    align-content: center;
-    margin-left: auto!important;
-    margin-right: auto!important;
+    align-items: center;
+  margin: auto;
 }
 
 #intro table{
@@ -570,11 +569,25 @@ button:hover {
   padding: 7px;
   border-radius: 100000px;
   margin-right: 10px;
+  align-items: center;
 }
 
 .accountInformationMenu > p{
   margin: auto 5px;
 }
+
+
+.roosterItem{
+  color:var(--negAccentColor);
+}
+.roosterItem p{
+   margin-top: 0px;
+   margin-bottom: 0px;
+ }
+.roosterItem .name{
+margin-left: 5px;
+}
+
 
 .Button {
   color: white;
