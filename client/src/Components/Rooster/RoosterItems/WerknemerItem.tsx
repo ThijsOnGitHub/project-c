@@ -8,12 +8,16 @@ interface IProps {
 }
 
 class WerknemerItem extends React.Component<IProps>{
+    private startTijd : string;
+    private eindTijd : string;
 
     render() {
+        this.startTijd = new Date(this.props.itemData.beginTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"});
+        this.eindTijd = new Date(this.props.itemData.eindTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"});
         return(
             <div className="column isideItem">
                 <div className="row">
-                    <p className="onAccent noMargin">{new Date(this.props.itemData.beginTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}-{new Date(this.props.itemData.eindTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}</p>
+                    <p className="onAccent noMargin">{this.startTijd} - {this.eindTijd}</p>
                     <details className="chooseMenu right" >
                         <div>
                             <OptionWithIcon icon="people-24px.svg" text="Vervanging Regelen"/>
