@@ -526,8 +526,8 @@ button:hover {
   background: #eeeeee;
   align-content: center;
   justify-content: center;
-  padding-top: 30px;
 }
+
 .roundShape {
   font-weight: bold;
   padding: 10px;
@@ -576,20 +576,18 @@ button:hover {
   margin: auto 5px;
 }
 
-.Home figcaption {
+.Button {
   color: white;
   background: #622081;
   font-weight: bold;
   padding: 10px;
   border-radius: 500px;
   margin: 10px;
+  text-align: center;
 }
+
 .Home figure {
   border-radius: 20px;
-}
-.Home img {
-  display: block;
-  margin-left: auto;
 }
 
 .Notifs {
@@ -601,21 +599,76 @@ button:hover {
   padding-left: 50px;
   padding-right: 50px;
   max-width: 250px;
+  margin-left: 40px;
 }
+
 .notifList {
   overflow: auto;
   max-height: 300px;
   margin-bottom: 20px;
   border-radius: 20px;
 }
+
+/* width */
+.notifList::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.notifList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8000px;
+}
+
+/* Handle */
+.notifList::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8000px;
+}
+
+/* Handle on hover */
+.notifList::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .NotifItem {
   background: #dddddd;
   border-radius: 20px;
-  display: block;
-  padding-left: 20px;
-  padding-right: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 5px;
+}
+.NotifItem img {
+  min-width: 40px;
+  min-height: 40px;
+  width: 40px;
+  height: 40px;
+}
+.NotifItem p {
+  margin-left: 10px;
 }
 
+.HomeInfo {
+  background: #dddddd;
+  display: flex;
+  margin: auto;
+  border-radius: 50px;
+  padding-left: 50px;
+}
+.HomeInfoC {
+  margin-top: 20px;
+}
+.HomeContents {
+  display: block;
+}
+.NextShift {
+  background: darkmagenta;
+  color:white;
+  border-radius: 20px;
+  text-align: center;
+  padding: 1px 10px;
+}
 /*My Account page*/
 #reg img{
   margin: auto;

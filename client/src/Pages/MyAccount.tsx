@@ -1,7 +1,7 @@
 import React from 'react'
 import User from "../Components/User"
 import "../Components/User";
-var API_LINK='http://localhost:5000/api'
+var API_LINK='http://localhost:5000/api';
 
 interface IState {
     content:{firstName:string,lastName:string,email:string,phone:string,birth:string,profielFotoLink:string}[],
@@ -19,10 +19,10 @@ interface IProps {
     serverLink:string
 }
 class MyAccount extends React.Component<IProps,IState>{
-    lijst:string[]
+    lijst:string[];
 
     constructor(props:IProps){
-        super(props)
+        super(props);
         this.state={
             content:[],
             firstName: "",
@@ -32,23 +32,24 @@ class MyAccount extends React.Component<IProps,IState>{
             birth: "",
             profielFotoLink: "",
             isWerkgever: ""
-        }
-        this.lijst=["firstName","lastName","email","phone","birth","profielfoto","isWerkgever"]
+        };
+        this.lijst=["firstName","lastName","email","phone","birth","profielfoto","isWerkgever"];
         this.refreshData=this.refreshData.bind(this)
     }
 
     refreshData= async ()=>{
-        console.log("get data")
-        var request= await fetch(this.props.apiLink+"/getgebruikerinfo",{headers:{authToken:sessionStorage.getItem("authToken")}})
-        var json= await request.json()
-        console.log(json)
+        console.log("get data");
+        var request= await fetch(this.props.apiLink+"/getgebruikerinfo",{headers:{authToken:sessionStorage.getItem("authToken")}});
+        var json= await request.json();
+        console.log(json);
         this.setState({
-            content:json
-        })
-    }
+                          content:json
+                      })};
+
     componentDidMount= async ()=> {
         this.refreshData()
-    }
+    };
+
 
     render() {
         return(
@@ -57,8 +58,13 @@ class MyAccount extends React.Component<IProps,IState>{
                     <h1><span className="weighted">{this.state.content.length>0 && this.state.content[0].firstName}'s</span> account informatie</h1>
                 </div>
 
-                {this.state.content.map(value =>{ return<User serverLink={this.props.serverLink} firstName={value.firstName} lastName={value.lastName} mail={value.email} telefoon={value.phone} geboorte={value.birth} avatar={value.profielFotoLink}/>})}
-
+                {this.state.content.map(value =>{ return<User serverLink={this.props.serverLink}
+                                                              firstName={value.firstName}
+                                                              lastName={value.lastName}
+                                                              mail={value.email}
+                                                              telefoon={value.phone}
+                                                              geboorte={value.birth}
+                                                              avatar={value.profielFotoLink} apiLink={this.props.apiLink}/>})}
             </div>
         )
     }
