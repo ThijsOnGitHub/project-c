@@ -83,7 +83,6 @@ app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
 
     if (req.file !== undefined) {image = req.file.filename;}
     data.pass = await bcrypt.hash(data.pass, 10 );
-console.log(data)
     connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, profielFotoLink, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth,image ,data.isWerkgever==='true'],
     (error, results, fields) => {
         if (error) {

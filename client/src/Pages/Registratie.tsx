@@ -56,9 +56,9 @@ class Registratie extends React.Component<IProps,IState>{
             roosterName: '',
             koppelCodeWerknemer: '',
             koppelCodeWerkgever: '',
-            // Beschrijf de toegestane symbolen voor de inputvelden.
-            letters: /^[A-Za-z]+$/,
-            numbers: /^[0-9]+$/,
+            // Beschrijf de toegestane symbolen voor de inputvelden. Geen spaties voor en na inputs, wel mogen in namen spaties zitten.
+            letters: /^[^\s][A-Z\sa-z]+[^\s]$/,
+            numbers: /^[^\s][0-9]+[^\s]$/,
             // Sla op of inputvelden al zijn aangeraakt door de gebruiker.
             touched: {
                 firstName: false,
@@ -87,6 +87,7 @@ class Registratie extends React.Component<IProps,IState>{
 
     generateKoppelCode() {
         let value = (Math.floor(Math.random() * 100000) + 1).toString();
+        // Controlleer of de koppelcode al in de database staat.
         return value;
     }
 
@@ -122,6 +123,7 @@ class Registratie extends React.Component<IProps,IState>{
         return {
             firstName: firstName.length === 0 || firstName.length >= 30 || !firstName.match(this.state.letters),
             lastName: lastName.length === 0 || lastName.length >= 30 || !lastName.match(this.state.letters),
+            // Controlleer hier of een email al aanwezig is in de database of niet door een nieuwe functie aan te roepen.
             email: email.length === 0 || email.length >= 30,
             pass: pass.length === 0 || pass.length >= 30,
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
