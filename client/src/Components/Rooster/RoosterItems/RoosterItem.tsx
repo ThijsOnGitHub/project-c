@@ -7,6 +7,8 @@ interface IState {
 }
 
 interface IProps {
+    width?:string
+    startWidth?:string
     beginTijd:Date
     eindTijd:Date
     roosterData:DagData
@@ -35,7 +37,7 @@ class RoosterItem extends React.Component<IProps,IState>{
     render() {
 
         return(
-            <div  className="absolute roosterItem" style={{top:this.state.top,height:this.state.length}}>
+            <div  className="absolute roosterItem" style={{top:this.state.top,height:this.state.length,maxHeight:this.state.length,left:this.props.startWidth||0,width:this.props.width||"100%"}}>
                 {this.props.children}
             </div>
         )

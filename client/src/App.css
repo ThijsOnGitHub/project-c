@@ -170,7 +170,6 @@ position: fixed;
 
 body{
   margin: 0;
-    min-width: 750px;
 }
 
 
@@ -349,9 +348,8 @@ nav {
     display: flex!important;
     text-align: center;
     justify-content: center;
-    align-content: center;
-    margin-left: auto!important;
-    margin-right: auto!important;
+    align-items: center;
+  margin: auto;
 }
 
 #intro table{
@@ -541,6 +539,12 @@ button:hover {
 }
 
 .avatarMini{
+  min-width: 30px;
+  max-width: 30px;
+
+  min-height: 30px;
+  max-height: 30px;
+
   width: 30px;
   height: 30px;
 }
@@ -570,13 +574,28 @@ button:hover {
   padding: 7px;
   border-radius: 100000px;
   margin-right: 10px;
+  align-items: center;
 }
 
 .accountInformationMenu > p{
   margin: auto 5px;
 }
 
+
+.roosterItem{
+  color:var(--negAccentColor);
+}
+.roosterItem p{
+   margin-top: 0px;
+   margin-bottom: 0px;
+ }
+.roosterItem .name{
+margin-left: 5px;
+}
+
+
 .Button {
+  border: none;
   color: white;
   background: #622081;
   font-weight: bold;

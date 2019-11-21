@@ -27,28 +27,43 @@ var upload=multer({storage:storage});
 
 var connection=mysql.createConnection(serverSecret.databaseLogin);
 
-app.get("/bedrijf",async (req,res)=>{
-    console.log("Get bedrijven");
-    connection.query('SELECT * FROM bedrijf', (error, results, fields) =>{
-        res.json(results)
-    });
+
+app.get("/getRooster",auth,(req,res)=>{
+    console.log("get rooster")
+    console.log(req.user.isWerkgever)
+    if(req.user.isWerkgever){
+        console.log('werkgever queary')
+        connection.query("select rI.*,CONCAT(firstName,' ',lastName) as naam from gebruiker join roosterItems rI on gebruiker.id = rI.userId where roosterId=(select roosterId from gebruiker where id=?)",[req.user.id],(err,values)=>{
+            if(err){
+                res.status(500).send(err)
+            }else{
+                console.log(newValues)
+                var newValues=values.map(value => {
+                    value.beginTijd=`1899-12-31T${value.beginTijd}.000`;
+                    value.eindTijd=`1899-12-31T${value.eindTijd}.000`;
+                    return value
+                });
+                res.status(200).json(newValues)
+            }
+        })
+    }else{
+        console.log("get agenda from user: "+req.user.id);
+        connection.query("SELECT datum,beginTijd,eindTijd,userId as id,CONCAT(firstName,' ',lastname) as naam FROM roosterItems join gebruiker g on roosterItems.userId = g.id where userId=?",[req.user.id,req.user.id],(err,values)=>{
+            //Hier worden de tijden omgezet in javascript format zodat ze tot DATE object kunnen worden gemaakt
+            if(err){
+                res.status(500).send(err)
+            }else{
+                var newValues=values.map(value => {
+                    value.beginTijd=`1899-12-31T${value.beginTijd}.000`;
+                    value.eindTijd=`1899-12-31T${value.eindTijd}.000`;
+                    return value
+                });
+                res.json(newValues)
+            }
+        })
+    }
 });
 
-
-app.get("/getAgenda",auth,(req,res)=>{
-    console.log("get agenda from user: "+req.user.id);
-    connection.query('SELECT datum,beginTijd,eindTijd FROM roosterItems where userId=?',[req.user.id],(err,values)=>{
-        //Hier worden de tijden omgezet in javascript format zodat ze tot DATE object kunnen worden gemaakt
-        var newValues=values.map(value => {
-            value.beginTijd=`1899-12-31T${value.beginTijd}.000`;
-            value.eindTijd=`1899-12-31T${value.eindTijd}.000`;
-            return value
-        });
-        res.json(newValues)
-    })
-
-
-});
 
 app.post("/addbedrijf",(req,res)=>{
     var data=req.body;
@@ -76,6 +91,21 @@ app.get("/avatar/:name",(req,res)=>{
 
 // ---------------- REGISTRATIE ----------------
 
+app.get("/avatarWithId/:id",(req,res)=>{
+    connection.query("select profielFotoLink as avatar from gebruiker where id =?",[req.params.id],(err,values)=>{
+        if(err){
+            res.status(500).send(err)
+        }else{
+            console.log(values)
+            if(values.length===0){
+                res.status(400)
+            }else{
+                res.sendFile(__dirname.split("\\").slice(0,-1).join("\\")+"/uploads/"+values[0].avatar)
+            }
+
+        }
+    })
+})
 // Zend een POST request dat de data uit de front-end in de database krijgt en daarmee een nieuwe gebruiker aanmaakt.
 app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
     let data = req.body;

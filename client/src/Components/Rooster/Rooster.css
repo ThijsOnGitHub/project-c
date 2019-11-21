@@ -29,7 +29,14 @@
 .roosterItem{
     background:var(--accentColor);
     border-radius:15px;
+
 }
+
+.noOverflow{
+    max-height: 100%;
+    overflow: auto;
+}
+
 .WeekKiezer{
     margin: 10px;
 }
@@ -38,6 +45,7 @@
     justify-content: center
 }
 .isideItem{
+    box-sizing:border-box;
     padding: 5px 10px;
 }
 .noMargin{
@@ -87,8 +95,10 @@
 }
 
 
+
 .dag{
     display: flex;
+    min-width: 300px;
 }
 .dag > div{
     flex: 1 0 190px;
