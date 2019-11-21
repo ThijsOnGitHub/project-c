@@ -1,10 +1,10 @@
 import React from 'react'
 import {ReactComponent as MoreOptions} from "../../../icons/more_horiz-24px.svg";
 import OptionWithIcon from "../../OptionWithIcon";
-import {ItemData} from "../../../Pages/RoosterView";
+import {itemComponentsData} from "../../../Pages/Rooster";
 
 interface IProps {
-    itemData:ItemData
+    itemData:itemComponentsData
 }
 
 class WerknemerItem extends React.Component<IProps>{

@@ -88,7 +88,7 @@ class WeekKiezer extends React.Component<IProps,IState>{
                 </select>
                 <BackIcon onClick={()=>this.changeWeek(-1)}/>
                 <NextIcon onClick={()=>this.changeWeek(1)}/>
-                <button onClick={()=>{
+                <button className="Button" onClick={()=>{
                     this.props.changeBeginDatum(this.changeToMonday(new Date())).then(()=>{
                         this.updateSelects()
                     })

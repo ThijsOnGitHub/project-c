@@ -5,6 +5,8 @@ import '../Rooster.css'
 import DagTitel from "./DagTitel";
 import RoosterItem from "../RoosterItems/RoosterItem";
 import {TimeMarkerTypes} from './TimeMarkerTypes';
+import {fullRenderItem} from "../../../Pages/Rooster";
+
 
 
 interface IProps {
@@ -13,7 +15,7 @@ interface IProps {
     beginTijd: Date
     height:number
     markerInterval:Date
-    renderItems:{[datum:string]:(RoosterData:DagData)=>ReactElement<RoosterItem>}[]
+    renderItems:fullRenderItem
 }
 
 
@@ -26,7 +28,7 @@ class RoosterComponent extends React.Component<IProps>{
 
     render() {
         // Hier worden alle datums die weergeven moeten worden gegenereerd
-        var datums=[0,1,2,3,4,5,6].map((value,index) => {
+        var datums=[0,2,3,4,5,6].map((value,index) => {
             var newDate=new Date(this.props.startDate.toString());
             var newValue=newDate.getDate()+index;
             newDate.setDate(newValue);
@@ -48,12 +50,11 @@ class RoosterComponent extends React.Component<IProps>{
                     <TimeMarker type={TimeMarkerTypes.time} interval={this.props.markerInterval} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} />
                     <div className="row dag dagTijden">
                     {
-                        datums.map(value => <DagField datum={value} renderItems={
+                        datums.map(value => <DagField  datum={value} renderItems={
                             /* *1 Hier worden alle roosterItems verdeeld over de dagen d.m.v. de datum die in het object stond */
-                            this.props.renderItems.filter(value1=>{
-                            return Number.parseInt(Object.keys(value1)[0])===value.getTime()
-                        }
-                        )} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} markerInterval={this.props.markerInterval}/>)
+                            this.props.renderItems[value.toISOString()]||{}
+
+                        } beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} markerInterval={this.props.markerInterval}/>)
                     }
                     </div>
                     </div>

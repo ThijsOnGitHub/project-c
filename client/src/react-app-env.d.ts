@@ -4,6 +4,10 @@ declare module '*.svg' {
     export default content;
 }
 
+interface Array{
+    equals:(array:Array)=>boolean
+}
+
 interface String {
     capitalFirst:()=>String
 }
