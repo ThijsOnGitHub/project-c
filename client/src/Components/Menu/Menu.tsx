@@ -19,7 +19,7 @@ interface IState {
 class Menu extends React.Component <IProps,IState>{
 
     constructor(props:IProps){
-        super(props)
+        super(props);
         this.state={
             isOpen:false
         }
