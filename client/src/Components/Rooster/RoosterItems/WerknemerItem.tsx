@@ -8,7 +8,7 @@ interface IProps {
 }
 
 class WerknemerItem extends React.Component<IProps>{
-    vervangingRegelen=()=>{
+    ziekMelden=()=>{
         console.log(this.props.itemData);
         fetch(
             "http://localhost:5000/api/addnotif", {
@@ -18,7 +18,7 @@ class WerknemerItem extends React.Component<IProps>{
                 },
                 body:JSON.stringify({
                     "person": this.props.itemData.UserData[0].userId,
-                    "messageId": 3,
+                    "messageId": 1,
                     "roosterId": 1
                 })
             }
@@ -34,9 +34,9 @@ class WerknemerItem extends React.Component<IProps>{
                     <p className="onAccent noMargin">{new Date(this.props.itemData.beginTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}-{new Date(this.props.itemData.eindTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}</p>
                     <details className="chooseMenu right" >
                         <div>
-                            <OptionWithIcon icon="people-24px.svg" text="Vervanging Regelen" onClick={this.vervangingRegelen}/>
-                            <OptionWithIcon icon="local_hospital-24px.svg" text="Ziek Melden"/>
-                            <OptionWithIcon icon="disable_person.svg" text="Vrij Vragen"/>
+                            <OptionWithIcon icon="people-24px.svg" text="Vervanging regelen"/>
+                            <OptionWithIcon icon="local_hospital-24px.svg" text="Ziek melden" onClick={this.ziekMelden}/>
+                            <OptionWithIcon icon="disable_person.svg" text="Vrij vragen"/>
                         </div>
                         <summary>
                                 <MoreOptions width={35} height={35} className="onAccent right"/>
