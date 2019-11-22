@@ -29,15 +29,15 @@ var connection=mysql.createConnection(serverSecret.databaseLogin);
 
 
 app.get("/getRooster",auth,(req,res)=>{
-    console.log("get rooster")
-    console.log(req.user.isWerkgever)
+    console.log("get rooster");
+    console.log(req.user.isWerkgever);
     if(req.user.isWerkgever){
-        console.log('werkgever queary')
+        console.log('werkgever queary');
         connection.query("select rI.*,CONCAT(firstName,' ',lastName) as naam from gebruiker join roosterItems rI on gebruiker.id = rI.userId where roosterId=(select roosterId from gebruiker where id=?)",[req.user.id],(err,values)=>{
             if(err){
                 res.status(500).send(err)
             }else{
-                console.log(newValues)
+                console.log(newValues);
                 var newValues=values.map(value => {
                     value.beginTijd=`1899-12-31T${value.beginTijd}.000`;
                     value.eindTijd=`1899-12-31T${value.eindTijd}.000`;
@@ -48,7 +48,7 @@ app.get("/getRooster",auth,(req,res)=>{
         })
     }else{
         console.log("get agenda from user: "+req.user.id);
-        connection.query("SELECT datum,beginTijd,eindTijd,userId as id,CONCAT(firstName,' ',lastname) as naam FROM roosterItems join gebruiker g on roosterItems.userId = g.id where userId=?",[req.user.id,req.user.id],(err,values)=>{
+        connection.query("SELECT datum,beginTijd,eindTijd,userId,CONCAT(firstName,' ',lastname) as naam FROM roosterItems join gebruiker g on roosterItems.userId = g.id where userId=?",[req.user.id,req.user.id],(err,values)=>{
             //Hier worden de tijden omgezet in javascript format zodat ze tot DATE object kunnen worden gemaakt
             if(err){
                 res.status(500).send(err)
@@ -96,7 +96,7 @@ app.get("/avatarWithId/:id",(req,res)=>{
         if(err){
             res.status(500).send(err)
         }else{
-            console.log(values)
+            console.log(values);
             if(values.length===0){
                 res.status(400)
             }else{
@@ -105,7 +105,7 @@ app.get("/avatarWithId/:id",(req,res)=>{
 
         }
     })
-})
+});
 // Zend een POST request dat de data uit de front-end in de database krijgt en daarmee een nieuwe gebruiker aanmaakt.
 app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
     let data = req.body;
@@ -113,7 +113,7 @@ app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
 
     if (req.file !== undefined) {image = req.file.filename;}
     data.pass = await bcrypt.hash(data.pass, 10 );
-console.log(data)
+console.log(data);
     connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, profielFotoLink, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth,image ,data.isWerkgever==='true'],
     (error, results, fields) => {
         if (error) {

@@ -22,21 +22,6 @@ class NotifList extends React.Component<IProps, IState> {
         this.getnotifs()
     }
 
-    addNotif(person:number, messageId:number, bedrijfId:number) {
-        fetch(
-            "http://localhost:5000/api/addnotif", {
-                method:"post",
-                headers:{
-                    "content-type":"application/json"
-                },
-                body:JSON.stringify({
-                    "person": person,
-                    "messageId": messageId,
-                    "bedrijfId": bedrijfId
-                })
-            }
-        )
-    }
 
     getnotifs = () => {
         fetch("http://localhost:5000/api/getnotifs")
