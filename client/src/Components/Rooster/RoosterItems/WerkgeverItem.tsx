@@ -1,6 +1,6 @@
 import React from 'react'
 import {ReactComponent as CreateIcon} from '../../../icons/create-24px.svg'
-import {itemComponentsData} from "../../../Pages/Rooster";
+import {itemComponentsData} from "../roosterData";
 
 interface IProps {
     itemData:itemComponentsData

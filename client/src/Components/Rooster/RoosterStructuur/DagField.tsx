@@ -1,7 +1,8 @@
 import React from 'react'
 import TimeMarker from "./TimeMarker";
 import {TimeMarkerTypes} from "./TimeMarkerTypes";
-import {dayRenderItem} from "../../../Pages/Rooster";
+import {dayRenderItem} from "../roosterData";
+
 
 
 
@@ -30,7 +31,6 @@ class DagField extends React.Component<IProps>{
                         {
                             // Hier wordt het rooster items echt uitgevoerd en geplaasts
                             Object.values(this.props.renderItems).map(value => {
-                                console.log(this.props.renderItems);
                                 return value(this.props)
                             })
 
