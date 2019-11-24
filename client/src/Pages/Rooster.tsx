@@ -89,7 +89,7 @@ class Rooster extends Component<IProps,IState>{
             )})
     };
 
-    };
+    
 
     render() {
         return (
