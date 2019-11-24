@@ -105,7 +105,7 @@ body{
   color: black;
   padding: 10px;
   width:max-content;
-  z-index: 99;
+  z-index: 2;
 }
 .chooseMenu > summary::-webkit-details-marker {
   display: none;
@@ -223,7 +223,6 @@ body{
 input {
   margin: auto;
   border-radius: 50px;
-  width: 350px;
   margin-bottom: 10px;
   display: block;
   padding: 15px 40px;
@@ -237,6 +236,10 @@ input {
   text-align: center;
   color: #585858;
   font-size: 18px;
+}
+
+form input{
+  width:350px;
 }
 input:focus {
   border: 3px solid #555;
@@ -584,6 +587,7 @@ button:hover {
 
 .roosterItem{
   color:var(--negAccentColor);
+
 }
 .roosterItem p{
    margin-top: 0px;
@@ -728,4 +732,31 @@ margin-left: 5px;
 }
 #account input:focus{
   border: 2px solid #ccc;
+}
+
+.thinScrollBar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.thinScrollBar::-webkit-scrollbar-button{
+  height: 5px;
+}
+/* Track */
+.thinScrollBar::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background:grey ;
+}
+
+/* Handle */
+.thinScrollBar::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.thinScrollBar::-webkit-scrollbar-thumb:hover{
+  background: #555;
+}
+.thinScrollBar::-webkit-scrollbar-corner{
+  display: none;
 }

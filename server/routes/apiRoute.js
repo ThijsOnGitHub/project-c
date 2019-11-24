@@ -48,7 +48,7 @@ app.get("/getRooster",auth,(req,res)=>{
         })
     }else{
         console.log("get agenda from user: "+req.user.id);
-        connection.query("SELECT datum,beginTijd,eindTijd,userId as id,CONCAT(firstName,' ',lastname) as naam FROM roosterItems join gebruiker g on roosterItems.userId = g.id where userId=?",[req.user.id,req.user.id],(err,values)=>{
+        connection.query("SELECT datum,beginTijd,eindTijd,userId,CONCAT(firstName,' ',lastname) as naam FROM roosterItems join gebruiker g on roosterItems.userId = g.id where userId=?",[req.user.id,req.user.id],(err,values)=>{
             //Hier worden de tijden omgezet in javascript format zodat ze tot DATE object kunnen worden gemaakt
             if(err){
                 res.status(500).send(err)

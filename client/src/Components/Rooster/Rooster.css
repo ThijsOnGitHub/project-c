@@ -1,7 +1,6 @@
 .row{
     display: flex;
     flex-direction: row;
-    width: 100%;
 }
 .centerText{
     text-align: center;
@@ -34,7 +33,10 @@
 
 .noOverflow{
     max-height: 100%;
-    overflow: auto;
+    overflow: hidden;
+}
+.scrolOverflow{
+    overflow-y: auto;
 }
 
 .WeekKiezer{
@@ -47,9 +49,14 @@
 .isideItem{
     box-sizing:border-box;
     padding: 5px 10px;
+    height: 100%;
 }
 .noMargin{
     margin: 0 0;
+}
+.noVertMargin{
+    margin-top: 0;
+    margin-bottom: 0;
 }
 .column{
     display: flex;
@@ -62,6 +69,9 @@
 .row{
     display: flex;
     flex-direction: row;
+}
+.roosterVelden .row{
+    width: 100%;
 }
 .dagTitles{
     padding-left: 50px;
@@ -108,11 +118,11 @@
 
 /* width */
 .roosterVelden::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
-}
+     width: 7px;
+     height: 7px;
+ }
 .roosterVelden::-webkit-scrollbar-button{
-   height: 5px;
+    height: 5px;
 }
 /* Track */
 .roosterVelden::-webkit-scrollbar-track {
@@ -130,3 +140,4 @@
 .roosterVelden::-webkit-scrollbar-thumb:hover{
     background: #555;
 }
+
