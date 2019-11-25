@@ -481,6 +481,23 @@ button:hover {
   color: #af71cc;
 }
 
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 15px;
+
+}
+
+th{
+  text-align: left;
+}
+
+table {
+  border-spacing: 5px;
+}
+
+
+
 #reg table button, #Login table button {
   background-color: #ad35d7;
   border: 4px solid #ba83cd;
