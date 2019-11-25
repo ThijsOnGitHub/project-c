@@ -7,9 +7,8 @@ import RoosterItem from "../Components/Rooster/RoosterItems/RoosterItem";
 import WerknemerItem from "../Components/Rooster/RoosterItems/WerknemerItem";
 import WerkgeverItem from "../Components/Rooster/RoosterItems/WerkgeverItem";
 import RoosterData, {
-    formatedRoosterItems,
     fullRenderItem,
-    itemComponentsData, roosterItem,
+    itemComponentsData,
     roosterItemRenderFunc
 } from "../Components/Rooster/roosterData";
 
