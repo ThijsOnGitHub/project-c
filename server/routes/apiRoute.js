@@ -204,6 +204,18 @@ app.get("/getnotifs", (req, res) => {
         res.json(result)
     })
 });
+
+app.get("/GetMedewerkers",auth, ((req, res) =>{
+
+   if(req.user.isWerkgever){
+       connection.query("SELECT id, firstName, lastName FROM gebruiker WHERE roosterid = 1", [], ( err, result, val) => {
+           res.json(result)
+       });
+   }
+
+
+
+}))
 app.get("/getNextShift", auth, (req, res) => {
     console.log("Getting next shift...");
     var today = new Date();
