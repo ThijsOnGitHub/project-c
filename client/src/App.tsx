@@ -11,6 +11,9 @@ import Home from "./Pages/Home";
 import MyAccount from "./Pages/MyAccount";
 import * as jsonwebtoken from 'jsonwebtoken'
 import loadingIcon from "./img/Loding-Icon-zwart.gif";
+import WerknemerItem from "./Components/Rooster/RoosterItems/WerknemerItem";
+import WerkgeversOverzicht from "./Pages/WerkgeversOverzicht";
+
 
 export interface IState {
     apiLink:string
@@ -168,7 +171,7 @@ class App extends React.Component<{},IState>{
                                         {
                                             this.state.isWerkgever?
                                                 <Switch>
-
+                                                    <Route path='/WerkgeversOverzicht' render={() => <WerkgeversOverzicht apiLink={this.state.apiLink}/>}/>
                                                 </Switch>:
                                                 <Switch>
                                                     <Route path="/Rooster" render={() => <RoosterView apiLink={this.state.apiLink}/>}/>
