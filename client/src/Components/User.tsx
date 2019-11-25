@@ -1,10 +1,12 @@
 import React from'react'
+import {Redirect} from 'react-router-dom'
 
 interface IState {
     newVoornaam:string
     newAchternaam:string
     newEmail:string
     newTelefoon:string
+    updateDone: boolean
 }
 interface IProps {
     apiLink:string
@@ -15,6 +17,7 @@ interface IProps {
     telefoon:string
     geboorte:string
     serverLink:string
+
 }
 
 class User extends React.Component<IProps,IState> {
@@ -26,7 +29,8 @@ class User extends React.Component<IProps,IState> {
             newVoornaam: '',
             newAchternaam: '',
             newEmail: '',
-            newTelefoon: ''
+            newTelefoon: '',
+            updateDone: false
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -57,7 +61,9 @@ class User extends React.Component<IProps,IState> {
                 newTelefoon: this.state.newTelefoon
 
             })
+
         });
+        this.setState({updateDone: true});
     };
 
     handleInputChange = (event:React.ChangeEvent<HTMLInputElement>) =>{
@@ -69,6 +75,7 @@ class User extends React.Component<IProps,IState> {
     }
 
 render(){
+        console.log(this.state.updateDone)
     return(
         <div id="reg">
         <form id="account">
@@ -105,6 +112,10 @@ render(){
                     <tr>
                         <td colSpan={3}><button onClick={this.handleSubmit}>Wijzigen</button></td>
                     </tr>
+                    {
+                        this.state.updateDone && <Redirect to={{pathname: '/Melding',state: { id: '1' }}}/>
+
+                    }
                 </tbody>
                 </table>
             </form>

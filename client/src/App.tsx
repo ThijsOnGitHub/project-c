@@ -9,8 +9,9 @@ import addFunctions from "./Values/addFunctions";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import MyAccount from "./Pages/MyAccount";
-import * as jsonwebtoken from 'jsonwebtoken'
+import * as jsonwebtoken from 'jsonwebtoken';
 import loadingIcon from "./img/Loding-Icon-zwart.gif";
+import Melding from "./Pages/Melding";
 
 export interface IState {
     apiLink:string

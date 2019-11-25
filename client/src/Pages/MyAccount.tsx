@@ -50,7 +50,6 @@ class MyAccount extends React.Component<IProps,IState>{
         this.refreshData()
     };
 
-
     render() {
         return(
             <div>

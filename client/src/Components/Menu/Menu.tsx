@@ -24,7 +24,6 @@ class Menu extends React.Component <IProps,IState>{
             isOpen:false
         }
     }
-
     
     render() {
         return(
