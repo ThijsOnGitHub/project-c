@@ -67,6 +67,8 @@ router.get("/refresh",(req, res) => {
     })
 })
 
+router.get("/Medewerkers", )
+
 router.delete("/logout",((req, res) => {
     console.log(req.header("refreshToken"))
     console.log("hello")
