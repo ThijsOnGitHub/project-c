@@ -21,14 +21,14 @@
     border-color: var(--lijnen);
     position:relative;
     background: white;
-}
 
+}
 
 
 .roosterItem{
     background:var(--accentColor);
     border-radius:15px;
-
+    cursor: pointer;
 }
 
 .noOverflow{
@@ -46,6 +46,21 @@
     margin: auto 10px;
     justify-content: center
 }
+
+.popUp{
+    width: 90vw;
+    height: 85vh;
+    left: 5vw;
+    top:5vh;
+    z-index: 3;
+    position: fixed;
+    border: black 1px solid;
+    border-radius: 5px;
+    padding: 20px;
+    background: white;
+}
+
+
 .isideItem{
     box-sizing:border-box;
     padding: 5px 10px;
@@ -54,10 +69,7 @@
 .noMargin{
     margin: 0 0;
 }
-.noVertMargin{
-    margin-top: 0;
-    margin-bottom: 0;
-}
+
 .column{
     display: flex;
     flex-direction: column;

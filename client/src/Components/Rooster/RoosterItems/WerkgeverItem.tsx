@@ -29,6 +29,7 @@ class  WerkgeverItem extends React.Component<IProps,IState>{
     }
 
     componentDidMount(): void {
+        this.changeFuncties()
         window.addEventListener('resize',this.changeFuncties)
     }
 

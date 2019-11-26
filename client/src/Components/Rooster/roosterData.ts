@@ -3,10 +3,10 @@ import {ReactElement} from "react";
 import RoosterItem from "./RoosterItems/RoosterItem";
 
 
-export interface itemComponentsData { beginTijd: string, eindTijd: string, datum: string, UserData: { naam: string, userId: number }[] }
-export interface roosterItem { datum: string, beginTijd: string, eindTijd: string, userId: number, naam: string }
+export interface itemComponentsData { beginTijd: string, eindTijd: string, datum: string, UserData: { naam: string, userId: number,itemId:number }[] }
+export interface roosterItem { datum: string, beginTijd: string, eindTijd: string, userId: number, naam: string,itemId:number }
 export type itemValues={ naam: string, userId: number }[]
-export interface formatedDayItem { [tijd: string]: { naam: string, userId: number }[] }
+export interface formatedDayItem { [tijd: string]: { naam: string, userId: number,itemId:number }[] }
 export interface formatedRoosterItems{ [datum: string]: formatedDayItem }
 export type roosterItemRenderFunc =(RoosterData: DagData) => ReactElement<RoosterItem>
 export interface dayRenderItem { [tijd: string]: roosterItemRenderFunc }
@@ -18,14 +18,13 @@ class BeginEindTijd{
     public eindTijd:Date
     public beginTijdWaarde:number
     public eindTijdWaarde:number
-    constructor(beginEindTijd:string){
 
+    constructor(beginEindTijd:string){
         const gesplitst=beginEindTijd.split(";");
         this.beginTijd=new Date(gesplitst[0])
         this.eindTijd=new Date(gesplitst[1])
         this.beginTijdWaarde=this.beginTijd.getTime()
         this.eindTijdWaarde=this.eindTijd.getTime()
-
     }
 
     public getLength(){
@@ -46,6 +45,7 @@ class RoosterData {
         return list1.every(value => list2.includes(value))
     };
 
+    //Deze functie maakt lijsten met alle intersectie die er zijn
     getInterSecties(itemIndexLijst:string[]):number[][]{
         var allIntersecties:number[][] = [];
 
@@ -66,13 +66,11 @@ class RoosterData {
             }
         });
 
-        var orginalItersections=allIntersecties.filter((value1,index) => {
-            return !allIntersecties.some((value2,index1)=> {
-                return (index===index1? false: this.isSubListOf2(value2,value1))
+        return allIntersecties.filter((value1, index) => {
+            return !allIntersecties.some((value2, index1) => {
+                return (index === index1 ? false : this.isSubListOf2(value2, value1))
             })
-        });
-
-        return orginalItersections
+        })
     }
 
     styleItemObject(gesorteerdeItems:number[],intersecties:number[][]):({[id:string]:{width:number,start:number}}){
@@ -107,17 +105,18 @@ class RoosterData {
     //Hier wordt ook gekozen of ze naast elkaar moeten komen of niet
     public getRenderdItems(returnRender:((value:itemComponentsData,width?:string,startWidth?:string)=>roosterItemRenderFunc)):fullRenderItem{
         var formatJson:any=Object.assign({},this.data);
+
         Object.keys(formatJson).forEach(value => {
             const datumJSON=this.data[value];
             var ObjectList=Object.keys(formatJson[value]);
 
             var intersecties=this.getInterSecties(ObjectList)
 
-            var amount:{[id:string]:number}={};
+            var amountOfIntersecties:{[id:string]:number}={};
             var indexen:number[]=[];
             ObjectList.forEach((value1,index) => {
                 indexen.push(index);
-                amount[index.toString()]=intersecties.reduce((previousValue, currentValue) => previousValue+(currentValue.includes(index)?1:0),0)
+                amountOfIntersecties[index.toString()]=intersecties.reduce((previousValue, currentValue) => previousValue+(currentValue.includes(index)?1:0),0)
             });
 
             indexen.sort((a, b) => {
@@ -126,7 +125,7 @@ class RoosterData {
                 return tijdb.getLength()-tijda.getLength()
             });
 
-            var itemSort=indexen.sort((a, b) => amount[b]-amount[a]);
+            var itemSort=indexen.sort((a, b) => amountOfIntersecties[b]-amountOfIntersecties[a]);
 
             var itemStyleData=this.styleItemObject(itemSort,intersecties)
 
@@ -156,12 +155,12 @@ class RoosterData {
                 var datumVak=returnObject[value.datum];
                 if(this.beginEindString(value.beginTijd,value.eindTijd) in datumVak){
                     var tijdVak=datumVak[this.beginEindString(value.beginTijd,value.eindTijd)];
-                    tijdVak.push({userId:value.userId,naam:value.naam})
+                    tijdVak.push({userId:value.userId,naam:value.naam,itemId:value.itemId})
                 }else{
-                    datumVak[this.beginEindString(value.beginTijd,value.eindTijd)]=[{userId:value.userId,naam:value.naam}]
+                    datumVak[this.beginEindString(value.beginTijd,value.eindTijd)]=[{userId:value.userId,naam:value.naam,itemId:value.itemId}]
                 }
             }else{
-                returnObject[value.datum]={[this.beginEindString(value.beginTijd,value.eindTijd)]:[{userId:value.userId,naam:value.naam}]}
+                returnObject[value.datum]={[this.beginEindString(value.beginTijd,value.eindTijd)]:[{userId:value.userId,naam:value.naam,itemId:value.itemId}]}
             }
 
         });

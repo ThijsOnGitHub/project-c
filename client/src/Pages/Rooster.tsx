@@ -6,21 +6,22 @@ import {DagData} from "../Components/Rooster/RoosterStructuur/DagField";
 import RoosterItem from "../Components/Rooster/RoosterItems/RoosterItem";
 import WerknemerItem from "../Components/Rooster/RoosterItems/WerknemerItem";
 import WerkgeverItem from "../Components/Rooster/RoosterItems/WerkgeverItem";
+import PopUp from "../Components/Rooster/PopUps/PopUp";
+import WijzigTijden from "../Components/Rooster/PopUps/WijzigTijden/WijzigTijden";
 import RoosterData, {
     fullRenderItem,
     itemComponentsData,
     roosterItemRenderFunc
 } from "../Components/Rooster/roosterData";
-
-
-
-
+import OptionWithIcon from "../Components/OptionWithIcon";
 
 
 interface IState {
     agendaJSON:fullRenderItem,
     beginDatum:Date,
     loading:boolean
+    popUp:boolean
+    popUpContent:React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined
 }
 
 interface IProps {
@@ -35,27 +36,30 @@ class Rooster extends Component<IProps,IState>{
         this.state={
             agendaJSON:{},
             beginDatum:new Date(),
-            loading:true
+            loading:true,
+            popUp:false,
+            popUpContent:<p>hallo</p>
         }
     }
 
     componentDidMount=async ()=> {
-        this.refreshRooster()
+        this.refreshRooster(true)
     };
 
-    refreshRooster=async ()=>{
+    refreshRooster=async (first:boolean)=>{
         //Hier wordt de data uit de server gehaald en in de state gezet
-        var res=await fetch(this.props.apiLink+"/getRooster",{headers:{"authToken":sessionStorage.getItem("authToken")}}).catch(reason => {console.log(reason)});
+        var res=await fetch(this.props.apiLink+"/rooster/get",{headers:{"authToken":sessionStorage.getItem("authToken")}}).catch(reason => {console.log(reason)});
         var agendaJSON=[];
         if(typeof res !=="undefined"){
             agendaJSON=await res.json();
         }
-
         var roosterData=new RoosterData(agendaJSON)
         var renderdAgendaJSON=roosterData.getRenderdItems(this.retrurnRenderdItems)
-        this.setState({
-            agendaJSON:renderdAgendaJSON,
-            loading:false
+        this.setState({agendaJSON:{}},() => {
+            this.setState({
+                agendaJSON:renderdAgendaJSON,
+                loading:false
+            })
         })
     };
 
@@ -67,7 +71,6 @@ class Rooster extends Component<IProps,IState>{
                 this.setState({beginDatum:datum},resolve)
             })
         )
-
     };
 
     //Hier wordt gekozen welke items er moeten worden gegenereerd
@@ -79,6 +82,10 @@ class Rooster extends Component<IProps,IState>{
                     {
                         this.props.isWerkgever?
                             <WerkgeverItem
+                                onClick={event => {this.setState({popUp:true,
+                                //Als er op dit element wordt geklikt wordt de pop-up gevult met een element waarmee Actie Worden Uitgevoerd
+                                popUpContent:<WijzigTijden close={this.closePopUp} RoosterData={value} apiLink={this.props.apiLink} />
+                            })}}
                                 apiLink={this.props.apiLink} itemData={value} />
                             :
                             <WerknemerItem itemData={value}/>
@@ -88,15 +95,25 @@ class Rooster extends Component<IProps,IState>{
             )})
     };
 
-    
+
+    closePopUp=()=>{
+       this.refreshRooster(false)
+       this.setState({popUp:false})
+    };
 
     render() {
         return (
-            <div>
-                <div className='row'>
-                    <WeekKiezer beginDatum={this.state.beginDatum} changeBeginDatum={this.changeBeginDatum}/>
-                </div>
-                {/*Rooster Component maakt de rooster structuur waar roosterItems ingaat*/}
+                <div>
+                    {
+                        this.state.popUp &&
+                        <PopUp>
+                            {this.state.popUpContent}
+                        </PopUp>
+                    }
+                    <div className='row'>
+                        <WeekKiezer beginDatum={this.state.beginDatum} changeBeginDatum={this.changeBeginDatum}/>
+                    </div>
+                    {/*Rooster Component maakt de rooster structuur waar roosterItems ingaat*/}
                 {
                     this.state.loading
                         ?
