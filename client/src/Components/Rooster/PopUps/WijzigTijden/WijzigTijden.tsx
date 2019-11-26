@@ -15,10 +15,13 @@ export interface IState {
     eindTijd:string
     datum:Date
     werkNemers:{userId:number,naam:string,beginTijd:string,eindTijd:string,itemId:number}[]
-    edit:boolean
+    edit:boolean,
+    validToSubmit:boolean
 }
 
 class WijzigTijden extends Component<IProps,IState>{
+    private beginTijd: React.RefObject<HTMLInputElement>
+    private eindTijd: React.RefObject<HTMLInputElement>
 
     constructor(props:IProps){
         super(props)
@@ -27,8 +30,11 @@ class WijzigTijden extends Component<IProps,IState>{
             eindTijd:"",
             datum:new Date(),
             werkNemers:[],
-            edit:false
+            edit:false,
+            validToSubmit:false
         }
+        this.beginTijd=React.createRef()
+        this.eindTijd=React.createRef()
     }
 
     componentDidMount(): void {
@@ -49,13 +55,23 @@ class WijzigTijden extends Component<IProps,IState>{
         const name = target.name;
         //: target.type=== 'time'? new Date(target.value)
 
+        if(target.checkValidity()){
+            this.setState({validToSubmit:true})
+        }else{
+            this.setState({validToSubmit:false})
+        }
+
         this.setState<never>({
             [name]: value
         });
     }
 
     changeState=(functie:(oldState:IState)=>Partial<IState>)=>{
-       this.setState<never>((oldstate)=>{return functie(oldstate)})
+       this.setState<never>((oldstate)=>{return functie(oldstate)},() => {
+           if(this.state.werkNemers.length===0){
+               this.props.close()
+           }
+       })
     }
 
 
@@ -85,12 +101,11 @@ class WijzigTijden extends Component<IProps,IState>{
                             {
                             this.state.edit ?
                                 <div className="row">
-                                    <input type="time" name={"beginTijd"} onChange={this.handleInputChange} value={this.state.beginTijd}/>
-                                    <input type="time" name={"eindTijd"} onChange={this.handleInputChange} value={this.state.eindTijd}/>
+                                    <input type="time" ref={this.beginTijd}  required={true} min={"00:00"} max={this.state.eindTijd} name={"beginTijd"} onChange={this.handleInputChange} value={this.state.beginTijd}/>
+                                    <input type="time" ref={this.eindTijd} required={true} min={this.state.beginTijd} max={"23:59"}  name={"eindTijd"} onChange={this.handleInputChange} value={this.state.eindTijd}/>
                                 </div> :
                                 <div className="row">
                                     <p>{this.state.beginTijd} - {this.state.eindTijd}</p>
-
                                 </div>
                         }
                         </td>
@@ -98,21 +113,26 @@ class WijzigTijden extends Component<IProps,IState>{
                             {
                                 this.state.edit?
                                     <Done onClick={() => {
-                                        console.log(this.state.werkNemers)
-                                        var newWerknemers=this.state.werkNemers.map(value=>{
-                                            fetch(this.props.apiLink+"/rooster/change/"+value.itemId,{
-                                                method:"POST",
-                                                headers:{
-                                                    authToken:sessionStorage.getItem("authToken"),
-                                                    'Content-Type': 'application/json'
-                                                },
-                                                body:JSON.stringify({beginTijd:this.state.beginTijd+":00",eindTijd:this.state.eindTijd+":00"})
-                                            })
+                                        if(this.state.validToSubmit){
+                                            console.log(this.state.werkNemers)
+                                            var newWerknemers=this.state.werkNemers.map(value=>{
+                                                fetch(this.props.apiLink+"/rooster/change/"+value.itemId,{
+                                                    method:"POST",
+                                                    headers:{
+                                                        authToken:sessionStorage.getItem("authToken"),
+                                                        'Content-Type': 'application/json'
+                                                    },
+                                                    body:JSON.stringify({beginTijd:this.state.beginTijd+":00",eindTijd:this.state.eindTijd+":00"})
+                                                })
 
-                                            return {...value,beginTijd:this.state.beginTijd,eindTijd:this.state.eindTijd}
-                                        })
-                                        console.log(newWerknemers)
-                                        this.setState({edit: false})
+                                                return {...value,beginTijd:this.state.beginTijd,eindTijd:this.state.eindTijd}
+                                            })
+                                            console.log(newWerknemers)
+                                            this.setState({edit: false})
+                                        }else {
+                                            this.beginTijd.current.reportValidity()
+                                            this.eindTijd.current.reportValidity()
+                                        }
                                     }}/>
                                     :
                                     <Create onClick={() => {

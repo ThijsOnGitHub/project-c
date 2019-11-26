@@ -17,15 +17,22 @@ interface IProps {
 
 interface IState{
     edit:boolean
+    validToSubmit:boolean
 }
 
 class WerknemerTijden extends Component<IProps,IState>{
+    private beginTijd: React.RefObject<HTMLInputElement>
+    private eindTijd: React.RefObject<HTMLInputElement>
+
 
     constructor(props:IProps){
         super(props)
         this.state={
-            edit:false
+            edit:false,
+            validToSubmit:false
         }
+        this.beginTijd=React.createRef()
+        this.eindTijd=React.createRef()
     }
 
 
@@ -35,9 +42,16 @@ class WerknemerTijden extends Component<IProps,IState>{
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name:string= target.name;
         //: target.type=== 'time'? new Date(target.value)
+
+        if(target.checkValidity()){
+            this.setState({validToSubmit:true})
+        }else{
+            this.setState({validToSubmit:false})
+        }
+
         this.props.changeHigherState(oldState=>{
             var werknemer=oldState.werkNemers[this.props.index]
-           // @ts-ignore
+            // @ts-ignore
             werknemer[name]=value
             return {werkNemers:oldState.werkNemers}
         });
@@ -59,8 +73,8 @@ class WerknemerTijden extends Component<IProps,IState>{
                         {
                             this.state.edit?
                                 <div className="row">
-                                    <input type="time" name={"beginTijd"} onChange={this.handleInputChange} value={this.props.beginTijd}/>
-                                    <input type="time" name={"eindTijd"}  onChange={this.handleInputChange} value={this.props.eindTijd}/>
+                                    <input  type="time" name={"beginTijd"} ref={this.beginTijd}  required={true} min={"00:00"} max={this.props.eindTijd} onChange={this.handleInputChange} value={this.props.beginTijd}/>
+                                    <input  type="time" name={"eindTijd"}  ref={this.eindTijd} required={true} min={this.props.beginTijd} max={"23:59"}  onChange={this.handleInputChange} value={this.props.eindTijd}/>
                                 </div>:
                                 <div className="row">
                                     <p>{this.props.beginTijd} - {this.props.eindTijd}</p>
@@ -73,15 +87,24 @@ class WerknemerTijden extends Component<IProps,IState>{
                         {
                             this.state.edit?
                                 <Done onClick={async ()=>{
-                                    this.setState({edit:false})
-                                    await fetch(this.props.apiLink+"/rooster/change/"+this.props.itemId,{
-                                        method:"POST",
-                                        headers:{
-                                            authToken:sessionStorage.getItem("authToken"),
-                                            'Content-Type': 'application/json'
-                                        },
-                                        body:JSON.stringify({beginTijd:this.props.beginTijd+":00",eindTijd:this.props.eindTijd+":00"})
-                                    })
+                                    if(this.state.validToSubmit) {
+                                        this.setState({edit: false})
+                                        await fetch(this.props.apiLink + "/rooster/change/" + this.props.itemId, {
+                                            method: "POST",
+                                            headers: {
+                                                authToken: sessionStorage.getItem("authToken"),
+                                                'Content-Type': 'application/json'
+                                            },
+                                            body: JSON.stringify({
+                                                beginTijd: this.props.beginTijd + ":00",
+                                                eindTijd: this.props.eindTijd + ":00"
+                                            })
+                                        })
+                                    }else{
+                                        console.log("hello")
+                                        this.beginTijd.current.reportValidity()
+                                        this.eindTijd.current.reportValidity()
+                                    }
                                 }} />
                                 :
                                 <Create onClick={()=>{this.setState({edit:true})}} />
