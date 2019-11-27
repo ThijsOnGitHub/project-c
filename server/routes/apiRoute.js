@@ -2,10 +2,10 @@ const express = require('express');
 app=express.Router();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
-const roosterItemRoute = require('./RoosterItemRoute')
+const roosterItemRoute = require('./RoosterItemRoute');
 const multer = require('multer');
 const auth=require("../middleware/verifytoken");
-const yourItem=require("../middleware/itemOfWerkgever")
+const yourItem=require("../middleware/itemOfWerkgever");
 
 var mysql = require('mysql');
 var {serverSecret}=require('../serverSecret');
@@ -190,7 +190,7 @@ app.put("/updategebruiker",auth, (req, res) => {
 app.post("/addnotif",async (req, res) => {
     var data = req.body;
     console.log("Notificatie toevoegen: ");
-    connection.query("INSERT INTO Notifications (userId, messageType, roosterId, roosterItemId) VALUES (?,?,?,?)", [data.person, data.messageId, data.roosterId],
+    connection.query("INSERT INTO Notifications (userId, messageType, roosterId, roosterItemId) VALUES (?,?,?,?)", [data.person, data.messageId, data.roosterId, data.roosterItemId],
         (error, results, fields) => {
             if (error) {
                 console.log(error);
@@ -239,7 +239,12 @@ app.get("/getgebruikerinfo",auth,async (req,res)=>{
     });
 });
 
-app.use("/rooster",roosterItemRoute)
+app.get('/getRoosterAndPerson', auth, async (req, res) => {
+    console.log("Getting sick person's data...");
+    connection.query("SELECT concat(firstName, ' ', lastName) as naam, beginTijd, eindTijd, datum FROM roosterit.Notifications LEFT JOIN roosterItems rI on Notifications.roosterItemId = rI.itemId LEFT JOIN gebruiker g on Notifications.userId = g.id WHERE Notifications.id = ?", [this.userId])
+});
+
+app.use("/rooster",roosterItemRoute);
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports=app;

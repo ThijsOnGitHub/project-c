@@ -20,8 +20,8 @@ class WerknemerItem extends React.Component<IProps>{
                 body:JSON.stringify({
                     "person": this.props.itemData.UserData[0].userId,
                     "messageId": 1,
-                    "roosterId": 1
-                    "roosterItemId": this.
+                    "roosterId": 1,
+                    "roosterItemId": this.props.itemData.UserData[0].itemId
                 })
             }
         )

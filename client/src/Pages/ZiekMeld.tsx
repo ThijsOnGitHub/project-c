@@ -1,8 +1,7 @@
 import React from "react";
 
 interface IState{
-    sickPerson: string,
-    exchangePerson: string
+    RoosterAndPerson:[]
 }
 
 interface IProps {
@@ -14,10 +13,34 @@ class ZiekMeld extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state={
-            sickPerson:"",
-            exchangePerson:""
+            RoosterAndPerson:null
         }
     }
+
+    componentDidMount() : void{
+        this.getRoosterAndPerson()
+    }
+
+    getRoosterAndPerson() {
+        fetch("/getRoosterAndPerson")
+            .then(
+                (u) => {
+                    try{
+                        return u.json()
+                    }
+                    catch(error){
+                        console.error(error)
+                    }
+                }
+            )
+            .then(
+                (json) => {
+                    console.log(json);
+                    this.setState({RoosterAndPerson:json})
+                }
+            )
+    };
+
     render() {
         return (
             <div id="reg">
