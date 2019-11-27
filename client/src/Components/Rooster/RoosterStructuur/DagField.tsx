@@ -1,7 +1,8 @@
 import React from 'react'
 import TimeMarker from "./TimeMarker";
 import {TimeMarkerTypes} from "./TimeMarkerTypes";
-import {dayRenderItem} from "../../../Pages/Rooster";
+import {dayRenderItem} from "../roosterData";
+
 
 
 
@@ -21,7 +22,6 @@ class DagField extends React.Component<IProps>{
     render() {
         return(
             <div>
-
                 <div className="DagField" style={{height:this.props.height}}>
                     <div className="DagLijnen absolute">
                         <TimeMarker interval={this.props.markerInterval} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={this.props.hourHeight} height={this.props.height} type={TimeMarkerTypes.line}/>
@@ -30,12 +30,10 @@ class DagField extends React.Component<IProps>{
                         {
                             // Hier wordt het rooster items echt uitgevoerd en geplaasts
                             Object.values(this.props.renderItems).map(value => {
-                                console.log(this.props.renderItems);
                                 return value(this.props)
                             })
 
                         }
-
                     </div>
                 </div>
             </div>

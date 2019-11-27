@@ -5,7 +5,8 @@ import '../Rooster.css'
 import DagTitel from "./DagTitel";
 import RoosterItem from "../RoosterItems/RoosterItem";
 import {TimeMarkerTypes} from './TimeMarkerTypes';
-import {fullRenderItem} from "../../../Pages/Rooster";
+import {fullRenderItem} from "../roosterData";
+
 
 
 

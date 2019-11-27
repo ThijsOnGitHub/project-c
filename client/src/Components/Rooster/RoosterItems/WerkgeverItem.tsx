@@ -1,27 +1,48 @@
 import React from 'react'
-import {itemComponentsData} from "../../../Pages/Rooster";
-
+import {ReactComponent as CreateIcon} from '../../../icons/create-24px.svg'
+import {itemComponentsData} from "../roosterData";
 
 interface IProps {
     itemData:itemComponentsData
     apiLink:string
+    onClick?:(event:React.MouseEvent)=>void
 }
 
-class  WerkgeverItem extends React.Component<IProps>{
-    private divRef:React.RefObject<HTMLDivElement>
+interface IState {
+    divRef:HTMLDivElement|{clientWidth:number,clientHeight:number}
+    changeRef:boolean
+}
+
+class  WerkgeverItem extends React.Component<IProps,IState>{
+    public changeFuncties:()=>void
 
     constructor(props:IProps){
         super(props)
-        const divRef=React.createRef()
+        this.state={
+            divRef:{clientWidth:0,clientHeight:0},
+            changeRef:true
+        }
+        this.changeFuncties=()=>{
+            console.log()
+            this.setState({changeRef:true})
+        }
     }
 
+    componentDidMount(): void {
+        this.changeFuncties()
+        window.addEventListener('resize',this.changeFuncties)
+    }
+
+    componentWillUnmount(): void {
+        window.removeEventListener('resize',this.changeFuncties)
+    }
 
 
     render() {
         return(
-            <div ref={this.divRef} className="column isideItem roosterItem noOverflow">
+            <div onClick={this.props.onClick} ref={instance => this.state.changeRef && this.setState({divRef:instance,changeRef:false})} className="column isideItem roosterItem noOverflow">
                 <div className="row">
-                    <p className="onAccent noMargin" >{new Date(this.props.itemData.beginTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}-{new Date(this.props.itemData.eindTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}</p>
+                    {/*<p className="onAccent noMargin" >{new Date(this.props.itemData.beginTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}-{new Date(this.props.itemData.eindTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}</p>*/}
 
                     {/*
                         <details className="chooseMenu right">
@@ -36,18 +57,23 @@ class  WerkgeverItem extends React.Component<IProps>{
                         </details>
                     */}
                 </div>
-                <p>{"Test"}</p>
-                <p>{this.divRef && this.divRef.current.clientHeight}</p>
+                <CreateIcon className="center noVertMargin onAccent"/>
+                <p className="center">{this.props.itemData.UserData.length} </p>
+                {(this.state.divRef.clientWidth>100&&this.state.divRef.clientHeight>90)&&<p className="center">Medewerker{this.props.itemData.UserData.length===0&&"s"}</p>}
                 {
-                    this.props.itemData.UserData.map(value => {
-                        return (
-                        <div className="row centerContent">
-                            <img className="avatar avatarMini" src={this.props.apiLink+"/avatarwithid/"+value.userId}/>
-                            <p className="name">{value.naam}</p>
-                        </div>)
-                    })
+                    (this.state.divRef.clientWidth>100&&this.state.divRef.clientHeight >100) &&
+                    <div className="scrolOverflow thinScrollBar" >
+                        {
+                            this.props.itemData.UserData.map(value => {
+                                return (
+                                    <div className="row centerContent" style={{marginBottom:5}}>
+                                        <img className="avatar avatarMini" src={this.props.apiLink+"/avatarwithid/"+value.userId}/>
+                                        <p className="name">{value.naam}</p>
+                                    </div>)
+                            })
+                        }
+                    </div>
                 }
-
 
             </div>
         )
