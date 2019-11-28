@@ -1,5 +1,6 @@
 import React, {MouseEventHandler} from 'react';
 import {Link} from "react-router-dom";
+import {Redirect} from 'react-router-dom';
 import ProfielFotoBijsnijder from "../Components/ProfielFotoBijsnijder";
 
 interface IState {
@@ -15,6 +16,11 @@ interface IState {
     roosterName: string,
     koppelCodeWerknemer: string,
     koppelCodeWerkgever: string,
+    // Feedback
+    registratieSucces: boolean,
+    addgebruikerSuccess: boolean,
+    addroosterSuccess: boolean,
+    koppelgebruikerSuccess: boolean,
     // Beschrijf de toegestane symbolen voor de inputvelden.
     letters: RegExp,
     numbers: RegExp,
@@ -56,6 +62,11 @@ class Registratie extends React.Component<IProps,IState>{
             roosterName: '',
             koppelCodeWerknemer: '',
             koppelCodeWerkgever: '',
+            // Feedback
+            registratieSucces: false,
+            addgebruikerSuccess: false,
+            addroosterSuccess: false,
+            koppelgebruikerSuccess: false,
             // Beschrijf de toegestane symbolen voor de inputvelden. Geen spaties voor en na inputs, wel mogen in namen spaties zitten.
             letters: /^[^\s][A-Z\sa-z]+[^\s]$/,
             numbers: /^[^\s][0-9]+[^\s]$/,
@@ -88,6 +99,7 @@ class Registratie extends React.Component<IProps,IState>{
     generateKoppelCode() {
         let value = (Math.floor(Math.random() * 100000) + 1).toString();
         // Controlleer of de koppelcode al in de database staat.
+
         return value;
     }
 
@@ -144,6 +156,7 @@ class Registratie extends React.Component<IProps,IState>{
         let image = null;
         if (this.state.foto != "") {image = await this.state.getImage();}
 
+        // Stel de informatie samen voor het toevoegen van de gebruiker.
         let formData = new FormData();
         formData.append("profielFoto",image);
         this.lijst.forEach( value => {
@@ -152,26 +165,37 @@ class Registratie extends React.Component<IProps,IState>{
         });
 
         // Voeg de gebruiker toe aan de database.
-        console.log("sending");
-        await fetch(this.props.apiLink+"/addgebruiker",{
+        let addgebruiker: any = await fetch(this.props.apiLink+"/addgebruiker",{
             method:'POST',
             body:formData
-        }).then(value => console.log(value));
+        }).then(res => res.json());
+        this.setState({addgebruikerSuccess: addgebruiker.addgebruikerSuccess});
 
         // Maak een nieuw rooster aan in de database.
         if (this.state.isWerkgever) {
-            fetch(this.props.apiLink + "/addrooster", {
+            let addrooster: any = await fetch(this.props.apiLink + "/addrooster", {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
                 body: JSON.stringify({roosterName: this.state.roosterName, koppelCodeWerkgever: this.state.koppelCodeWerkgever, email: this.state.email})
-            });
+            }).then(res => res.json());
+            this.setState({addroosterSuccess: addrooster.addroosterSuccess});
         }
         if (!this.state.isWerkgever) {
-            fetch(this.props.apiLink + "/koppelgebruiker", {
+            let koppelgebruiker: any = await fetch(this.props.apiLink + "/koppelgebruiker", {
                 headers: {'Content-Type': 'application/json'},
                 method: 'PUT',
                 body: JSON.stringify({email: this.state.email, koppelCodeWerknemer: this.state.koppelCodeWerknemer})
-            });
+            }).then(res => res.json());
+            this.setState({koppelgebruikerSuccess: koppelgebruiker.koppelgebruikerSuccess})
+        }
+
+        // Geef door dat de registratie succesvol is wanneer...
+        if (this.state.isWerkgever && this.state.addgebruikerSuccess && this.state.addroosterSuccess) {
+            this.setState({registratieSucces: true});
+            alert("Registratie succesvol.");
+        } else if (!this.state.isWerkgever && this.state.addgebruikerSuccess && this.state.koppelgebruikerSuccess) {
+            this.setState({registratieSucces: true});
+            alert("Registratie succesvol.");
         }
     };
 
@@ -270,6 +294,9 @@ class Registratie extends React.Component<IProps,IState>{
                 }
 
                 <button disabled={isDisabled} onClick={this.handleSubmit}>Registreer</button>
+                {
+                    this.state.registratieSucces && <Redirect to={{pathname: '/login', state: {id: '2'}}}/>
+                }
 
                 </tbody>
             </table>

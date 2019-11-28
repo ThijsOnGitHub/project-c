@@ -90,7 +90,7 @@ app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
             res.status(422).json;
             res.json({message:error});
         } else {
-            res.status(201).send(data.firstName + " toegevoegd.");
+            res.json({addgebruikerSuccess: true});
             console.log(data.firstName + " toegevoegd.");
 
             // Hier wordt het verificatie-email verstuurd. Wanneer we ook op andere plekken email gaan gebruiken kan deze code centraler opgeslagen worden.
@@ -129,7 +129,6 @@ app.post("/addrooster", (req, res) => {
     connection.query("INSERT INTO rooster (roosterName) VALUES (?)", [data.roosterName], (error, results, fields) => {
         if (error) {
             console.log(error);
-            res.status(422);
             res.json({message: error});
         } else {
             console.log("Rooster " + data.roosterName + " toegevoegd.");
@@ -145,7 +144,9 @@ app.post("/addrooster", (req, res) => {
             console.log("Koppelcode toegevoegd.");
 
             // Update in de gebruikerstabel de werkgever met het roosterId van het rooster dat hij heeft aangemaakt.
-            connection.query("UPDATE gebruiker SET roosterId = ? WHERE email = ?", [roosterId, data.email], (error, results, fields) => {});
+            connection.query("UPDATE gebruiker SET roosterId = ? WHERE email = ?", [roosterId, data.email], (error, results, fields) => {
+                res.json({addroosterSuccess: true});
+            });
         });
     });
 });
@@ -159,6 +160,7 @@ app.put("/koppelgebruiker", (req, res) => {
 
         // Update in de gebruikerstabel de werknemer met het roosterId dat bij de ingevoerde koppelcode past.
        connection.query("UPDATE gebruiker SET roosterId = ? WHERE email = ?", [roosterId, data.email], (error, results, fields) => {
+           res.json({koppelgebruikerSuccess: true});
            console.log("Gebruiker gekoppeld aan rooster " + roosterId);
        });
     });
