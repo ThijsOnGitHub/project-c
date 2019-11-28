@@ -9,6 +9,7 @@ interface IState {
     lastName: string,
     email: string,
     pass: string,
+    secondPass: string,
     phone: string,
     birth: string,
     foto: string,
@@ -30,6 +31,7 @@ interface IState {
         lastName: boolean,
         email: boolean,
         pass: boolean,
+        secondPass: boolean,
         phone: boolean,
         birth: boolean,
         roosterName: boolean,
@@ -55,6 +57,7 @@ class Registratie extends React.Component<IProps,IState>{
             lastName: '',
             email: '',
             pass: '',
+            secondPass: '',
             phone: '',
             birth: '',
             foto: '',
@@ -76,6 +79,7 @@ class Registratie extends React.Component<IProps,IState>{
                 lastName: false,
                 email: false,
                 pass: false,
+                secondPass: false,
                 phone: false,
                 birth: false,
                 roosterName: false,
@@ -105,7 +109,7 @@ class Registratie extends React.Component<IProps,IState>{
 
     // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
     canBeSubmitted() {
-        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCodeWerknemer);
+        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCodeWerknemer, this.state.secondPass);
         const isDisabled = Object.values(errors).some(value => value);
         return !isDisabled;
     }
@@ -130,14 +134,15 @@ class Registratie extends React.Component<IProps,IState>{
         });
     };
 
-    validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterName:string, koppelCodeWerknemer:string) {
+    validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterName:string, koppelCodeWerknemer:string, secondPass:string) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
         return {
             firstName: firstName.length === 0 || firstName.length >= 30 || !firstName.match(this.state.letters),
             lastName: lastName.length === 0 || lastName.length >= 30 || !lastName.match(this.state.letters),
             // Controlleer hier of een email al aanwezig is in de database of niet door een nieuwe functie aan te roepen.
             email: email.length === 0 || email.length >= 30,
-            pass: pass.length === 0 || pass.length >= 30,
+            pass: pass.length === 0,
+            secondPass: secondPass.length === 0 || !secondPass.match(this.state.pass),
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
             birth: birth.length === 0,
             roosterName: this.state.isWerkgever && roosterName.length === 0,
@@ -151,12 +156,12 @@ class Registratie extends React.Component<IProps,IState>{
 
         // Laat de data niet verstuurd worden wanneer de input validatie niet succesvol is.
         if (!this.canBeSubmitted()) {return;}
-
-        let wachten = await this.setState({blackCircle:false});
+        
+        // Stel de informatie samen voor het toevoegen van de gebruiker.
+        await this.setState({blackCircle:false});
         let image = null;
         if (this.state.foto != "") {image = await this.state.getImage();}
 
-        // Stel de informatie samen voor het toevoegen van de gebruiker.
         let formData = new FormData();
         formData.append("profielFoto",image);
         this.lijst.forEach( value => {
@@ -169,6 +174,7 @@ class Registratie extends React.Component<IProps,IState>{
             method:'POST',
             body:formData
         }).then(res => res.json());
+        // Verwerk de feedback vanuit de server.
         this.setState({addgebruikerSuccess: addgebruiker.addgebruikerSuccess});
 
         // Maak een nieuw rooster aan in de database.
@@ -178,6 +184,7 @@ class Registratie extends React.Component<IProps,IState>{
                 method: 'POST',
                 body: JSON.stringify({roosterName: this.state.roosterName, koppelCodeWerkgever: this.state.koppelCodeWerkgever, email: this.state.email})
             }).then(res => res.json());
+            // Verwerk de feedback vanuit de server.
             this.setState({addroosterSuccess: addrooster.addroosterSuccess});
         }
         if (!this.state.isWerkgever) {
@@ -186,6 +193,7 @@ class Registratie extends React.Component<IProps,IState>{
                 method: 'PUT',
                 body: JSON.stringify({email: this.state.email, koppelCodeWerknemer: this.state.koppelCodeWerknemer})
             }).then(res => res.json());
+            // Verwerk de feedback vanuit de server.
             this.setState({koppelgebruikerSuccess: koppelgebruiker.koppelgebruikerSuccess})
         }
 
@@ -201,8 +209,8 @@ class Registratie extends React.Component<IProps,IState>{
 
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
-        type fields = {birth: boolean, email: boolean, firstName: boolean, lastName: boolean, pass: boolean, phone: boolean, roosterName: boolean, koppelCodeWerknemer: boolean}
-        const errors:fields = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCodeWerknemer);
+        type fields = {birth: boolean, email: boolean, firstName: boolean, lastName: boolean, pass: boolean, phone: boolean, roosterName: boolean, koppelCodeWerknemer: boolean, secondPass: boolean}
+        const errors:fields = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCodeWerknemer, this.state.secondPass);
         const isDisabled = Object.values(errors).some(value => value);
 
         // Valideer of een fout getoond zou moeten worden.
@@ -265,6 +273,12 @@ class Registratie extends React.Component<IProps,IState>{
                     <td><input className={shouldMarkError('pass') ? "error" : ""}
                                onBlur={this.handleBlur('pass')}
                                type='password' name="pass" value={this.state.pass} placeholder="Wachtwoord" onChange={this.handleInputChange}/></td>
+                </tr>
+                <tr>
+                    <label>Bevestiging wachtwoord</label>
+                    <td><input className={shouldMarkError('secondPass') ? "error" : ""}
+                               onBlur={this.handleBlur('secondPass')}
+                               type='password' name="secondPass" value={this.state.secondPass} placeholder="Wachtwoord" onChange={this.handleInputChange}/></td>
                 </tr>
                 <tr>
                     <label>Account voor werkgever</label>
