@@ -6,7 +6,7 @@ interface IProps{
 }
 
 interface IState{
-    notifs:{name:string,messageType:number,profielFotoLink:string}[]
+    notifs:{name:string,messageType:number,profielFotoLink:string, roosterItemId:number}[]
 }
 
 class NotifList extends React.Component<IProps, IState> {
@@ -49,7 +49,7 @@ class NotifList extends React.Component<IProps, IState> {
             <div className='Notifs'>
                 <h1>Meldingen</h1>
                 <div className="notifList">
-                    {this.state.notifs.map(notif => <Notification person={notif.name} messageId={notif.messageType} imageLink={notif.profielFotoLink} apiLink={this.props.apiLink}/>)}
+                    {this.state.notifs.map(notif => <Notification person={notif.name} messageId={notif.messageType} imageLink={notif.profielFotoLink} apiLink={this.props.apiLink} roosterItemId={notif.roosterItemId}/>)}
                 </div>
             </div>
         )

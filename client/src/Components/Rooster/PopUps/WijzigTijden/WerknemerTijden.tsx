@@ -21,17 +21,17 @@ interface IState{
 }
 
 class WerknemerTijden extends Component<IProps,IState>{
-    private beginTijd: React.RefObject<HTMLInputElement>
-    private eindTijd: React.RefObject<HTMLInputElement>
+    private beginTijd: React.RefObject<HTMLInputElement>;
+    private eindTijd: React.RefObject<HTMLInputElement>;
 
 
     constructor(props:IProps){
-        super(props)
+        super(props);
         this.state={
             edit:false,
             validToSubmit:false
-        }
-        this.beginTijd=React.createRef()
+        };
+        this.beginTijd=React.createRef();
         this.eindTijd=React.createRef()
     }
 
@@ -50,12 +50,12 @@ class WerknemerTijden extends Component<IProps,IState>{
         }
 
         this.props.changeHigherState(oldState=>{
-            var werknemer=oldState.werkNemers[this.props.index]
+            var werknemer=oldState.werkNemers[this.props.index];
             // @ts-ignore
-            werknemer[name]=value
+            werknemer[name]=value;
             return {werkNemers:oldState.werkNemers}
         });
-    }
+    };
 
     render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
         return (
@@ -88,7 +88,7 @@ class WerknemerTijden extends Component<IProps,IState>{
                             this.state.edit?
                                 <Done onClick={async ()=>{
                                     if(this.state.validToSubmit) {
-                                        this.setState({edit: false})
+                                        this.setState({edit: false});
                                         await fetch(this.props.apiLink + "/rooster/change/" + this.props.itemId, {
                                             method: "POST",
                                             headers: {
@@ -101,8 +101,8 @@ class WerknemerTijden extends Component<IProps,IState>{
                                             })
                                         })
                                     }else{
-                                        console.log("hello")
-                                        this.beginTijd.current.reportValidity()
+                                        console.log("hello");
+                                        this.beginTijd.current.reportValidity();
                                         this.eindTijd.current.reportValidity()
                                     }
                                 }} />

@@ -166,7 +166,7 @@ class App extends React.Component<{},IState>{
                                     <Switch>
                                         <Route path="/MyAccount" render={() => <MyAccount apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
                                         <Route path="/" exact render={() => <Home apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
-                                        <Route path="/ZiekMeld" render={() => <ZiekMeld apiLink={this.state.apiLink} serverLink = {this.state.serverLink}/>}/>
+                                        <Route path="/ZiekMeld/:roosterItemId"  render={(props:{match:{params:{roosterItemId:number}}}) => <ZiekMeld apiLink={this.state.apiLink} serverLink = {this.state.serverLink} roosterItemId={props.match.params.roosterItemId}/>}/>
                                         <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink} isWerkgever={this.state.isWerkgever}/>}/>
                                         {
                                             this.state.isWerkgever?
