@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 interface IState{
     RoosterAndPerson:{naam:string, beginTijd:string, eindTijd:string, datum:string}
@@ -21,6 +22,17 @@ class ZiekMeld extends React.Component<IProps, IState> {
     componentDidMount() : void{
         console.log("yeehaw motherfucker");
         this.getRoosterAndPerson()
+    }
+
+    accept = () => {
+        console.log("Changing schedule item to new user...");
+        fetch(this.props.apiLink+"/ziekAccept", {method:"post",
+            headers:{
+                authToken:sessionStorage.getItem("authToken"),
+                "content-type":"application/json"
+            },
+            body: JSON.stringify({roosterItemId:this.props.roosterItemId})
+        })
     }
 
     getRoosterAndPerson = () => {
@@ -58,6 +70,10 @@ class ZiekMeld extends React.Component<IProps, IState> {
                     <tbody>
                         <tr>
                             <td align={"center"}>{this.state.RoosterAndPerson.naam} heeft zich ziek gemeld, van {this.state.RoosterAndPerson.beginTijd} tot {this.state.RoosterAndPerson.eindTijd} op {new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"})}.<br/>Wil je deze dienst overnemen?</td>
+                        </tr>
+                        <tr>
+                            <button className="Button" onClick={this.accept}>Ja</button>
+                            <Link to={"../"}><button className="Button">Nee</button></Link>
                         </tr>
                     </tbody>
                 </table>

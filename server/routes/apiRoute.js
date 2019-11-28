@@ -247,6 +247,11 @@ app.post('/getRoosterAndPerson', auth, (req, res) => {
     });
 });
 
+app.post('/ziekAccept', auth, (req) => {
+    console.log("Accept... changing.");
+    connection.query("UPDATE roosterItems SET userId = ? WHERE itemId = ?", [req.user.id, req.body.roosterItemId], (error, results, fields) =>{})
+});
+
 app.use("/rooster",roosterItemRoute);
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
