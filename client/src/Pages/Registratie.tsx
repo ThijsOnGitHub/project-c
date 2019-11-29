@@ -134,6 +134,7 @@ class Registratie extends React.Component<IProps,IState>{
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
+        // Kijk of het ingevulde email uniek is of niet.
         this.checkEmail();
 
         if (target.type === "file"){
@@ -156,7 +157,6 @@ class Registratie extends React.Component<IProps,IState>{
             body: JSON.stringify({email: this.state.email})
         }).then(res => res.json());
 
-        console.log(email.emailCheck);
         this.setState({checkemailSuccess: email.emailCheck});
     };
 
