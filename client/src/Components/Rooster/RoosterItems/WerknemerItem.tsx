@@ -24,7 +24,15 @@ class WerknemerItem extends React.Component<IProps>{
                     "roosterItemId": this.props.itemData.UserData[0].itemId
                 })
             }
-        )
+        );
+        fetch("http://localhost:5000/api/ziekMeld", {
+            method:'post',
+            headers:{
+                'content-type':'application/json',
+                'authToken':sessionStorage.getItem('authToken')
+            },
+            body:JSON.stringify({"roosterItemId":this.props.itemData.UserData[0].itemId})
+        })
     };
 
 

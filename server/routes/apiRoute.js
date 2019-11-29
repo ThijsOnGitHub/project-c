@@ -247,9 +247,33 @@ app.post('/getRoosterAndPerson', auth, (req, res) => {
     });
 });
 
-app.post('/ziekAccept', auth, (req) => {
-    console.log("Accept... changing.");
-    connection.query("UPDATE roosterItems SET userId = ? WHERE itemId = ?", [req.user.id, req.body.roosterItemId], (error, results, fields) =>{})
+app.post('/ziekMeld', auth, (req, res) => {
+    console.log("Start ziekMeld");
+    console.log(req.body.roosterItemId);
+    connection.query("UPDATE roosterItems SET state = 2 WHERE itemId = ?", [req.body.roosterItemId], (error, results, fields) =>{
+        if(error){
+            res.status(500).send(error);
+            console.log('ziekMeld failed')
+        }
+        else {
+            res.status(200).send();
+            console.log('ziekMeld succeeded')
+        }
+    })
+});
+
+app.post('/ziekAccept', auth, (req, res) => {
+    console.log("start ziekAccept");
+    connection.query("UPDATE roosterItems SET userId = ?, state = 1 WHERE itemId = ?", [req.user.id, req.body.roosterItemId], (error, results, fields) =>{
+        if(error){
+            res.status(500).send(error);
+            console.log('ziekAccept failed')
+        }
+        else {
+            res.status(200).send();
+            console.log('ziekAccept succeeded')
+        }
+    })
 });
 
 app.use("/rooster",roosterItemRoute);
