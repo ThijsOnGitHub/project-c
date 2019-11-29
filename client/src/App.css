@@ -512,6 +512,13 @@ button:hover {
 .errorMessage{
   color: red;
 }
+
+.error2 {
+  border: 3px solid red;
+}
+.error2Message{
+  color: red;
+}
 /* Andere dingen */
 
 .LinebreakPrevent {

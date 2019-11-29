@@ -49,6 +49,7 @@ class User extends React.Component<IProps,IState> {
             }
         }
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     componentDidMount(): void {
@@ -64,7 +65,6 @@ class User extends React.Component<IProps,IState> {
 
     // Converteer de waarden uit de state naar een JSON string om die in een POST request te plaatsen en te versturen.
     handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.preventDefault();
 
         // Maak een nieuw rooster aan in de database.
         fetch(this.props.apiLink + "/updategebruiker", {
@@ -89,8 +89,40 @@ class User extends React.Component<IProps,IState> {
         const name = target.name;
         this.setState<never> ({[name]: value});
     }
+    // Verander de waarde van touched voor een inputveld naar true.
+    handleBlur = (field:string) => (event:React.FocusEvent) => {
+        this.setState({
+            touched: {...this.state.touched, [field]: true},
+        });
+    };
+    validate(newVoornaam:string, newAchternaam:string, newEmail:string, newTelefoon:string,) {
+        // Als een waarde hier true is betekent dat dat het veld niet valide is.
+        return {
+            newVoornaam: newVoornaam.length === 0 || newVoornaam.length >= 30 || !newVoornaam.match(this.state.letters),
+            newAchternaam: newAchternaam.length === 0 || newAchternaam.length >= 30 || !newAchternaam.match(this.state.letters),
+            newEmail: !newEmail.includes("@") || (newEmail.length === 0 || newEmail.length >= 30),
+            newTelefoon: newTelefoon.length === 0 || newTelefoon.length >= 20 || !newTelefoon.match(this.state.numbers),
+        };
+    }
+    // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
+    canBeSubmitted() {
+        const errors = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon);
+        const isDisabled = Object.values(errors).some(value => value);
+        return !isDisabled;
+    }
+
 
 render(){
+    type fields = {newVoornaam: boolean, newAchternaam: boolean, newEmail: boolean, newTelefoon: boolean}
+    const errors:fields = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon);
+    const isDisabled = Object.values(errors).some(value => value);
+
+    // Valideer of een fout getoond zou moeten worden.
+    const shouldMarkError = (field: keyof typeof errors) => {
+        const hasError = errors[field];
+        const shouldShow = this.state.touched[field];
+        return hasError ? shouldShow : false;
+    };
         console.log(this.state.updateDone)
     return(
         <div id="reg">
@@ -108,25 +140,30 @@ render(){
                     <tr>
                         <td className="leftInfo"><p>Voornaam:</p></td>
                         <td className="rightValue"><p>{this.props.firstName}</p></td>
-                        <td><input onChange={this.handleInputChange} type='text' name="newVoornaam" value={this.state.newVoornaam}/></td>
+                        <td><input className={shouldMarkError('newVoornaam') ? "error" : ""}
+                                   onBlur={this.handleBlur('newVoornaam')}
+                                   type='text' name="newVoornaam" value={this.state.newVoornaam} onChange={this.handleInputChange}/></td>
                     </tr>
                     <tr>
                         <td className="leftInfo"><p>Achternaam:</p></td>
                         <td className="rightValue"><p>{this.props.lastName}</p></td>
-                        <td><input onChange={this.handleInputChange} type='text' name="newAchternaam" value={this.state.newAchternaam}/></td>
+                        <td><input className={shouldMarkError('newAchternaam') ? "error" : ""}
+                                   onBlur={this.handleBlur('newAchternaam')} onChange={this.handleInputChange} type='text' name="newAchternaam" value={this.state.newAchternaam}/></td>
                     </tr>
                     <tr>
                         <td className="leftInfo"><p>Email:</p></td>
                         <td className="rightValue"><p>{this.props.mail}</p></td>
-                        <td></td>
+                        <td><input className={shouldMarkError('newEmail') ? "error" : ""}
+                                   onBlur={this.handleBlur('newEmail')} onChange={this.handleInputChange} type='text' name="newEmail" value={this.state.newEmail}/></td>
                     </tr>
                     <tr>
                         <td className="leftInfo"><p>Telefoonnummer:</p></td>
                         <td className="rightValue"><p>{this.props.telefoon}</p></td>
-                        <td><input onChange={this.handleInputChange} type='text' name="newTelefoon" value={this.state.newTelefoon}/></td>
+                        <td><input className={shouldMarkError('newTelefoon') ? "error" : ""}
+                                   onBlur={this.handleBlur('newTelefoon')} onChange={this.handleInputChange} type='text' name="newTelefoon" value={this.state.newTelefoon}/></td>
                     </tr>
                     <tr>
-                        <td colSpan={3}><button onClick={this.handleSubmit}>Wijzigen</button></td>
+                        <td colSpan={3}><button disabled={isDisabled}  onClick={this.handleSubmit}>Wijzigen</button></td>
                     </tr>
                     {
                         this.state.updateDone && <Redirect to={{pathname: '/Melding',state: { id: '1' }}}/>
