@@ -2,11 +2,19 @@ import React from'react'
 import {Redirect} from 'react-router-dom'
 
 interface IState {
-    newVoornaam:string
-    newAchternaam:string
-    newEmail:string
-    newTelefoon:string
-    updateDone: boolean
+    newVoornaam:string,
+    newAchternaam:string,
+    newEmail:string,
+    newTelefoon:string,
+    updateDone: boolean,
+    letters: RegExp,
+    numbers: RegExp,
+    touched: {
+        newVoornaam: boolean,
+        newAchternaam: boolean,
+        newEmail: boolean,
+        newTelefoon: boolean
+    }
 }
 interface IProps {
     apiLink:string
@@ -30,7 +38,15 @@ class User extends React.Component<IProps,IState> {
             newAchternaam: '',
             newEmail: '',
             newTelefoon: '',
-            updateDone: false
+            updateDone: false,
+            letters: /^[A-Za-z]+$/,
+            numbers: /^[0-9]+$/,
+            touched: {
+                newVoornaam: false,
+                newAchternaam: false,
+                newEmail: false,
+                newTelefoon: false
+            }
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
