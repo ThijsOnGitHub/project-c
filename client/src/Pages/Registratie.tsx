@@ -21,6 +21,7 @@ interface IState {
     registratieSucces: boolean,
     addgebruikerSuccess: boolean,
     addroosterSuccess: boolean,
+    checkemailSuccess: boolean,
     koppelgebruikerSuccess: boolean,
     // Beschrijf de toegestane symbolen voor de inputvelden.
     letters: RegExp,
@@ -69,6 +70,7 @@ class Registratie extends React.Component<IProps,IState>{
             registratieSucces: false,
             addgebruikerSuccess: false,
             addroosterSuccess: false,
+            checkemailSuccess: false,
             koppelgebruikerSuccess: false,
             // Beschrijf de toegestane symbolen voor de inputvelden. Geen spaties voor en na inputs, wel mogen in namen spaties zitten.
             letters: /^[^\s][A-Z\sa-z]+[^\s]$/,
@@ -96,16 +98,27 @@ class Registratie extends React.Component<IProps,IState>{
     }
 
     componentDidMount() {
-        let value = this.generateKoppelCode();
-        this.setState({koppelCodeWerkgever: value});
+        this.generateKoppelCode();
     };
 
-    generateKoppelCode() {
-        let value = (Math.floor(Math.random() * 100000) + 1).toString();
-        // Controlleer of de koppelcode al in de database staat.
+    generateKoppelCode = async () => {
+        // Genereer een willekeurige serie van nummers.
+        let value: string = (Math.floor(Math.random() * 100000 ) + 1).toString();
 
-        return value;
-    }
+        // Controlleer of de gegenereerde koppelcode al in de database staat.
+        let koppelcode: any = await fetch(this.props.apiLink + "/checkkoppelcode", {
+            headers: {'Content-Type': 'application/json'},
+            method: 'POST',
+            body: JSON.stringify({value})
+        }).then(res => res.json());
+
+        // Verwerk de feedback vanuit de server.
+        if (koppelcode.koppelCodeCheck == 0) {
+            this.setState({koppelCodeWerkgever: value});
+        } else if (koppelcode.koppelCodeCheck == 1) {
+            this.generateKoppelCode();
+        }
+    };
 
     // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
     canBeSubmitted() {
@@ -121,6 +134,8 @@ class Registratie extends React.Component<IProps,IState>{
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
+        this.checkEmail();
+
         if (target.type === "file"){
             this.setState<never> ({[name+"File"]: target.files[0]})
         }
@@ -134,13 +149,25 @@ class Registratie extends React.Component<IProps,IState>{
         });
     };
 
+    checkEmail = async () => {
+        let email: any = await fetch(this.props.apiLink + "/checkemail", {
+            headers: {'Content-Type': 'application/json'},
+            method: 'POST',
+            body: JSON.stringify({email: this.state.email})
+        }).then(res => res.json());
+
+        console.log(email.emailCheck);
+        this.setState({checkemailSuccess: email.emailCheck});
+    };
+
     validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterName:string, koppelCodeWerknemer:string, secondPass:string) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
+
         return {
             firstName: firstName.length === 0 || firstName.length >= 30 || !firstName.match(this.state.letters),
             lastName: lastName.length === 0 || lastName.length >= 30 || !lastName.match(this.state.letters),
             // Controlleer hier of een email al aanwezig is in de database of niet door een nieuwe functie aan te roepen.
-            email: email.length === 0 || email.length >= 30,
+            email: email.length === 0 || email.length >= 30 || !this.state.checkemailSuccess,
             pass: pass.length === 0,
             secondPass: secondPass.length === 0 || !secondPass.match(this.state.pass),
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
@@ -156,7 +183,7 @@ class Registratie extends React.Component<IProps,IState>{
 
         // Laat de data niet verstuurd worden wanneer de input validatie niet succesvol is.
         if (!this.canBeSubmitted()) {return;}
-        
+
         // Stel de informatie samen voor het toevoegen van de gebruiker.
         await this.setState({blackCircle:false});
         let image = null;
@@ -187,6 +214,8 @@ class Registratie extends React.Component<IProps,IState>{
             // Verwerk de feedback vanuit de server.
             this.setState({addroosterSuccess: addrooster.addroosterSuccess});
         }
+
+        // Koppel een gebruiker aan het rooster dat bij zijn koppelcode hoort.
         if (!this.state.isWerkgever) {
             let koppelgebruiker: any = await fetch(this.props.apiLink + "/koppelgebruiker", {
                 headers: {'Content-Type': 'application/json'},

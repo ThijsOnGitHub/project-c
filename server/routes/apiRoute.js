@@ -1,5 +1,5 @@
 const express = require('express');
-app=express.Router();
+app = express.Router();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 var mysql = require('mysql');
@@ -112,7 +112,7 @@ app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
                 `
             };
 
-            transporter.sendMail(mailOptions, function(error, info){
+            emailSettings.transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
                     console.log(error);
                 } else {
@@ -121,6 +121,33 @@ app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
             });
         }
     })
+});
+
+// Kijk in de database of de koppelcode al bestaat of niet.
+app.post("/checkkoppelcode", (req, res) => {
+    let data = req.body;
+    connection.query("SELECT EXISTS (SELECT koppelCode FROM koppelCode WHERE koppelCode = ?) AS koppelcode",  [data.value], (error, results, fields) => {
+        if (error) {
+            console.log(error);
+        } else {
+            results = results[0].koppelcode;
+            res.json({koppelCodeCheck: results});
+        }
+    });
+});
+
+// Kijk in de database of het ingevoerde emailadres al gebruikt is.
+app.post("/checkemail", (req, res) => {
+    let data = req.body;
+    connection.query("SELECT EXISTS (SELECT email FROM gebruiker WHERE email = ?) AS emailcheck", [data.email], (error, results, fields) => {
+        if (error) {
+            console.log(error);
+        } else {
+            results = results[0].emailcheck;
+            console.log(results);
+            res.json({emailCheck: results});
+        }
+    });
 });
 
 // Voeg een rooster toe aan de database met de verstuurde naam.
@@ -151,6 +178,7 @@ app.post("/addrooster", (req, res) => {
     });
 });
 
+// Sluit een werknemer aan bij het rooster van een werkgever.
 app.put("/koppelgebruiker", (req, res) => {
     let data = req.body;
 
@@ -176,7 +204,7 @@ app.put("/activeergebruiker", (req, res) => {
     });
 });
 
-// Update user
+// Update user via de accountpagina
 app.put("/updategebruiker",auth, (req, res) => {
     let data = req.body;
     console.log("Updaten gebruiker...:");
