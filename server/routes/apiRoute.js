@@ -112,7 +112,7 @@ app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
                 `
             };
 
-            emailSettings.transporter.sendMail(mailOptions, function(error, info){
+            transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
                     console.log(error);
                 } else {
