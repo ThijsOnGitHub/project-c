@@ -104,7 +104,7 @@ console.log(data)
             });
 
             const mailOptions = {
-                from: 'roosteritHRO@gmail.com',
+                from: 'roosteritHRO@gmail.com',W
                 to: data.email,
                 subject: 'Verificatie RoosterIt',
                 html: ` 
