@@ -1,5 +1,6 @@
 import React from'react'
 import {Redirect} from 'react-router-dom'
+import {posix} from "path";
 
 interface IState {
     newVoornaam:string,
@@ -111,7 +112,6 @@ class User extends React.Component<IProps,IState> {
         return !isDisabled;
     }
 
-
 render(){
     type fields = {newVoornaam: boolean, newAchternaam: boolean, newEmail: boolean, newTelefoon: boolean}
     const errors:fields = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon);
@@ -130,6 +130,7 @@ render(){
                 <table>
                 <tbody>
                     <tr>
+
                         <td colSpan={3}>
                             {/*Check if the user has an avatar picture, if not -> standard avatar for users*/}
                             {this.props.avatar.match("^http")?
@@ -165,10 +166,6 @@ render(){
                     <tr>
                         <td colSpan={3}><button disabled={isDisabled}  onClick={this.handleSubmit}>Wijzigen</button></td>
                     </tr>
-                    {
-                        this.state.updateDone && <Redirect to={{pathname: '/Melding',state: { id: '1' }}}/>
-
-                    }
                 </tbody>
                 </table>
             </form>

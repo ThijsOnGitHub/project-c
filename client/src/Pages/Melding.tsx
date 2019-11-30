@@ -1,37 +1,33 @@
-import React from 'react';
-import {IState as AppState} from "../App";
+import React, {MouseEventHandler} from 'react';
+import {Link} from "react-router-dom";
+import ProfielFotoBijsnijder from "../Components/ProfielFotoBijsnijder";
 
+interface IState {
+}
 
 interface IProps {
     apiLink:string
-    serverLink:string
 }
-
-interface IState {
-
-}
-
 
 class Melding extends React.Component<IProps,IState>{
-    constructor(props:IProps){
-        super(props)
-        this.state={
-            email:"",
-            pass:"",
-            loading:false,
-            error:""
-        }
-    }
 
+    // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
-
         return(
-            <div id="Login">
+            <div id="reg">
                 <form>
                     <table>
                         <tbody>
                         <tr>
-                            Test
+                            <h1>Registratie</h1>
+                        </tr>
+                        <tr>
+                            <label>Preview Profielfoto</label>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <label>Upload Profielfoto</label>
+                            <td></td>
                         </tr>
                         </tbody>
                     </table>
@@ -39,6 +35,6 @@ class Melding extends React.Component<IProps,IState>{
             </div>
         )
     }
-
 }
+
 export default Melding

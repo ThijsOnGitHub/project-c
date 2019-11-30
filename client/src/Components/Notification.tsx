@@ -7,9 +7,6 @@ interface IProps {
     apiLink:string
 }
 
-
-
-
 class NotificationItem extends React.Component<IProps> {
     render() {
         let messages = [" wil een dienst ruilen.", " heeft zich ziek gemeld.", " gaat op vakantie.", " heeft je rooster bijgewerkt."];
