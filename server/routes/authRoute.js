@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 var {serverSecret}=require('../serverSecret');
 var connection=mysql.createConnection(serverSecret.databaseLogin);
 
-const expireTime="3m"
+const expireTime="5m"
 
 router.post("/Login", (req,res) => {
     console.log(req.body);
