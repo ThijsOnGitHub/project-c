@@ -7,8 +7,6 @@ const multer = require('multer');
 const auth=require("../verifytoken");
 var {serverSecret}=require('../serverSecret');
 
-
-
 var storage= multer.diskStorage({
     destination: function(req,file,cb){
         cb(null,'uploads/')
@@ -104,7 +102,7 @@ console.log(data)
             });
 
             const mailOptions = {
-                from: 'roosteritHRO@gmail.com',W
+                from: 'roosteritHRO@gmail.com',
                 to: data.email,
                 subject: 'Verificatie RoosterIt',
                 html: ` 

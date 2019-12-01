@@ -17,6 +17,7 @@ interface IState {
         newTelefoon: boolean
     }
 }
+
 interface IProps {
     apiLink:string
     avatar:string
@@ -60,7 +61,6 @@ class User extends React.Component<IProps,IState> {
             newEmail: this.props.mail,
             newTelefoon: this.props.telefoon
             }
-
         )
     }
 
@@ -102,7 +102,7 @@ class User extends React.Component<IProps,IState> {
             newVoornaam: newVoornaam.length === 0 || newVoornaam.length >= 30 || !newVoornaam.match(this.state.letters),
             newAchternaam: newAchternaam.length === 0 || newAchternaam.length >= 30 || !newAchternaam.match(this.state.letters),
             newEmail: !newEmail.includes("@") || (newEmail.length === 0 || newEmail.length >= 30),
-            newTelefoon: newTelefoon.length === 0 || newTelefoon.length >= 20 || !newTelefoon.match(this.state.numbers),
+            newTelefoon: newTelefoon.length < 9 || newTelefoon.length >= 11 || !newTelefoon.match(this.state.numbers),
         };
     }
     // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
@@ -130,7 +130,6 @@ render(){
                 <table>
                 <tbody>
                     <tr>
-
                         <td colSpan={3}>
                             {/*Check if the user has an avatar picture, if not -> standard avatar for users*/}
                             {this.props.avatar.match("^http")?
