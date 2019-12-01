@@ -33,40 +33,24 @@ app.delete("/remove/:id",[auth,yourItem],(req, res) => {
     })
 })
 
-app.get("/get",auth,(req,res)=>{
-    console.log("get rooster")
-    console.log(req.user.isWerkgever)
-    if(req.user.isWerkgever){
-        console.log('werkgever queary')
-        connection.query("select rI.*,CONCAT(firstName,' ',lastName) as naam,itemId from gebruiker join roosterItems rI on gebruiker.id = rI.userId where roosterId=(select roosterId from gebruiker where id=?)",[req.user.id],(err,values)=>{
-            if(err){
-                res.status(500).send(err)
-            }else{
-                console.log(newValues)
-                var newValues=values.map(value => {
-                    value.beginTijd=`1899-12-31T${value.beginTijd}.000`;
-                    value.eindTijd=`1899-12-31T${value.eindTijd}.000`;
-                    return value
-                });
-                res.status(200).json(newValues)
-            }
-        })
-    }else{
-        console.log("get agenda from user: "+req.user.id);
-        connection.query("SELECT datum,beginTijd,eindTijd,userId,CONCAT(firstName,' ',lastname) as naam,itemId FROM roosterItems join gebruiker g on roosterItems.userId = g.id where userId=?",[req.user.id,req.user.id],(err,values)=>{
-            //Hier worden de tijden omgezet in javascript format zodat ze tot DATE object kunnen worden gemaakt
-            if(err){
-                res.status(500).send(err)
-            }else{
-                var newValues=values.map(value => {
-                    value.beginTijd=`1899-12-31T${value.beginTijd}.000`;
-                    value.eindTijd=`1899-12-31T${value.eindTijd}.000`;
-                    return value
-                });
-                res.json(newValues)
-            }
-        })
-    }
+app.post("/get",auth,(req,res)=>{
+    console.log("start get rooster")
+    console.log(req.body)
+    connection.query(`select rI.*,CONCAT(firstName,' ',lastName) as naam,itemId from gebruiker join roosterItems rI on gebruiker.id = rI.userId where ${req.user.isWerkgever? "roosterId=(select roosterId from gebruiker where id=?)" : "gebruiker.id=?" } and (datum >= ?) and (datum <= ?) `,[req.user.id,req.body.beginDatum,req.body.eindDatum],(err,values)=>{
+        if(err){
+            console.log("get rooster failed")
+            res.status(500).send(err)
+        }else{
+            console.log("get rooster succeed")
+            console.log(newValues)
+            var newValues=values.map(value => {
+                value.beginTijd=`1899-12-31T${value.beginTijd}.000`;
+                value.eindTijd=`1899-12-31T${value.eindTijd}.000`;
+                return value
+            });
+            res.status(200).json(newValues)
+        }
+    })
 });
 
 module.exports=app

@@ -46,13 +46,19 @@ class Rooster extends Component<IProps,IState>{
         }
     }
 
-    componentDidMount=async ()=> {
-        this.refreshRooster(true)
-    };
 
-    refreshRooster=async (first:boolean)=>{
+    refreshRooster=async ()=>{
         //Hier wordt de data uit de server gehaald en in de state gezet
-        var res=await fetch(this.props.apiLink+"/rooster/get",{headers:{"authToken":sessionStorage.getItem("authToken")}}).catch(reason => {console.log(reason)});
+        var res=await fetch(this.props.apiLink+"/rooster/get",{
+            method:"POST",
+            headers:{
+                "authToken":sessionStorage.getItem("authToken"),
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({beginDatum:this.state.beginDatum,
+            eindDatum:new Date(this.state.beginDatum.getTime()+(1000*60*60*24*7))})
+        }).catch(reason => {console.log(reason)});
+
         var agendaJSON=[];
         if(typeof res !=="undefined"){
             agendaJSON=await res.json();
@@ -72,7 +78,10 @@ class Rooster extends Component<IProps,IState>{
     //Deze functie wordt gebruikt door de weerkiezer
     changeBeginDatum=(datum:Date)=>{
         return new Promise((resolve => {
-                this.setState({beginDatum:datum},resolve)
+                this.setState({beginDatum:datum},()=>{
+                    this.refreshRooster()
+                    resolve()
+                })
             })
         )
     };
@@ -101,7 +110,7 @@ class Rooster extends Component<IProps,IState>{
 
 
     closePopUp=()=>{
-       this.refreshRooster(false)
+       this.refreshRooster()
        this.setState({popUp:false})
     };
 
