@@ -4,7 +4,7 @@ import {BrowserRouter,Switch,Route} from "react-router-dom";
 import Menu from "./Components/Menu/Menu";
 import Registratie from "./Pages/Registratie";
 import EmailVerificatie from "./Pages/EmailVerificatie";
-import addFunctions from "./Values/addFunctions";
+import addFunctions from "./Extra Functions/addFunctions";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import MyAccount from "./Pages/MyAccount";
@@ -74,6 +74,7 @@ class App extends React.Component<{},IState>{
       const jwtObject=jsonwebtoken.decode(jwt)
       console.log(jwtObject)
       if(typeof jwtObject!=="string"){
+          jwtObject.exp=jwtObject.exp-60
           return jwtObject
       }
       return null
