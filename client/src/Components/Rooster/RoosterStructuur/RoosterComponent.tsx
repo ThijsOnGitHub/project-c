@@ -29,9 +29,9 @@ class RoosterComponent extends React.Component<IProps>{
 
     render() {
         // Hier worden alle datums die weergeven moeten worden gegenereerd
-        var datums=[0,2,3,4,5,6].map((value,index) => {
+        var datums=[0,1,2,3,4,5,6].map(value => {
             var newDate=new Date(this.props.startDate.toString());
-            var newValue=newDate.getDate()+index;
+            var newValue=newDate.getDate()+value;
             newDate.setDate(newValue);
             return newDate
         });
