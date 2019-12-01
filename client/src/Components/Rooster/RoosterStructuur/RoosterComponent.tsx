@@ -37,7 +37,7 @@ class RoosterComponent extends React.Component<IProps>{
         });
 
         // Hier wordt berekend hoeveel pixels 1 uur is
-        var hourHeight=this.props.height/(this.props.eindTijd.getHours()-this.props.beginTijd.getHours());
+        var hourHeight=this.props.height/((this.props.eindTijd.getHours()+this.props.eindTijd.getMinutes()/60)-(this.props.beginTijd.getHours()+this.props.beginTijd.getMinutes()/60));
         return(
             <div>
                 <div className="rooster">

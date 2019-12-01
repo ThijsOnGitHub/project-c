@@ -22,6 +22,8 @@ interface IState {
     loading:boolean
     popUp:boolean
     popUpContent:React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined
+    minTijd:Date
+    maxTijd:Date
 }
 
 interface IProps {
@@ -39,6 +41,8 @@ class Rooster extends Component<IProps,IState>{
             loading:true,
             popUp:false,
             popUpContent:<p>hallo</p>
+            maxTijd:new Date(),
+            minTijd:new Date()
         }
     }
 
@@ -124,8 +128,8 @@ class Rooster extends Component<IProps,IState>{
                         <RoosterComponent
                             startDate={this.state.beginDatum}
                             markerInterval={new Date(0, 0, 0, 0, 30)}
-                            beginTijd={new Date(0, 0, 0, 7)}
-                            eindTijd={new Date(0, 0, 0, 20)}
+                            beginTijd={this.state.minTijd}
+                            eindTijd={this.state.maxTijd}
                             height={600}
 
                             /*
