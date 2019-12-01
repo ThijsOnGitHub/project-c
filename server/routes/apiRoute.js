@@ -224,7 +224,7 @@ app.get("/getNextShift", auth, (req, res) => {
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     today = yyyy + '/' + mm + '/' + dd;
-    connection.query('SELECT datum, beginTijd, eindTijd FROM roosterItems WHERE (datum > ?) AND (userId = ?) LIMIT 1', [today, req.user.id], (err, result, val) => {
+    connection.query('SELECT datum, beginTijd, eindTijd FROM roosterItems WHERE (datum > ?) AND (userId = ?) ORDER BY datum LIMIT 1', [today, req.user.id], (err, result, val) => {
         if (err !== null) {
             console.log(err);
             res.status(500).send()
