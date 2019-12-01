@@ -66,7 +66,26 @@ body{
 .menu li .menuItem:hover {color: #c5a4d5;}
 .menu .menuItem.active {color: #af71cc;}
 
+.heightTable table{
+  display: block;
+}
 
+.minHeight{
+  min-height: 120px;
+}
+
+.hunderMaxHeight{
+   display: flex;
+  flex-direction: column;
+   max-height: 100%;
+ }
+.fullDiv{
+  height: 100%;
+}
+.overFlowAuto{
+  overflow-y: auto;
+  width: max-content;
+}
 
 .noDecoration{
   text-decoration: none;
@@ -230,30 +249,7 @@ body{
   padding-top: 30px;
   padding-bottom: 40px;
 }
-input {
-  margin: auto;
-  border-radius: 50px;
-  margin-bottom: 10px;
-  display: block;
-  padding: 15px 40px;
-  box-sizing: border-box;
-  border: 3px solid #ccc;
-  -webkit-transition: 0.5s;
-  transition: 0.5s;
-  outline: none;
-  font-family: var(--font);
-  font-weight: 400;
-  text-align: center;
-  color: #585858;
-  font-size: 18px;
-}
 
-form input{
-  width:350px;
-}
-input:focus {
-  border: 3px solid #555;
-}
 #intro table a{
   font-family: var(--font);
   font-weight: 800;
@@ -365,12 +361,19 @@ nav {
   margin: auto;
 }
 
+
+
 #intro table{
   margin: auto;
   padding-top: 30px;
   padding-bottom: 40px;
 }
-input ,select{
+.MuiInputBase-input{
+  min-width: 100px!important;
+  width: auto!important;
+}
+
+form input,select,.styleInput input,input.styleInput{
   margin: auto;
   border-radius: 50px;
   /*width: fit-content;*/
@@ -389,6 +392,14 @@ input ,select{
   font-size: 18px;
 }
 
+
+form input{
+  width:350px;
+}
+
+form input:focus {
+  border: 3px solid #555;
+}
 select{
   border:none
 }
@@ -418,9 +429,7 @@ select  {
 
 }
 
-input:focus {
-  border: 3px solid #555;
-}
+
 #intro table a{
   font-family: var(--font);
   font-weight: 800;
@@ -613,7 +622,7 @@ margin-left: 5px;
   color: white;
   background: #622081;
   font-weight: bold;
-  padding: 10px;
+  padding:  10px;
   border-radius: 500px;
   margin: 10px;
   text-align: center;

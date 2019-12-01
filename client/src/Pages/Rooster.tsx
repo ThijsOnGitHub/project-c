@@ -7,14 +7,14 @@ import RoosterItem from "../Components/Rooster/RoosterItems/RoosterItem";
 import WerknemerItem from "../Components/Rooster/RoosterItems/WerknemerItem";
 import WerkgeverItem from "../Components/Rooster/RoosterItems/WerkgeverItem";
 import PopUp from "../Components/Rooster/PopUps/PopUp";
-import WijzigTijden from "../Components/Rooster/PopUps/WijzigTijden/WijzigTijden";
+import ItemWijzigen from "../Components/Rooster/PopUps/WijzigTijden/ItemWijzigen";
 import RoosterData, {
     fullRenderItem,
     itemComponentsData,
     roosterItemRenderFunc
 } from "../Components/Rooster/roosterData";
 import OptionWithIcon from "../Components/OptionWithIcon";
-
+import WerknemerInroosteren from "../Components/Rooster/PopUps/Inroosteren/WerknemerInroosteren";
 
 interface IState {
     agendaJSON:fullRenderItem,
@@ -40,7 +40,7 @@ class Rooster extends Component<IProps,IState>{
             beginDatum:new Date(),
             loading:true,
             popUp:false,
-            popUpContent:<p>hallo</p>
+            popUpContent:<p>hallo</p>,
             maxTijd:new Date(),
             minTijd:new Date()
         }
@@ -63,8 +63,11 @@ class Rooster extends Component<IProps,IState>{
         if(typeof res !=="undefined"){
             agendaJSON=await res.json();
         }
+
         var roosterData=new RoosterData(agendaJSON)
+        this.setState({minTijd:roosterData.minTijd,maxTijd:roosterData.maxTijd})
         var renderdAgendaJSON=roosterData.getRenderdItems(this.retrurnRenderdItems)
+
         this.setState({agendaJSON:{}},() => {
             this.setState({
                 agendaJSON:renderdAgendaJSON,
@@ -97,7 +100,7 @@ class Rooster extends Component<IProps,IState>{
                             <WerkgeverItem
                                 onClick={event => {this.setState({popUp:true,
                                 //Als er op dit element wordt geklikt wordt de pop-up gevult met een element waarmee Actie Worden Uitgevoerd
-                                popUpContent:<WijzigTijden close={this.closePopUp} RoosterData={value} apiLink={this.props.apiLink} />
+                                popUpContent:<ItemWijzigen close={this.closePopUp} RoosterData={value} apiLink={this.props.apiLink} />
                             })}}
                                 apiLink={this.props.apiLink} itemData={value} />
                             :
@@ -125,6 +128,17 @@ class Rooster extends Component<IProps,IState>{
                     }
                     <div className='row'>
                         <WeekKiezer beginDatum={this.state.beginDatum} changeBeginDatum={this.changeBeginDatum}/>
+                      <OptionWithIcon className="Button" onClick={()=>this.refreshRooster()} imgClass="onAccentFilter" icon={"refresh-24px.svg"} text={"Refresh"}/>
+                        {
+                            this.props.isWerkgever &&
+                                <div className="row">
+                                    <button className="noHorPadding Button onAccent" onClick={event => {
+                                        this.setState({popUp:true,popUpContent:<WerknemerInroosteren apiLink={this.props.apiLink} close={this.closePopUp}/>})
+                                    }} ><OptionWithIcon imgClass="onAccentFilter" icon={"person.svg"} text={"Werknemer Inroosteren"}/>
+                                    </button>
+                                </div>
+                        }
+
                     </div>
                     {/*Rooster Component maakt de rooster structuur waar roosterItems ingaat*/}
                 {

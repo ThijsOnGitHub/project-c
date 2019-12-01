@@ -1,5 +1,5 @@
 import React from 'react'
-import Functions from "../../Values/functions";
+import Functions from "../../Extra Functions/functions";
 import {ReactComponent as NextIcon} from "../../icons/arrow_next.svg";
 import {ReactComponent as BackIcon} from "../../icons/arrow_back.svg";
 

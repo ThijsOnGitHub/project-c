@@ -47,6 +47,10 @@
     justify-content: center
 }
 
+.fullDiv{
+    height: 100%;
+}
+
 .popUp{
     width: 90vw;
     height: 85vh;

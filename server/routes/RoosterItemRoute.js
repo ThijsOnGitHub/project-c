@@ -7,6 +7,42 @@ var {serverSecret}=require('../serverSecret');
 var connection=mysql.createConnection(serverSecret.databaseLogin);
 
 
+app.post("/add",auth,(req,res)=>{
+    console.log("Start Add")
+    if(req.user.isWerkgever){
+        const data=req.body
+        console.log(data)
+        connection.query('select id from gebruiker where roosterId=(select roosterId from gebruiker where id=?)',[req.user.id],(err,value)=>{
+            console.log(value)
+            var validUsers=data.users.every(value1 => value.some(value2 => value2.id ===value1))
+            if(validUsers){
+                var records=data.users.map(value =>[value,new Date(data.date),data.beginTijd,data.eindTijd])
+                connection.query("insert INTO  roosterItems(userId, datum, beginTijd, eindTijd)  VALUES ? ",[records],(err,values,fields)=>{
+                   console.log(values)
+                    console.log(fields)
+
+                    if(err){
+                        console.log("Add failed")
+                        res.status(500).send(err)
+                    }else {
+                        /*
+                        connection.query("INSERT INTO Notifications (userId, messageType, roosterId) VALUES (?,?,(select roosterId from gebruiker where id=?))", [req.user.userId, 3,req.user.userId], (error, results, fields) => {})
+                            */
+                            res.status(200).send(values)
+                            console.log("Add succeed")
+                    }
+                })
+            }else{
+                console.log("Add failed")
+                res.status(401).send("Sommige/alle werknemers behoren niet tot uw werknemers.")
+            }
+        })
+    }else{
+        console.log("Add failed")
+        res.status(401).send("U bent geen werkgever")
+    }
+})
+
 
 app.post("/change/:id",[auth,yourItem],(req, res) => {
     console.log(req.body.beginTijd)
@@ -15,6 +51,18 @@ app.post("/change/:id",[auth,yourItem],(req, res) => {
         if(err){
             res.status(500).send(err)
         }else{
+            /*
+            connection.query("INSERT INTO Notifications (userId, messageType, roosterId,roosterItemId) VALUES (?,?,(select roosterId from gebruiker where id=?),?)", [req.user.id, 3,req.user.id,req.params.id], (error, results, fields) => {
+                if(error){
+                    console.log(error)
+                }else{
+                    console.log("Melding gelukt!")
+                    console.log(results)
+                }
+
+            })
+
+             */
             res.status(200).send("Gelukt!")
         }
     })
@@ -28,7 +76,11 @@ app.delete("/remove/:id",[auth,yourItem],(req, res) => {
             console.log("Delete Failed")
         } else {
             console.log("Delete Done")
+            /*
+            connection.query("INSERT INTO Notifications (userId, messageType, roosterId) VALUES (?,?,(select roosterId from gebruiker where id=?))", [req.user.userId, 3,req.user.userId], (error, results, fields) => {})
+             */
             res.status(200).send("Verwijderen Gelukt")
+
         }
     })
 })

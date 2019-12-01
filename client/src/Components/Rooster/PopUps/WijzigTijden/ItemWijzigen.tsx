@@ -1,8 +1,14 @@
 import React, {Component} from "react";
 import {itemComponentsData} from "../../roosterData";
-import WerknemerTijden from "./WerknemerTijden";
+import LosItemWijzigen from "./LosItemWijzigen";
 import {ReactComponent as Done} from "../../../../icons/done-24px.svg";
 import {ReactComponent as Create} from "../../../../icons/create-24px.svg";
+import {Person} from "../Inroosteren/WerknemerInroosteren";
+import TextField from "@material-ui/core/TextField";
+import {Chip} from "@material-ui/core";
+import Avatar from "@material-ui/core/Avatar";
+import {Autocomplete} from "@material-ui/lab";
+import Functions from "../../../../Extra Functions/functions";
 
 interface IProps {
     RoosterData:itemComponentsData
@@ -15,11 +21,15 @@ export interface IState {
     eindTijd:string
     datum:Date
     werkNemers:{userId:number,naam:string,beginTijd:string,eindTijd:string,itemId:number}[]
-    edit:boolean,
+    edit:boolean
     validToSubmit:boolean
+    names:Person[]
+    newNames:Person[]
+    selectedNames:Person[],
+    inroosteren:boolean
 }
 
-class WijzigTijden extends Component<IProps,IState>{
+class ItemWijzigen extends Component<IProps,IState>{
     private beginTijd: React.RefObject<HTMLInputElement>
     private eindTijd: React.RefObject<HTMLInputElement>
 
@@ -31,13 +41,74 @@ class WijzigTijden extends Component<IProps,IState>{
             datum:new Date(),
             werkNemers:[],
             edit:false,
-            validToSubmit:false
+            validToSubmit:true,
+            names:[],
+            newNames:[],
+            selectedNames:[],
+            inroosteren:false
         }
         this.beginTijd=React.createRef()
         this.eindTijd=React.createRef()
     }
 
-    componentDidMount(): void {
+
+
+    getUsers= async ()=>{
+        const result=await fetch(this.props.apiLink+"/GetMedewerkers",{headers:{authToken:sessionStorage.getItem("authToken")}})
+        const resultJSON:Person[]=await result.json()
+        await this.setState({names:resultJSON})
+
+    }
+
+    updateNewNames=async ()=>{
+        console.log(this.state.werkNemers)
+        const personList=this.state.names.filter(value => {
+            return !this.state.werkNemers.some(value1 => value1.userId===value.id)
+        })
+        await this.setState({newNames:personList})
+    }
+
+    inroosteren=async ()=>{
+        this.setState({inroosteren:true})
+        var names = this.state.selectedNames
+        const result = await fetch(this.props.apiLink + "/rooster/add",
+            {
+                method: "POST",
+                headers: {
+                    authToken: sessionStorage.getItem("authToken"),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    date: new Date(this.state.datum),
+                    beginTijd: this.state.beginTijd + ":00",
+                    eindTijd: this.state.eindTijd + ":00",
+                    users: names.map(value => value.id)
+                })
+            })
+                const jsonResult = await result.json()
+                console.log(jsonResult)
+                console.log(Functions.range(jsonResult.insertId + jsonResult.affectedRows-1,jsonResult.insertId ))
+                const itemIds = Functions.range(jsonResult.insertId + jsonResult.affectedRows-1,jsonResult.insertId )
+                var objects = names.map((value, index) => {
+                    return Object.assign(value,{itemId:itemIds[index]})
+                });
+                this.setState(oldState=>{
+                    objects.forEach(value =>{
+                        oldState.werkNemers.push({beginTijd:this.state.beginTijd,eindTijd:this.state.eindTijd,naam:value.naam,itemId:value.itemId,userId:value.id})
+                    })
+                    return {selectedNames:[],werkNemers:oldState.werkNemers,inroosteren:false}},this.updateNewNames
+                )
+
+      }
+
+    addGebruiker=()=>{
+        var werknemersNieuw=this.state.werkNemers
+        this.state.selectedNames.forEach((value,index) => {
+
+        })
+    }
+
+     componentDidMount=async ()  =>{
         var userData=this.props.RoosterData.UserData.map(value => {
             return Object.assign(value,{beginTijd:new Date(this.props.RoosterData.beginTijd).toLocaleTimeString('nl-NL',{hour:"2-digit",minute:"2-digit"}),eindTijd:new Date(this.props.RoosterData.eindTijd).toLocaleTimeString('nl-NL',{hour:"2-digit",minute:"2-digit"})})
         })
@@ -47,6 +118,8 @@ class WijzigTijden extends Component<IProps,IState>{
             datum:new Date(this.props.RoosterData.datum),
             werkNemers:userData
         })
+        await this.getUsers()
+        this.updateNewNames()
     }
 
     handleInputChange=(event:React.ChangeEvent<HTMLInputElement>)=> {
@@ -68,6 +141,7 @@ class WijzigTijden extends Component<IProps,IState>{
 
     changeState=(functie:(oldState:IState)=>Partial<IState>)=>{
        this.setState<never>((oldstate)=>{return functie(oldstate)},() => {
+           this.updateNewNames()
            if(this.state.werkNemers.length===0){
                this.props.close()
            }
@@ -75,9 +149,10 @@ class WijzigTijden extends Component<IProps,IState>{
     }
 
 
+
     render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
         return (
-            <div>
+            <div className="hunderMaxHeight heightTable scrolOverflow">
                 <h1 className="noTopMargin">Wijzig Roosteritem</h1>
                 <table>
                     <tbody >
@@ -95,12 +170,12 @@ class WijzigTijden extends Component<IProps,IState>{
                         <td>
                         </td>
                         <td>
-                            BeginTijden:
+                            Begintijden:
                         </td>
                         <td>
                             {
                             this.state.edit ?
-                                <div className="row">
+                                <div className="row styleInput">
                                     <input type="time" ref={this.beginTijd}  required={true} min={"00:00"} max={this.state.eindTijd} name={"beginTijd"} onChange={this.handleInputChange} value={this.state.beginTijd}/>
                                     <input type="time" ref={this.eindTijd} required={true} min={this.state.beginTijd} max={"23:59"}  name={"eindTijd"} onChange={this.handleInputChange} value={this.state.eindTijd}/>
                                 </div> :
@@ -128,6 +203,7 @@ class WijzigTijden extends Component<IProps,IState>{
                                                 return {...value,beginTijd:this.state.beginTijd,eindTijd:this.state.eindTijd}
                                             })
                                             console.log(newWerknemers)
+                                            this.changeState(oldState => ({werkNemers:newWerknemers}))
                                             this.setState({edit: false})
                                         }else {
                                             this.beginTijd.current.reportValidity()
@@ -141,16 +217,61 @@ class WijzigTijden extends Component<IProps,IState>{
                             }
                         </td>
                     </tr>
+                    <tr>
+                        <td></td>
+                        <td>Personen:</td>
+                        <td>
+                            <Autocomplete
+                            noOptionsText={"Geen werknemer gevonden"}
+                            multiple={true}
+                            filterSelectedOptions={true}
+                            value={this.state.selectedNames}
+                            renderInput={params => (
+                                <TextField {...params} variant="outlined" fullWidth />
+                            )}
+                            options={this.state.newNames}
+                            renderTags={(value:Person[], getTagProps) => {
+                                return value.map((value,index) =>{
+                                    return <Chip {...getTagProps({ index })} avatar={<Avatar src={this.props.apiLink+"/avatarWithId/"+value.id}/>} label={value.naam} />
+                                })
+                            }}
+                            renderOption={option => {
+                                return(
+                                    <div className="row centerContent">
+                                        <img className="avatar avatarMini" src={this.props.apiLink+"/avatarWithId/"+option.id}/>
+                                        <p>{option.naam}</p>
+                                    </div>
+                                )
+                            }}
+                            style={{ width: 300 }}
+                            onChange={(event, value) => {
+                                this.setState({selectedNames:value})
+                            }}
+                        />
+                        </td>
+                        <td>
+                            {
+                                this.state.inroosteren ||
+                                <button className="Button" onClick={ event => {
+                                    this.inroosteren()
+                                    this.updateNewNames()
+                                }} >inroosteren</button>
+                            }
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table className="maxFullHeight overFlowAuto thinScrollBar minHeight">
                     {this.state.werkNemers.map((value,index) => {
                         return(
-                           <WerknemerTijden changeHigherState={this.changeState} index={index} itemId={value.itemId} userId={value.userId} naam={value.naam} beginTijd={value.beginTijd} eindTijd={value.eindTijd} apiLink={this.props.apiLink}/>
+                           <LosItemWijzigen changeHigherState={this.changeState} index={index} itemId={value.itemId} userId={value.userId} naam={value.naam} beginTijd={value.beginTijd} eindTijd={value.eindTijd} apiLink={this.props.apiLink}/>
                         )
                     })}
-                    </tbody>
                 </table>
                 <button className="Button" onClick={this.props.close} >Sluiten</button>
             </div>
         )
     }
 }
-export default WijzigTijden
+export default ItemWijzigen

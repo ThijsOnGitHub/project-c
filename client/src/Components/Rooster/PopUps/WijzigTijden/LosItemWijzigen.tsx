@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {ReactComponent as Create} from '../../../../icons/create-24px.svg'
 import {ReactComponent as Done} from '../../../../icons/done-24px.svg'
 import {ReactComponent as Delete} from '../../../../icons/close-24px.svg'
-import {IState as higherState } from './WijzigTijden'
+import {IState as higherState } from './ItemWijzigen'
 
 interface IProps {
     index: number
@@ -18,9 +18,10 @@ interface IProps {
 interface IState{
     edit:boolean
     validToSubmit:boolean
+    deleted:boolean
 }
 
-class WerknemerTijden extends Component<IProps,IState>{
+class LosItemWijzigen extends Component<IProps,IState>{
     private beginTijd: React.RefObject<HTMLInputElement>
     private eindTijd: React.RefObject<HTMLInputElement>
 
@@ -29,7 +30,8 @@ class WerknemerTijden extends Component<IProps,IState>{
         super(props)
         this.state={
             edit:false,
-            validToSubmit:false
+            validToSubmit:true,
+            deleted:false
         }
         this.beginTijd=React.createRef()
         this.eindTijd=React.createRef()
@@ -72,20 +74,21 @@ class WerknemerTijden extends Component<IProps,IState>{
                     <div className="row centerContent">
                         {
                             this.state.edit?
-                                <div className="row">
-                                    <input  type="time" name={"beginTijd"} ref={this.beginTijd}  required={true} min={"00:00"} max={this.props.eindTijd} onChange={this.handleInputChange} value={this.props.beginTijd}/>
+                                <div className="row styleInput">
+                                    <input  type="time" name={"beginTijd"} ref={this.beginTijd}  required={true} min={"00:00:00"} max={this.props.eindTijd} onChange={this.handleInputChange} value={this.props.beginTijd}/>
                                     <input  type="time" name={"eindTijd"}  ref={this.eindTijd} required={true} min={this.props.beginTijd} max={"23:59"}  onChange={this.handleInputChange} value={this.props.eindTijd}/>
                                 </div>:
                                 <div className="row">
                                     <p>{this.props.beginTijd} - {this.props.eindTijd}</p>
                                 </div>
                         }
-                        <p>{this.props.itemId}</p>
                     </div>
                 </td>
                     <td>
                         {
-                            this.state.edit?
+                            this.state.deleted ?
+                                <img src={require("../../../../img/Loding-Icon-zwart.gif")} width={"75px"}/> :
+                            (this.state.edit?
                                 <Done onClick={async ()=>{
                                     if(this.state.validToSubmit) {
                                         this.setState({edit: false})
@@ -108,19 +111,22 @@ class WerknemerTijden extends Component<IProps,IState>{
                                 }} />
                                 :
                                 <Create onClick={()=>{this.setState({edit:true})}} />
+                                )
                         }
                     </td>
                 <td>
                     {
-                        this.state.edit ||
-                        <Delete onClick={(()=>{
-                            fetch(this.props.apiLink+"/rooster/remove/"+this.props.itemId,{
+                        (!this.state.edit && !this.state.deleted) &&
+                        <Delete onClick={(async ()=>{
+                            this.setState({deleted:true})
+                            await fetch(this.props.apiLink+"/rooster/remove/"+this.props.itemId,{
                                 method:"delete",
                                 headers:{
                                     authToken:sessionStorage.getItem("authToken")
                                 }
                             });
                             this.props.changeHigherState(oldState => {return {werkNemers:oldState.werkNemers.filter((value, index) => index!==this.props.index)}} )
+                            this.setState({deleted:false})
                         })}/>
                     }
                 </td>
@@ -128,4 +134,4 @@ class WerknemerTijden extends Component<IProps,IState>{
         )
     }
 }
-export default WerknemerTijden
+export default LosItemWijzigen
