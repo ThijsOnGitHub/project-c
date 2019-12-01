@@ -206,7 +206,7 @@ app.post("/addnotif",async (req, res) => {
 
 app.get("/getnotifs", (req, res) => {
     console.log("Getting notifs...");
-    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink, roosterItemId FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id ORDER BY Notifications.id DESC', [], (err, result, val) => {
+    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink, roosterItemId, Notifications.id AS notifId FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id ORDER BY Notifications.id DESC', [], (err, result, val) => {
         if (err !== null) {
             console.log(err);
             res.status(400).send()
@@ -267,11 +267,24 @@ app.post('/ziekAccept', auth, (req, res) => {
     connection.query("UPDATE roosterItems SET userId = ?, state = 1 WHERE itemId = ?", [req.user.id, req.body.roosterItemId], (error, results, fields) =>{
         if(error){
             res.status(500).send(error);
-            console.log('ziekAccept failed')
+            console.log('ziekAccept failed', error)
         }
         else {
             res.status(200).send();
             console.log('ziekAccept succeeded')
+        }
+    })
+});
+app.post('/delNotif', auth, (req, res) => {
+    console.log("start delNotif");
+    connection.query('DELETE FROM Notifications WHERE id = ?', [req.body.notifId], (error, results, fields) => {
+        if(error){
+            res.status(500).send(error);
+            console.log('delNotif failed', error)
+        }
+        else {
+            res.status(200).send();
+            console.log('delNotif succeeded')
         }
     })
 });

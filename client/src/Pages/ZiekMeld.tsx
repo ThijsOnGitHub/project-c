@@ -8,7 +8,8 @@ interface IState{
 interface IProps {
     apiLink:string,
     serverLink:string,
-    roosterItemId:number
+    roosterItemId:number,
+    notifId:number
 }
 
 class ZiekMeld extends React.Component<IProps, IState> {
@@ -32,8 +33,14 @@ class ZiekMeld extends React.Component<IProps, IState> {
                 "content-type":"application/json"
             },
             body: JSON.stringify({roosterItemId:this.props.roosterItemId})
-        })
-    }
+        });
+        fetch(this.props.apiLink+'/delNotif', {method:'post',
+            headers:{
+                authToken:sessionStorage.getItem('authToken'),
+                "content-type":"application/json"
+            },
+            body:JSON.stringify({notifId:this.props.notifId})})
+    };
 
     getRoosterAndPerson = () => {
         console.log("Getting person and schedule info NOW!");
