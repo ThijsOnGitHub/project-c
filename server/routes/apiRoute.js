@@ -1,5 +1,5 @@
 const express = require('express');
-app=express.Router();
+app = express.Router();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 var mysql = require('mysql');
@@ -81,7 +81,6 @@ app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
 
     if (req.file !== undefined) {image = req.file.filename;}
     data.pass = await bcrypt.hash(data.pass, 10 );
-console.log(data)
     connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, profielFotoLink, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth,image ,data.isWerkgever==='true'],
     (error, results, fields) => {
         if (error) {
@@ -89,7 +88,7 @@ console.log(data)
             res.status(422).json;
             res.json({message:error});
         } else {
-            res.status(201).send(data.firstName + " toegevoegd.");
+            res.json({addgebruikerSuccess: true});
             console.log(data.firstName + " toegevoegd.");
 
             // Hier wordt het verificatie-email verstuurd. Wanneer we ook op andere plekken email gaan gebruiken kan deze code centraler opgeslagen worden.
@@ -138,13 +137,39 @@ console.log(data)
     })
 });
 
+// Kijk in de database of de koppelcode al bestaat of niet.
+app.post("/checkkoppelcode", (req, res) => {
+    let data = req.body;
+    connection.query("SELECT EXISTS (SELECT koppelCode FROM koppelCode WHERE koppelCode = ?) AS koppelcode",  [data.value], (error, results, fields) => {
+        if (error) {
+            console.log(error);
+        } else {
+            results = results[0].koppelcode;
+            res.json({koppelCodeCheck: results});
+        }
+    });
+});
+
+// Kijk in de database of het ingevoerde emailadres al gebruikt is.
+app.post("/checkemail", (req, res) => {
+    let data = req.body;
+    connection.query("SELECT EXISTS (SELECT email FROM gebruiker WHERE email = ?) AS emailcheck", [data.email], (error, results, fields) => {
+        if (error) {
+            console.log(error);
+        } else {
+            results = results[0].emailcheck;
+            console.log(results);
+            res.json({emailCheck: results});
+        }
+    });
+});
+
 // Voeg een rooster toe aan de database met de verstuurde naam.
 app.post("/addrooster", (req, res) => {
     let data = req.body;
     connection.query("INSERT INTO rooster (roosterName) VALUES (?)", [data.roosterName], (error, results, fields) => {
         if (error) {
             console.log(error);
-            res.status(422);
             res.json({message: error});
         } else {
             console.log("Rooster " + data.roosterName + " toegevoegd.");
@@ -160,11 +185,14 @@ app.post("/addrooster", (req, res) => {
             console.log("Koppelcode toegevoegd.");
 
             // Update in de gebruikerstabel de werkgever met het roosterId van het rooster dat hij heeft aangemaakt.
-            connection.query("UPDATE gebruiker SET roosterId = ? WHERE email = ?", [roosterId, data.email], (error, results, fields) => {});
+            connection.query("UPDATE gebruiker SET roosterId = ? WHERE email = ?", [roosterId, data.email], (error, results, fields) => {
+                res.json({addroosterSuccess: true});
+            });
         });
     });
 });
 
+// Sluit een werknemer aan bij het rooster van een werkgever.
 app.put("/koppelgebruiker", (req, res) => {
     let data = req.body;
 
@@ -174,6 +202,7 @@ app.put("/koppelgebruiker", (req, res) => {
 
         // Update in de gebruikerstabel de werknemer met het roosterId dat bij de ingevoerde koppelcode past.
        connection.query("UPDATE gebruiker SET roosterId = ? WHERE email = ?", [roosterId, data.email], (error, results, fields) => {
+           res.json({koppelgebruikerSuccess: true});
            console.log("Gebruiker gekoppeld aan rooster " + roosterId);
        });
     });
@@ -189,7 +218,7 @@ app.put("/activeergebruiker", (req, res) => {
     });
 });
 
-// Update user
+// Update user via de accountpagina
 app.put("/updategebruiker",auth, (req, res) => {
     let data = req.body;
     console.log("Updaten gebruiker...:");
