@@ -111,27 +111,7 @@ app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
                 from: 'roosteritHRO@gmail.com',
                 to: data.email,
                 subject: 'Verificatie RoosterIt',
-                html: ` 
-                <h1 style="font-family: sans-serif;text-align: center;">Geachte meneer/mevrouw ${data.lastName},</h1><p style="text-align: center;font-family: sans-serif;">Bedankt voor uw registratie bij RoosterIT.<br> Klik op de volgende link om uw registratie te voltooien.</p>
-<a href="http://localhost:3000/emailverificatie/${data.email}" class="myButton" style="margin: auto;
-                                                                                       display: block;
-                                                                                       text-align: center;
-                                                                                       inset 0px 0px 8px 0px #e184f3;
-                                                                                       background: linear-gradient(to bottom, #c123de 5%, #a20dbd 100%);
-                                                                                       background-color: #c123de;
-                                                                                       border-radius: 6px;
-                                                                                       border: 1px solid #a511c0;
-                                                                                      max-width: 150px;
-                                                                                       cursor: pointer;
-                                                                                       color: #ffffff;
-                                                                                       font-family: Arial;
-                                                                                       font-size: 15px;
-                                                                                       font-weight: bold;
-                                                                                       padding: 9px 21px;
-                                                                                       text-decoration: none;
-                                                                                       text-shadow: 0px 1px 0px #9b14b3;">Valideer account</a>
-                `
-            };
+                html: `<h1 style="font-family: sans-serif;text-align: center;">Geachte meneer/mevrouw ${data.lastName},</h1><p style="text-align: center;font-family: sans-serif;">Bedankt voor uw registratie bij RoosterIT.<br> Klik op de volgende link om uw registratie te voltooien.</p><a href="http://localhost:3000/emailverificatie/${data.email}">Valideer account</a>`};
 
             transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
