@@ -4,14 +4,14 @@ import {BrowserRouter,Switch,Route} from "react-router-dom";
 import Menu from "./Components/Menu/Menu";
 import Registratie from "./Pages/Registratie";
 import EmailVerificatie from "./Pages/EmailVerificatie";
-import RoosterView from "./Pages/RoosterView";
-import addFunctions from "./Values/addFunctions";
+import addFunctions from "./Extra Functions/addFunctions";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import MyAccount from "./Pages/MyAccount";
 import * as jsonwebtoken from 'jsonwebtoken';
 import loadingIcon from "./img/Loding-Icon-zwart.gif";
-import Melding from "./Pages/Melding";
+import Rooster from "./Pages/Rooster";
+
 
 export interface IState {
     apiLink:string
@@ -50,7 +50,7 @@ class App extends React.Component<{},IState>{
       this.setState({loading:true})
       await this.updateAuth()
       if(this.state.loggedIn){
-          await this.updateUserData()
+          this.updateUserData()
       }
       this.setState({loading:false})
 
@@ -75,6 +75,7 @@ class App extends React.Component<{},IState>{
       const jwtObject=jsonwebtoken.decode(jwt)
       console.log(jwtObject)
       if(typeof jwtObject!=="string"){
+          jwtObject.exp=jwtObject.exp-60
           return jwtObject
       }
       return null
@@ -132,7 +133,7 @@ class App extends React.Component<{},IState>{
           }
       }
       if(!prevState.loggedIn && this.state.loggedIn){
-          await this.updateUserData()
+          this.updateUserData()
       }
   }
 
@@ -166,13 +167,12 @@ class App extends React.Component<{},IState>{
                                     <Switch>
                                         <Route path="/MyAccount" render={() => <MyAccount apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
                                         <Route path="/" exact render={() => <Home apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
+                                        <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink} isWerkgever={this.state.isWerkgever}/>}/>
                                         {
                                             this.state.isWerkgever?
                                                 <Switch>
-
                                                 </Switch>:
                                                 <Switch>
-                                                    <Route path="/Rooster" render={() => <RoosterView apiLink={this.state.apiLink}/>}/>
                                                 </Switch>
                                         }
                                     </Switch>

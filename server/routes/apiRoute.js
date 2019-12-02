@@ -2,10 +2,14 @@ const express = require('express');
 app = express.Router();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
-var mysql = require('mysql');
+const roosterItemRoute = require('./RoosterItemRoute')
 const multer = require('multer');
-const auth=require("../verifytoken");
+const auth=require("../middleware/verifytoken");
+const yourItem=require("../middleware/itemOfWerkgever")
+
+var mysql = require('mysql');
 var {serverSecret}=require('../serverSecret');
+var connection=mysql.createConnection(serverSecret.databaseLogin);
 
 var storage= multer.diskStorage({
     destination: function(req,file,cb){
@@ -23,30 +27,11 @@ var storage= multer.diskStorage({
 
 var upload=multer({storage:storage});
 
-var connection=mysql.createConnection(serverSecret.databaseLogin);
-
-app.get("/bedrijf",async (req,res)=>{
-    console.log("Get bedrijven");
-    connection.query('SELECT * FROM bedrijf', (error, results, fields) =>{
-        res.json(results)
-    });
-});
 
 
-app.get("/getAgenda",auth,(req,res)=>{
-    console.log("get agenda from user: "+req.user.id);
-    connection.query('SELECT datum,beginTijd,eindTijd FROM roosterItems where userId=?',[req.user.id],(err,values)=>{
-        //Hier worden de tijden omgezet in javascript format zodat ze tot DATE object kunnen worden gemaakt
-        var newValues=values.map(value => {
-            value.beginTijd=`1899-12-31T${value.beginTijd}.000`;
-            value.eindTijd=`1899-12-31T${value.eindTijd}.000`;
-            return value
-        });
-        res.json(newValues)
-    })
 
 
-});
+
 
 app.post("/addbedrijf",(req,res)=>{
     var data=req.body;
@@ -62,9 +47,6 @@ app.post("/addbedrijf",(req,res)=>{
     })
 });
 
-app.get("/test",(req,res)=>{
-    res.status(200).send("Hello!")
-});
 
 
 app.get("/avatar/:name",(req,res)=>{
@@ -74,6 +56,31 @@ app.get("/avatar/:name",(req,res)=>{
 
 // ---------------- REGISTRATIE ----------------
 
+app.get("/avatarWithId/:id",(req,res)=>{
+    connection.query("select profielFotoLink as avatar from gebruiker where id =?",[req.params.id],(err,values)=>{
+        if(err){
+            res.status(500).send(err)
+        }else{
+            console.log(values)
+            if(values.length===0){
+                res.status(400)
+            }else{
+                res.sendFile(__dirname.split("\\").slice(0,-1).join("\\")+"/uploads/"+values[0].avatar)
+            }
+
+        }
+    })
+})
+
+app.get("/GetMedewerkers",auth, ((req, res) =>{
+    if(req.user.isWerkgever){
+        connection.query("SELECT id, firstName, lastName, CONCAT(firstName,' ',lastName) as naam FROM gebruiker WHERE roosterid = (select roosterId from gebruiker where id=?)", [req.user.id], ( err, result, val) => {
+            res.status(200).json(result)
+        });
+    }else{
+        res.status(401).send("Je bent geen werkgever")
+    }
+}))
 // Zend een POST request dat de data uit de front-end in de database krijgt en daarmee een nieuwe gebruiker aanmaakt.
 app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
     let data = req.body;
@@ -284,5 +291,8 @@ app.get("/getgebruikerinfo",auth,async (req,res)=>{
         res.json(results)
     });
 });
+
+app.use("/rooster",roosterItemRoute)
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports=app;

@@ -1,5 +1,5 @@
 import React from 'react'
-import Functions from "../../Values/functions";
+import Functions from "../../Extra Functions/functions";
 import {ReactComponent as NextIcon} from "../../icons/arrow_next.svg";
 import {ReactComponent as BackIcon} from "../../icons/arrow_back.svg";
 
@@ -88,7 +88,7 @@ class WeekKiezer extends React.Component<IProps,IState>{
                 </select>
                 <BackIcon onClick={()=>this.changeWeek(-1)}/>
                 <NextIcon onClick={()=>this.changeWeek(1)}/>
-                <button onClick={()=>{
+                <button className="Button" onClick={()=>{
                     this.props.changeBeginDatum(this.changeToMonday(new Date())).then(()=>{
                         this.updateSelects()
                     })
