@@ -203,6 +203,7 @@ app.put("/updategebruiker",auth, (req, res) => {
 });
 
 // ---------------- NOTIFICATIES ----------------
+
 app.post("/addnotif",async (req, res) => {
     var data = req.body;
     console.log("Notificatie toevoegen: ");

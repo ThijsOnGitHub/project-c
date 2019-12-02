@@ -1,14 +1,12 @@
 import React from'react'
 import {Redirect} from 'react-router-dom'
 import {posix} from "path";
-import ProfielFotoBijsnijder from "./ProfielFotoBijsnijder";
 
 interface IState {
     newVoornaam:string,
     newAchternaam:string,
     newEmail:string,
     newTelefoon:string,
-    foto: string,
     updateDone: boolean,
     letters: RegExp,
     numbers: RegExp,
@@ -17,10 +15,7 @@ interface IState {
         newAchternaam: boolean,
         newEmail: boolean,
         newTelefoon: boolean
-    },
-    fotoFile: File,
-    blackCircle: boolean,
-    getImage: () => Promise <Blob>
+    }
 }
 
 interface IProps {
@@ -45,7 +40,6 @@ class User extends React.Component<IProps,IState> {
             newAchternaam: '',
             newEmail: '',
             newTelefoon: '',
-            foto: '',
             updateDone: false,
             letters: /^[A-Za-z]+$/,
             numbers: /^[0-9]+$/,
@@ -54,10 +48,7 @@ class User extends React.Component<IProps,IState> {
                 newAchternaam: false,
                 newEmail: false,
                 newTelefoon: false
-            },
-            fotoFile: null,
-            blackCircle: true,
-            getImage: null
+            }
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -75,9 +66,6 @@ class User extends React.Component<IProps,IState> {
 
     // Converteer de waarden uit de state naar een JSON string om die in een POST request te plaatsen en te versturen.
     handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        let wachten = await this.setState({blackCircle:false});
-        let image = null;
-        if (this.state.foto != "") {image = await this.state.getImage();}
 
         // Maak een nieuw rooster aan in de database.
         fetch(this.props.apiLink + "/updategebruiker", {
@@ -88,7 +76,9 @@ class User extends React.Component<IProps,IState> {
                 newAchternaam: this.state.newAchternaam,
                 newEmail: this.state.newEmail,
                 newTelefoon: this.state.newTelefoon
+
             })
+
         });
         this.setState({updateDone: true});
     };
@@ -98,11 +88,7 @@ class User extends React.Component<IProps,IState> {
         // Laat de waarde de waarde zijn van het actieve veld. Als het input-type een checkbox is is de waarde of deze aangevinkt is of niet.
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-        if (target.type === "file"){
-            this.setState<never> ({[name+"File"]: target.files[0]})
-        }
         this.setState<never> ({[name]: value});
-
     }
     // Verander de waarde van touched voor een inputveld naar true.
     handleBlur = (field:string) => (event:React.FocusEvent) => {
@@ -143,14 +129,6 @@ render(){
         <form id="account">
                 <table>
                 <tbody>
-                    <tr>
-                        <label>Preview Profielfoto</label>
-                        <td><ProfielFotoBijsnijder size={350} blackCircle={this.state.blackCircle} setImageGetFunction={(functie)=>{this.setState({getImage:functie})}} image={this.state.fotoFile}/></td>
-                    </tr>
-                    <tr>
-                        <label>Upload Profielfoto</label>
-                        <td><input type="file" accept={"image/*"}  onChange={this.handleInputChange} name="foto"/></td>
-                    </tr>
                     <tr>
                         <td colSpan={3}>
                             {/*Check if the user has an avatar picture, if not -> standard avatar for users*/}
