@@ -10,6 +10,7 @@ import Home from "./Pages/Home";
 import MyAccount from "./Pages/MyAccount";
 import * as jsonwebtoken from 'jsonwebtoken';
 import loadingIcon from "./img/Loding-Icon-zwart.gif";
+import ZiekMeld from "./Pages/ZiekMeld";
 import Rooster from "./Pages/Rooster";
 
 
@@ -47,8 +48,8 @@ class App extends React.Component<{},IState>{
 
   componentDidMount=async ():Promise<void>=> {
 
-      this.setState({loading:true})
-      await this.updateAuth()
+      this.setState({loading:true});
+      await this.updateAuth();
       if(this.state.loggedIn){
           this.updateUserData()
       }
@@ -61,19 +62,19 @@ class App extends React.Component<{},IState>{
       var result = await fetch(this.state.apiLink+"/getgebruikerinfo",
           {headers:
                   {"authToken":sessionStorage.getItem("authToken")}
-          })
-      var resultJSON= (await result.json())[0]
+          });
+      var resultJSON= (await result.json())[0];
 
       return {avatar:this.state.apiLink+"/avatar/"+resultJSON.profielFotoLink,naam:resultJSON.firstName+" "+resultJSON.lastName}
-  }
+  };
 
   updateUserData=async ()=>{
       this.setState(await this.getUserData())
-  }
+  };
 
   getJWTOjbect=(jwt:string)=>{
-      const jwtObject=jsonwebtoken.decode(jwt)
-      console.log(jwtObject)
+      const jwtObject=jsonwebtoken.decode(jwt);
+      console.log(jwtObject);
       if(typeof jwtObject!=="string"){
           jwtObject.exp=jwtObject.exp-60
           return jwtObject
@@ -83,14 +84,14 @@ class App extends React.Component<{},IState>{
 
   updateStateFromJWT=(jwt:string)=>{
       this.setState<never>(this.getJWTOjbect(jwt))
-  }
+  };
 
   updateAuth=async ()=>{
       console.log("update");
       const refreshToken=localStorage.getItem("refreshToken");
       const authToken=sessionStorage.getItem("authToken");
       if(authToken!==null){
-          this.setState({loggedIn:true})
+          this.setState({loggedIn:true});
           this.updateStateFromJWT(authToken)
       }else if(refreshToken!==null){
               const result=await fetch(this.state.serverLink+"/auth/refresh",{
@@ -101,9 +102,9 @@ class App extends React.Component<{},IState>{
               const status=result.status;
               if(status===200){
 
-                  var tekst=await result.text()
-                  this.setState({loggedIn:true})
-                  this.updateStateFromJWT(tekst)
+                  var tekst=await result.text();
+                  this.setState({loggedIn:true});
+                  this.updateStateFromJWT(tekst);
                   sessionStorage.setItem("authToken",tekst)
               }else{
                   this.setState({loggedIn:false});
@@ -128,14 +129,14 @@ class App extends React.Component<{},IState>{
               var timeOut=window.setTimeout(()=>{
                   sessionStorage.removeItem("authToken");
                   this.updateAuth()
-              },this.state.exp*1000-Date.now())
+              },this.state.exp*1000-Date.now());
               this.setState({logoutTimeout:timeOut})
           }
       }
       if(!prevState.loggedIn && this.state.loggedIn){
           this.updateUserData()
       }
-  }
+  };
 
   logout=()=>{
       fetch(this.state.serverLink+"/auth/logout",{method:"Delete",
@@ -167,6 +168,7 @@ class App extends React.Component<{},IState>{
                                     <Switch>
                                         <Route path="/MyAccount" render={() => <MyAccount apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
                                         <Route path="/" exact render={() => <Home apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
+                                        <Route path="/ZiekMeld/:roosterItemId/:notifId"  render={(props:{match:{params:{roosterItemId:number, notifId:number}}}) => <ZiekMeld apiLink={this.state.apiLink} serverLink = {this.state.serverLink} roosterItemId={props.match.params.roosterItemId} notifId={props.match.params.notifId}/>}/>
                                         <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink} isWerkgever={this.state.isWerkgever}/>}/>
                                         {
                                             this.state.isWerkgever?

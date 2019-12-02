@@ -19,7 +19,7 @@ interface IState {
 
 class Login extends React.Component<IProps,IState>{
     constructor(props:IProps){
-        super(props)
+        super(props);
         this.state={
             email:"",
             pass:"",
@@ -30,8 +30,8 @@ class Login extends React.Component<IProps,IState>{
 
 
      handleSubmit=async (event:React.MouseEvent<HTMLButtonElement,MouseEvent>)=> {
-        this.setState({loading:true})
-        event.preventDefault()
+        this.setState({loading:true});
+        event.preventDefault();
          if(localStorage.getItem("refreshToken")===null) {
              var result = await fetch(this.props.serverLink + "/auth/login", {
                  method: 'POST',
@@ -40,23 +40,23 @@ class Login extends React.Component<IProps,IState>{
                  },
                  credentials: "include",
                  body: JSON.stringify({email: this.state.email, pass: this.state.pass})// body data type must match "Content-Type" header
-             })
+             });
              if (result.status === 200) {
-                 var token = await result.json()
-                 console.log(result.status)
-                 localStorage.setItem("refreshToken", token.refreshToken)
-                 sessionStorage.setItem("authToken", token.sessionToken)
+                 var token = await result.json();
+                 console.log(result.status);
+                 localStorage.setItem("refreshToken", token.refreshToken);
+                 sessionStorage.setItem("authToken", token.sessionToken);
                  this.props.updateAuth()
              } else {
-                 var text = await result.text()
-                 console.log(text)
+                 var text = await result.text();
+                 console.log(text);
                  this.setState({error: text})
              }
          }else {
              this.props.updateAuth()
          }
      this.setState({loading:false})
-    }
+    };
 
     handleInputChange=(event:React.ChangeEvent<HTMLInputElement>)=> {
         const target = event.currentTarget;
@@ -66,7 +66,7 @@ class Login extends React.Component<IProps,IState>{
         this.setState<never>({
             [name]: value
         });
-    }
+    };
 
     render() {
 
