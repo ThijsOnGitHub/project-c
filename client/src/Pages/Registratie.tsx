@@ -167,7 +167,7 @@ class Registratie extends React.Component<IProps,IState>{
             firstName: firstName.length === 0 || firstName.length >= 30 || !firstName.match(this.state.letters),
             lastName: lastName.length === 0 || lastName.length >= 30 || !lastName.match(this.state.letters),
             // Controlleer hier of een email al aanwezig is in de database of niet door een nieuwe functie aan te roepen.
-            email: email.length === 0 || email.length >= 30 || !this.state.checkemailSuccess,
+            email: email.length === 0 || email.length >= 30,// || !this.state.checkemailSuccess,
             pass: pass.length === 0,
             secondPass: secondPass.length === 0 || !secondPass.match(this.state.pass),
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
