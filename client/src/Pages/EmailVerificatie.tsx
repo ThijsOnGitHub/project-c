@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 interface IProps {
     apiLink:string
     email:string
