@@ -1,4 +1,5 @@
 class Functions{
+    
     static range = (max:number,min?:number):number[] => {
 
         var lijst= Array.from(Array(max+1-(min||0)).keys())

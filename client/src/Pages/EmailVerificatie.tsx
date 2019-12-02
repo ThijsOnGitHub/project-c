@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 interface IProps {
     apiLink:string
     email:string
@@ -27,9 +26,9 @@ class EmailVerificatie extends React.Component<IProps> {
             <div id="reg">
                 <table>
                     <tbody>
-                    <tr>
-                        <td>Uw verificatie is succesvol, u kunt deze pagina verlaten.</td>
-                    </tr>
+                        <tr>
+                            <td align={"center"}>Uw verificatie is succesvol, u kunt deze pagina verlaten.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
