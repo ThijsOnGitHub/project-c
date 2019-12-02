@@ -247,6 +247,35 @@ app.get("/getnotifs", (req, res) => {
         res.json(result)
     })
 });
+
+app.get("/GetMedewerkers",auth, ((req, res) =>{
+
+   if(req.user.isWerkgever){
+       connection.query("SELECT id, firstName, lastName FROM gebruiker WHERE roosterid = 1", [], ( err, result, val) => {
+           res.json(result)
+       });
+   }
+
+
+
+}))
+
+app.post("/deleteUser",auth,((req,res) => {
+    console.log(req.body)
+    if(req.user.isWerkgever){
+        connection.query("DELETE FROM gebruiker WHERE id = ?  ", [req.body.id], (err,values,field)=>{
+            if(err){
+                res.status(500).send(err)
+            }else{
+                res.status(200).send()
+
+            }
+        })
+    }else{
+        res.status(401).send("Je bent geen werkgever")
+    }
+
+}))
 app.get("/getNextShift", auth, (req, res) => {
     console.log("Getting next shift...");
     var today = new Date();

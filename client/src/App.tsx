@@ -10,6 +10,10 @@ import Home from "./Pages/Home";
 import MyAccount from "./Pages/MyAccount";
 import * as jsonwebtoken from 'jsonwebtoken';
 import loadingIcon from "./img/Loding-Icon-zwart.gif";
+
+import WerknemerItem from "./Components/Rooster/RoosterItems/WerknemerItem";
+import WerkgeversOverzicht from "./Pages/WerkgeversOverzicht";
+
 import ZiekMeld from "./Pages/ZiekMeld";
 import Rooster from "./Pages/Rooster";
 
@@ -149,6 +153,8 @@ class App extends React.Component<{},IState>{
       this.setState({loggedIn:false,logoutTimeout:null})
   };
 
+
+
     render(){
     return (
         <div>
@@ -173,6 +179,9 @@ class App extends React.Component<{},IState>{
                                         {
                                             this.state.isWerkgever?
                                                 <Switch>
+
+                                                    <Route path='/WerkgeversOverzicht' render={() => <WerkgeversOverzicht apiLink={this.state.apiLink}/>}/>
+
                                                 </Switch>:
                                                 <Switch>
                                                 </Switch>
