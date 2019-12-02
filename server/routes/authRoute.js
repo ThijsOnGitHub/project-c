@@ -69,17 +69,17 @@ router.get("/refresh",(req, res) => {
 
 router.get("/Medewerkers", )
 
+
 router.delete("/logout",((req, res) => {
     console.log(req.header("refreshToken"))
     console.log("hello")
-    connection.query("DELETE FROM authSessions WHERE `refreshToken` = ? ",[req.header("refreshToken")],(err,values)=>{
-        if(err){
+    connection.query("DELETE FROM authSessions WHERE `refreshToken` = ? ", [req.header("refreshToken")], (err, values) => {
+        if (err) {
             res.status(400).send()
-        }else{
+        } else {
             res.status(200).send()
         }
     })
-
 }))
 
 module.exports=router

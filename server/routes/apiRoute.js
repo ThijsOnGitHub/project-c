@@ -216,6 +216,23 @@ app.get("/GetMedewerkers",auth, ((req, res) =>{
 
 
 }))
+
+app.post("/deleteUser",auth,((req,res) => {
+    console.log(req.body)
+    if(req.user.isWerkgever){
+        connection.query("DELETE FROM gebruiker WHERE id = ?  ", [req.body.id], (err,values,field)=>{
+            if(err){
+                res.status(500).send(err)
+            }else{
+                res.status(200).send()
+
+            }
+        })
+    }else{
+        res.status(401).send("Je bent geen werkgever")
+    }
+
+}))
 app.get("/getNextShift", auth, (req, res) => {
     console.log("Getting next shift...");
     var today = new Date();

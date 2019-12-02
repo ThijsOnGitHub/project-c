@@ -1,19 +1,25 @@
 import React from 'react';
 import User from "../Components/User";
+import OptionWithIcon from "../Components/OptionWithIcon";
 
-interface Iprops{apiLink:string}
+interface Iprops{
+    apiLink:string
+}
 
 
 
 interface Istate{
     user: {
-        userId: number,
+        id: number,
         firstName:string,
         lastName:string
     }[]
 
 
 }
+
+
+
 
 class WerkgeversOverzicht extends React.Component<Iprops,Istate> {
 
@@ -32,14 +38,28 @@ class WerkgeversOverzicht extends React.Component<Iprops,Istate> {
                 value.json().then(value1 => {
                     this.setState({
                         user:value1
-                        }
-
+                        },() => console.log(value1)
                     )
                 })
             }
         )
 
     }
+
+    deleteUser=(id:number)=> {
+        console.log({id:id})
+        fetch(this.props.apiLink + "/deleteUser", {
+            method:"post",
+            headers:{authToken:sessionStorage.getItem("authToken"),
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({id:id})
+        });
+    }
+
+
+
+
 
 
 
@@ -51,21 +71,18 @@ class WerkgeversOverzicht extends React.Component<Iprops,Istate> {
              <div className="header">
                  <h1>Werkgeversoverzicht</h1>
              </div>
-             <table>
-
-             {this.state.user.map(value => {
-                 return (<div>
-                     <th>Id</th>
+             <table  id='555555'>
+                 <tr>
                      <th>Voornaam </th>
                      <th>Achternaam </th>
-
+                 </tr>
+             {this.state.user.map(value => {
+                 return (
                      <tr>
-                     <td>{value.userId}</td>
-                     <td>{value.firstName} {value.lastName}</td>
-                     </tr>
-
-                  </div>)
-
+                     <td>{value.firstName} </td>
+                     <td>{value.lastName}</td>
+                     <td> {<OptionWithIcon onClick={event => this.deleteUser(value.id)} icon="delete.svg" text="Verwijder Werknemer"/>}</td>
+                     </tr>)
              })}
              </table>
     </div>
