@@ -209,7 +209,7 @@ app.post("/addnotif",async (req, res) => {
 
 app.get("/getnotifs", (req, res) => {
     console.log("Getting notifs...");
-    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id', [], (err, result, val) => {
+    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id WHERE Notifications.roosterId = ?', [req.body.roosterId], (err, result, val) => {
         if (err !== null) {
             console.log(err);
             res.status(400).send()
