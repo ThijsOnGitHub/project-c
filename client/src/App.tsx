@@ -28,6 +28,7 @@ export interface IState {
     isWerkgever:boolean
     avatar:string
     naam:string
+    id:number
 }
 
 class App extends React.Component<{},IState>{
@@ -44,7 +45,8 @@ class App extends React.Component<{},IState>{
           loading:false,
           isWerkgever:false,
           avatar:"",
-          naam:""
+          naam:"",
+          id:null
       };
       // this programm adds new string functions
       addFunctions()
@@ -174,7 +176,7 @@ class App extends React.Component<{},IState>{
                                     <Switch>
                                         <Route path="/MyAccount" render={() => <MyAccount apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
                                         <Route path="/" exact render={() => <Home apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
-                                        <Route path="/ZiekMeld/:roosterItemId/:notifId"  render={(props:{match:{params:{roosterItemId:number, notifId:number}}}) => <ZiekMeld apiLink={this.state.apiLink} serverLink = {this.state.serverLink} roosterItemId={props.match.params.roosterItemId} notifId={props.match.params.notifId}/>}/>
+                                        <Route path="/ZiekMeld/:roosterItemId/:notifId"  render={(props:{match:{params:{roosterItemId:number, notifId:number}}}) => <ZiekMeld apiLink={this.state.apiLink} serverLink = {this.state.serverLink} roosterItemId={props.match.params.roosterItemId} notifId={props.match.params.notifId} currentUser={this.state.id}/>}/>
                                         <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink} isWerkgever={this.state.isWerkgever}/>}/>
                                         {
                                             this.state.isWerkgever?

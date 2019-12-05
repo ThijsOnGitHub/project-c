@@ -2,26 +2,38 @@ import React from "react";
 import {Link} from "react-router-dom";
 
 interface IState{
-    RoosterAndPerson:{naam:string, beginTijd:string, eindTijd:string, datum:string}
+    RoosterAndPerson:{
+        naam:string,
+        beginTijd:string,
+        eindTijd:string,
+        datum:string,
+        userId:number
+    }
 }
 
 interface IProps {
     apiLink:string,
     serverLink:string,
     roosterItemId:number,
-    notifId:number
+    notifId:number,
+    currentUser:number
 }
 
 class ZiekMeld extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state={
-            RoosterAndPerson : {naam : "" , beginTijd : "" , eindTijd : "" , datum : ""}
+            RoosterAndPerson : {
+                naam : "" ,
+                beginTijd : "" ,
+                eindTijd : "" ,
+                datum : "",
+                userId:null
+            }
         }
     }
 
     componentDidMount() : void{
-        console.log("yeehaw motherfucker");
         this.getRoosterAndPerson()
     }
 
@@ -76,11 +88,11 @@ class ZiekMeld extends React.Component<IProps, IState> {
                 <table>
                     <tbody>
                         <tr>
-                            <td align={"center"}>{this.state.RoosterAndPerson.naam} heeft zich ziek gemeld, van {this.state.RoosterAndPerson.beginTijd} tot {this.state.RoosterAndPerson.eindTijd} op {new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"})}.<br/>Wil je deze dienst overnemen?</td>
+                            <td align={"center"}>{(this.state.RoosterAndPerson.userId == this.props.currentUser) ? "Je hebt jezelf ziek gemeld op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + " van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + ".\n Wil je je ziektemelding annuleren?" : this.state.RoosterAndPerson.naam + " heeft zich ziek gemeld, van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je deze dienst overnemen?"}</td>
                         </tr>
                         <tr>
-                            <button className="Button" onClick={this.accept}>Ja</button>
-                            <Link to={"../"}><button className="Button">Nee</button></Link>
+                            <Link to={"/"}><button className="Button" onClick={this.accept}>Ja</button></Link>
+                            <Link to={"/"}><button className="Button">Nee</button></Link>
                         </tr>
                     </tbody>
                 </table>
