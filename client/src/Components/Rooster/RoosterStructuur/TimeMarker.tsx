@@ -26,9 +26,18 @@ class TimeMarker extends React.Component<IProps,IState>{
         }
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
+        this.updateLijnen()
+    }
 
-        //Hier wordt een lijst gemaakt met alle uren om weer te geven (i.p.v. uren kan er ook een lijn worden weergegeven)
+    componentDidUpdate(prevProps:Readonly<IProps>, prevState:Readonly<IState>, snapshot?:any) {
+        if(prevProps!==this.props){
+            //Hier wordt een lijst gemaakt met alle uren om weer te geven (i.p.v. uren kan er ook een lijn worden weergegeven)
+           this.updateLijnen()
+        }
+    }
+
+    updateLijnen=()=>{
         var lijst=[{tijd:this.props.beginTijd.toTime(),y:0}];
         var interval=this.props.interval.toTime();
         for(let i=1;new Date(lijst[i-1].tijd.getTime()+interval.getTime()).getTime()<=this.props.eindTijd.toTime().getTime();i++){

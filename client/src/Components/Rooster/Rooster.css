@@ -1,7 +1,6 @@
 .row{
     display: flex;
     flex-direction: row;
-    width: 100%;
 }
 .centerText{
     text-align: center;
@@ -22,14 +21,24 @@
     border-color: var(--lijnen);
     position:relative;
     background: white;
-}
 
+}
 
 
 .roosterItem{
     background:var(--accentColor);
     border-radius:15px;
+    cursor: pointer;
 }
+
+.noOverflow{
+    max-height: 100%;
+    overflow: hidden;
+}
+.scrolOverflow{
+    overflow-y: auto;
+}
+
 .WeekKiezer{
     margin: 10px;
 }
@@ -37,12 +46,34 @@
     margin: auto 10px;
     justify-content: center
 }
+
+.fullDiv{
+    height: 100%;
+}
+
+.popUp{
+    width: 90vw;
+    height: 85vh;
+    left: 5vw;
+    top:5vh;
+    z-index: 3;
+    position: fixed;
+    border: black 1px solid;
+    border-radius: 5px;
+    padding: 20px;
+    background: white;
+}
+
+
 .isideItem{
+    box-sizing:border-box;
     padding: 5px 10px;
+    height: 100%;
 }
 .noMargin{
     margin: 0 0;
 }
+
 .column{
     display: flex;
     flex-direction: column;
@@ -54,6 +85,9 @@
 .row{
     display: flex;
     flex-direction: row;
+}
+.roosterVelden .row{
+    width: 100%;
 }
 .dagTitles{
     padding-left: 50px;
@@ -87,8 +121,10 @@
 }
 
 
+
 .dag{
     display: flex;
+    min-width: 300px;
 }
 .dag > div{
     flex: 1 0 190px;
@@ -98,11 +134,11 @@
 
 /* width */
 .roosterVelden::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
-}
+     width: 7px;
+     height: 7px;
+ }
 .roosterVelden::-webkit-scrollbar-button{
-   height: 5px;
+    height: 5px;
 }
 /* Track */
 .roosterVelden::-webkit-scrollbar-track {
@@ -120,3 +156,4 @@
 .roosterVelden::-webkit-scrollbar-thumb:hover{
     background: #555;
 }
+
