@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 var {serverSecret}=require('../serverSecret');
 var connection=mysql.createConnection(serverSecret.databaseLogin);
 
-const expireTime="5m"
+const expireTime="5m";
 
 router.post("/Login", (req,res) => {
     console.log(req.body);
@@ -67,7 +67,7 @@ router.get("/refresh",(req, res) => {
     })
 });
 
-router.get("/Medewerkers", )
+router.get("/Medewerkers", );
 
 
 router.delete("/logout",((req, res) => {

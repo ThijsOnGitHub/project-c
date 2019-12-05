@@ -34,9 +34,9 @@ class BeginEindTijd{
 
 
 class RoosterData {
-    public data:formatedRoosterItems
-    public maxTijd:Date=new Date(0,0,0,20)
-    public minTijd:Date=new Date(0,0,0,7)
+    public data:formatedRoosterItems;
+    public maxTijd:Date=new Date(0,0,0,20);
+    public minTijd:Date=new Date(0,0,0,7);
 
     constructor(data:roosterItem[]) {
         this.data=this.sortOnSameTime(data)
@@ -162,22 +162,22 @@ class RoosterData {
                     tijdVak.push({userId:value.userId,naam:value.naam,itemId:value.itemId})
                 }else{
                     if(new Date(value.beginTijd).getTime()<this.minTijd.getTime()){
-                        console.log("new MaxTijd")
+                        console.log("new MaxTijd");
                         this.minTijd=new Date(value.beginTijd)
                     }
                     if(new Date(value.eindTijd).getTime()>this.maxTijd.getTime()){
-                        console.log("new MaxTijd")
+                        console.log("new MaxTijd");
                         this.maxTijd=new Date(value.eindTijd)
                     }
                     datumVak[this.beginEindString(value.beginTijd,value.eindTijd)]=[{userId:value.userId,naam:value.naam,itemId:value.itemId}]
                 }
             }else{
                 if(new Date(value.beginTijd).getTime()<this.minTijd.getTime()){
-                    console.log("new MaxTijd")
+                    console.log("new MaxTijd");
                     this.minTijd=new Date(value.beginTijd)
                 }
                 if(new Date(value.eindTijd).getTime()>this.maxTijd.getTime()){
-                    console.log("new MaxTijd")
+                    console.log("new MaxTijd");
                     this.maxTijd=new Date(value.eindTijd)
                 }
                 returnObject[value.datum]={[this.beginEindString(value.beginTijd,value.eindTijd)]:[{userId:value.userId,naam:value.naam,itemId:value.itemId}]}

@@ -70,7 +70,7 @@ app.get("/avatarWithId/:id",(req,res)=>{
 
         }
     })
-})
+});
 
 app.get("/GetMedewerkers",auth, ((req, res) =>{
     if(req.user.isWerkgever){
@@ -80,7 +80,7 @@ app.get("/GetMedewerkers",auth, ((req, res) =>{
     }else{
         res.status(401).send("Je bent geen werkgever")
     }
-}))
+}));
 // Zend een POST request dat de data uit de front-end in de database krijgt en daarmee een nieuwe gebruiker aanmaakt.
 app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
     let data = req.body;
@@ -239,7 +239,7 @@ app.post("/addnotif",async (req, res) => {
 
 app.get("/getnotifs", (req, res) => {
     console.log("Getting notifs...");
-    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink, roosterItemId, Notifications.id AS notifId FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id ORDER BY Notifications.id DESC', [], (err, result, val) => {
+    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink, roosterItemId, Notifications.id AS notifId FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id WHERE Notifications.roosterId = (select roosterId from gebruiker where id=?) ORDER BY Notifications.id DESC', [req.body.userId], (err, result, val) => {
         if (err !== null) {
             console.log(err);
             res.status(400).send()
@@ -258,10 +258,10 @@ app.get("/GetMedewerkers",auth, ((req, res) =>{
 
 
 
-}))
+}));
 
 app.post("/deleteUser",auth,((req,res) => {
-    console.log(req.body)
+    console.log(req.body);
     if(req.user.isWerkgever){
         connection.query("DELETE FROM gebruiker WHERE id = ?  ", [req.body.id], (err,values,field)=>{
             if(err){
@@ -275,7 +275,7 @@ app.post("/deleteUser",auth,((req,res) => {
         res.status(401).send("Je bent geen werkgever")
     }
 
-}))
+}));
 app.get("/getNextShift", auth, (req, res) => {
     console.log("Getting next shift...");
     var today = new Date();

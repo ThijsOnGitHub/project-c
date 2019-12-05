@@ -64,9 +64,9 @@ class Rooster extends Component<IProps,IState>{
             agendaJSON=await res.json();
         }
 
-        var roosterData=new RoosterData(agendaJSON)
-        this.setState({minTijd:roosterData.minTijd,maxTijd:roosterData.maxTijd})
-        var renderdAgendaJSON=roosterData.getRenderdItems(this.retrurnRenderdItems)
+        var roosterData=new RoosterData(agendaJSON);
+        this.setState({minTijd:roosterData.minTijd,maxTijd:roosterData.maxTijd});
+        var renderdAgendaJSON=roosterData.getRenderdItems(this.retrurnRenderdItems);
 
         this.setState({agendaJSON:{}},() => {
             this.setState({
@@ -82,7 +82,7 @@ class Rooster extends Component<IProps,IState>{
     changeBeginDatum=(datum:Date)=>{
         return new Promise((resolve => {
                 this.setState({beginDatum:datum},()=>{
-                    this.refreshRooster()
+                    this.refreshRooster();
                     resolve()
                 })
             })
@@ -113,7 +113,7 @@ class Rooster extends Component<IProps,IState>{
 
 
     closePopUp=()=>{
-       this.refreshRooster()
+       this.refreshRooster();
        this.setState({popUp:false})
     };
 
