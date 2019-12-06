@@ -24,7 +24,11 @@ class NotifList extends React.Component<IProps, IState> {
 
 
     getnotifs = () => {
-        fetch("http://localhost:5000/api/getnotifs")
+        fetch("http://localhost:5000/api/getnotifs", {
+            headers:{
+                authToken:sessionStorage.getItem("authToken")
+            }
+        })
             .then(
                 (u) => {
                     try{

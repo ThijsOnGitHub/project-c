@@ -237,14 +237,17 @@ app.post("/addnotif",async (req, res) => {
         })
 });
 
-app.get("/getnotifs", (req, res) => {
+app.get("/getnotifs", auth, (req, res) => {
     console.log("Getting notifs...");
-    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink, roosterItemId, Notifications.id AS notifId FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id WHERE Notifications.roosterId = (select roosterId from gebruiker where id=?) ORDER BY Notifications.id DESC', [req.body.userId], (err, result, val) => {
+    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink, roosterItemId, Notifications.id AS notifId FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id WHERE Notifications.roosterId = (select roosterId from gebruiker where id = ?) ORDER BY Notifications.id DESC', [req.user.id], (err, result, val) => {
         if (err !== null) {
             console.log(err);
-            res.status(400).send()
+            res.status(400).send(err)
         }
-        res.json(result)
+        else {
+            console.log(result);
+            res.json(result)
+        }
     })
 });
 
