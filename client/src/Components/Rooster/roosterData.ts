@@ -3,6 +3,7 @@ import {ReactElement} from "react";
 import RoosterItem from "./RoosterItems/RoosterItem";
 
 
+
 export interface itemComponentsData { beginTijd: string, eindTijd: string, datum: string, UserData: { naam: string, userId: number,itemId:number,status:number }[] }
 export interface roosterItem { datum: string, beginTijd: string, eindTijd: string, userId: number, naam: string,itemId:number }
 export type itemValues={ naam: string, userId: number }[]
