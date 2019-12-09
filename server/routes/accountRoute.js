@@ -54,8 +54,7 @@ app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
                     from: 'roosteritHRO@gmail.com',
                     to: data.email,
                     subject: 'Verificatie RoosterIt',
-                    html: `<h1 style="font-family: sans-serif;text-align: center;">Geachte meneer/mevrouw ${data.lastName},</h1><p style="text-align: center;font-family: sans-serif;">Bedankt voor uw registratie bij RoosterIT.<br> Klik op de volgende link om uw registratie te voltooien.</p>
-                        <a href="http://localhost:3000/emailverificatie/${data.email}">Valideer account</a>`
+                    html: `<h1 style="font-family: sans-serif;text-align: center; font-size: 20px;color: #3f3f3f;">Geachte meneer/mevrouw ${data.lastName},</h1><p style="text-align: center;font-family: sans-serif;">Hartelijk dan voor uw registratie bij RoosterIT. Om uw registratie te voltooien dient u uw account eerst te verifiëren.<br> Klik op de knop hier beneden om uw email-adres te verifiëren.</p><a href="http://localhost:3000/emailverificatie/${data.email}" class="myButton" style="-moz-border-radius:42px;-webkit-border-radius:42px;background-color:#ac35d7;border:4px solid #bb83cd;border-radius:42px;color:#fff;cursor:pointer;display:block;font-family:Trebuchet MS;font-size:18px;padding:10px 31px;text-decoration:none;margin:auto; width:250px;">Valideer account</a>`
                 };
 
                 transporter.sendMail(mailOptions, function(error, info){
