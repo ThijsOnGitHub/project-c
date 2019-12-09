@@ -3,6 +3,7 @@ app = express.Router();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const roosterItemRoute = require('./RoosterItemRoute');
+const accountRoute = require('./accountRoute');
 const multer = require('multer');
 const auth=require("../middleware/verifytoken");
 const yourItem=require("../middleware/itemOfWerkgever");
@@ -27,12 +28,6 @@ var storage= multer.diskStorage({
 
 var upload=multer({storage:storage});
 
-
-
-
-
-
-
 app.post("/addbedrijf",(req,res)=>{
     var data=req.body;
     console.log("posting:");
@@ -47,14 +42,12 @@ app.post("/addbedrijf",(req,res)=>{
     })
 });
 
-
-
 app.get("/avatar/:name",(req,res)=>{
     console.log(__dirname.split("/"));
     res.sendFile(__dirname.split("\\").slice(0,-1).join("\\")+"/uploads/"+req.params.name)
 });
 
-// ---------------- REGISTRATIE ----------------
+// ---------------- ACCOUNTS ----------------
 
 app.get("/avatarWithId/:id",(req,res)=>{
     connection.query("select profielFotoLink as avatar from gebruiker where id =?",[req.params.id],(err,values)=>{
@@ -70,7 +63,7 @@ app.get("/avatarWithId/:id",(req,res)=>{
 
         }
     })
-})
+});
 
 app.get("/GetMedewerkers",auth, ((req, res) =>{
     if(req.user.isWerkgever){
@@ -80,130 +73,7 @@ app.get("/GetMedewerkers",auth, ((req, res) =>{
     }else{
         res.status(401).send("Je bent geen werkgever")
     }
-}))
-// Zend een POST request dat de data uit de front-end in de database krijgt en daarmee een nieuwe gebruiker aanmaakt.
-app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
-    let data = req.body;
-    let image = "defaultAvatar.png";
-
-    if (req.file !== undefined) {image = req.file.filename;}
-    data.pass = await bcrypt.hash(data.pass, 10 );
-    connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, profielFotoLink, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth,image ,data.isWerkgever==='true'],
-    (error, results, fields) => {
-        if (error) {
-            console.log(error);
-            res.status(422).json;
-            res.json({message:error});
-        } else {
-            res.json({addgebruikerSuccess: true});
-            console.log(data.firstName + " toegevoegd.");
-
-            // Hier wordt het verificatie-email verstuurd. Wanneer we ook op andere plekken email gaan gebruiken kan deze code centraler opgeslagen worden.
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: 'roosteritHRO@gmail.com',
-                    pass: 'hogeschoolr'
-                }
-            });
-
-            const mailOptions = {
-                from: 'roosteritHRO@gmail.com',
-                to: data.email,
-                subject: 'Verificatie RoosterIt',
-                html: `<h1 style="font-family: sans-serif;text-align: center;">Geachte meneer/mevrouw ${data.lastName},</h1><p style="text-align: center;font-family: sans-serif;">Bedankt voor uw registratie bij RoosterIT.<br> Klik op de volgende link om uw registratie te voltooien.</p><a href="http://localhost:3000/emailverificatie/${data.email}">Valideer account</a>`};
-
-            transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email verstuurd: ' + info.response);
-                }
-            });
-        }
-    })
-});
-
-// Kijk in de database of de koppelcode al bestaat of niet.
-app.post("/checkkoppelcode", (req, res) => {
-    let data = req.body;
-    connection.query("SELECT EXISTS (SELECT koppelCode FROM koppelCode WHERE koppelCode = ?) AS koppelcode",  [data.value], (error, results, fields) => {
-        if (error) {
-            console.log(error);
-        } else {
-            results = results[0].koppelcode;
-            res.json({koppelCodeCheck: results});
-        }
-    });
-});
-
-// Kijk in de database of het ingevoerde emailadres al gebruikt is.
-app.post("/checkemail", (req, res) => {
-    let data = req.body;
-    connection.query("SELECT EXISTS (SELECT email FROM gebruiker WHERE email = ?) AS emailcheck", [data.email], (error, results, fields) => {
-        if (error) {
-            console.log(error);
-        } else {
-            results = results[0].emailcheck;
-            console.log(results);
-            res.json({emailCheck: results});
-        }
-    });
-});
-
-// Voeg een rooster toe aan de database met de verstuurde naam.
-app.post("/addrooster", (req, res) => {
-    let data = req.body;
-    connection.query("INSERT INTO rooster (roosterName) VALUES (?)", [data.roosterName], (error, results, fields) => {
-        if (error) {
-            console.log(error);
-            res.json({message: error});
-        } else {
-            console.log("Rooster " + data.roosterName + " toegevoegd.");
-        }
-    });
-
-    // Haal het roosterId op van het zojuist aangemaakte rooster.
-    connection.query("SELECT roosterId FROM rooster WHERE roosterName = (?)", [data.roosterName], (error, results, fields) => {
-        let roosterId = results[0].roosterId;
-
-        // Voeg de gegenereerde koppelcode toe aan de database.
-        connection.query("INSERT INTO koppelCode (koppelCode, roosterId) VALUES (?,?)", [data.koppelCodeWerkgever, roosterId], (error, results, fields) => {
-            console.log("Koppelcode toegevoegd.");
-
-            // Update in de gebruikerstabel de werkgever met het roosterId van het rooster dat hij heeft aangemaakt.
-            connection.query("UPDATE gebruiker SET roosterId = ? WHERE email = ?", [roosterId, data.email], (error, results, fields) => {
-                res.json({addroosterSuccess: true});
-            });
-        });
-    });
-});
-
-// Sluit een werknemer aan bij het rooster van een werkgever.
-app.put("/koppelgebruiker", (req, res) => {
-    let data = req.body;
-
-    // Haal het roosterId op van het rooster dat bij de ingevoerde koppelcode hoort.
-    connection.query("SELECT roosterId FROM koppelCode WHERE koppelCode = ?", [data.koppelCodeWerknemer], (error, results, fields) => {
-       let roosterId = results[0].roosterId;
-
-        // Update in de gebruikerstabel de werknemer met het roosterId dat bij de ingevoerde koppelcode past.
-       connection.query("UPDATE gebruiker SET roosterId = ? WHERE email = ?", [roosterId, data.email], (error, results, fields) => {
-           res.json({koppelgebruikerSuccess: true});
-           console.log("Gebruiker gekoppeld aan rooster " + roosterId);
-       });
-    });
-});
-
-// Activeer een gebruiker in de database nadat deze de link in de verificatie-email heeft gevolgd.
-app.put("/activeergebruiker", (req, res) => {
-    let data = req.body;
-    console.log("Activeren gebruiker:");
-    connection.query("UPDATE gebruiker SET verificatie = 1 WHERE email = (?)", [data.email], (error, results, fields) =>{
-        res.json(results);
-        console.log("Gebruiker geactiveerd.");
-    });
-});
+}));
 
 // Update user via de accountpagina
 app.put("/updategebruiker",auth, (req, res) => {
@@ -256,9 +126,7 @@ app.get("/GetMedewerkers",auth, ((req, res) =>{
        });
    }
 
-
-
-}))
+}));
 
 app.post("/deleteUser",auth,((req,res) => {
     console.log(req.body)
@@ -274,8 +142,8 @@ app.post("/deleteUser",auth,((req,res) => {
     }else{
         res.status(401).send("Je bent geen werkgever")
     }
+}));
 
-}))
 app.get("/getNextShift", auth, (req, res) => {
     console.log("Getting next shift...");
     var today = new Date();
@@ -294,6 +162,7 @@ app.get("/getNextShift", auth, (req, res) => {
         res.json(result)
     })
 });
+
 app.get("/getgebruikerinfo",auth,async (req,res)=>{
     console.log("Get user info");
     connection.query("SELECT firstName, lastName, email, phone, birth, profielFotoLink FROM roosterit.gebruiker where id= ?",[req.user.id], (error, results, fields) =>{
@@ -337,6 +206,7 @@ app.post('/ziekAccept', auth, (req, res) => {
         }
     })
 });
+
 app.post('/delNotif', auth, (req, res) => {
     console.log("start delNotif");
     connection.query('DELETE FROM Notifications WHERE id = ?', [req.body.notifId], (error, results, fields) => {
@@ -351,7 +221,8 @@ app.post('/delNotif', auth, (req, res) => {
     })
 });
 
-app.use("/rooster",roosterItemRoute);
+app.use("/rooster", roosterItemRoute);
+app.use("/account", accountRoute);
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports=app;
