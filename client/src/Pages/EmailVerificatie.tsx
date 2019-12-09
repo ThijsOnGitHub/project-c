@@ -8,7 +8,7 @@ interface IProps {
 class EmailVerificatie extends React.Component<IProps> {
 
     verify() {
-        fetch(this.props.apiLink + "/activeergebruiker", {
+        fetch(this.props.apiLink + "/account/activeergebruiker", {
             method: 'PUT',
             body: JSON.stringify({
                 email:this.props.email

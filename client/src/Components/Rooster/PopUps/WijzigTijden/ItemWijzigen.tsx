@@ -251,7 +251,7 @@ class ItemWijzigen extends Component<IProps,IState>{
                         </td>
                         <td>
                             {
-                                this.state.inroosteren ||
+                                (this.state.inroosteren || this.state.selectedNames.length===0)  ||
                                 <button className="Button" onClick={ event => {
                                     this.inroosteren()
                                     this.updateNewNames()

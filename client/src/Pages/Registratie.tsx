@@ -106,7 +106,7 @@ class Registratie extends React.Component<IProps,IState>{
         let value: string = (Math.floor(Math.random() * 100000 ) + 1).toString();
 
         // Controlleer of de gegenereerde koppelcode al in de database staat.
-        let koppelcode: any = await fetch(this.props.apiLink + "/checkkoppelcode", {
+        let koppelcode: any = await fetch(this.props.apiLink + "/account/checkkoppelcode", {
             headers: {'Content-Type': 'application/json'},
             method: 'POST',
             body: JSON.stringify({value})
@@ -151,11 +151,13 @@ class Registratie extends React.Component<IProps,IState>{
     };
 
     checkEmail = async () => {
-        let email: any = await fetch(this.props.apiLink + "/checkemail", {
+        let email: any = await fetch(this.props.apiLink + "/account/checkemail", {
             headers: {'Content-Type': 'application/json'},
             method: 'POST',
             body: JSON.stringify({email: this.state.email})
         }).then(res => res.json());
+
+        console.log(email.emailCheck);
 
         this.setState({checkemailSuccess: email.emailCheck});
     };
@@ -167,7 +169,7 @@ class Registratie extends React.Component<IProps,IState>{
             firstName: firstName.length === 0 || firstName.length >= 30 || !firstName.match(this.state.letters),
             lastName: lastName.length === 0 || lastName.length >= 30 || !lastName.match(this.state.letters),
             // Controlleer hier of een email al aanwezig is in de database of niet door een nieuwe functie aan te roepen.
-            email: email.length === 0 || email.length >= 30,// || !this.state.checkemailSuccess,
+            email: email.length === 0 || email.length >= 30 || this.state.checkemailSuccess,
             pass: pass.length === 0,
             secondPass: secondPass.length === 0 || !secondPass.match(this.state.pass),
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
@@ -197,7 +199,7 @@ class Registratie extends React.Component<IProps,IState>{
         });
 
         // Voeg de gebruiker toe aan de database.
-        let addgebruiker: any = await fetch(this.props.apiLink+"/addgebruiker",{
+        let addgebruiker: any = await fetch(this.props.apiLink+"/account/addgebruiker",{
             method:'POST',
             body:formData
         }).then(res => res.json());
@@ -206,7 +208,7 @@ class Registratie extends React.Component<IProps,IState>{
 
         // Maak een nieuw rooster aan in de database.
         if (this.state.isWerkgever) {
-            let addrooster: any = await fetch(this.props.apiLink + "/addrooster", {
+            let addrooster: any = await fetch(this.props.apiLink + "/account/addrooster", {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
                 body: JSON.stringify({roosterName: this.state.roosterName, koppelCodeWerkgever: this.state.koppelCodeWerkgever, email: this.state.email})
@@ -217,7 +219,7 @@ class Registratie extends React.Component<IProps,IState>{
 
         // Koppel een gebruiker aan het rooster dat bij zijn koppelcode hoort.
         if (!this.state.isWerkgever) {
-            let koppelgebruiker: any = await fetch(this.props.apiLink + "/koppelgebruiker", {
+            let koppelgebruiker: any = await fetch(this.props.apiLink + "/account/koppelgebruiker", {
                 headers: {'Content-Type': 'application/json'},
                 method: 'PUT',
                 body: JSON.stringify({email: this.state.email, koppelCodeWerknemer: this.state.koppelCodeWerknemer})
