@@ -3,6 +3,7 @@ app = express.Router();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const roosterItemRoute = require('./RoosterItemRoute');
+const accountRoute = require('./accountRoute');
 const multer = require('multer');
 const auth=require("../middleware/verifytoken");
 const yourItem=require("../middleware/itemOfWerkgever");
@@ -27,12 +28,6 @@ var storage= multer.diskStorage({
 
 var upload=multer({storage:storage});
 
-
-
-
-
-
-
 app.post("/addbedrijf",(req,res)=>{
     var data=req.body;
     console.log("posting:");
@@ -47,14 +42,12 @@ app.post("/addbedrijf",(req,res)=>{
     })
 });
 
-
-
 app.get("/avatar/:name",(req,res)=>{
     console.log(__dirname.split("/"));
     res.sendFile(__dirname.split("\\").slice(0,-1).join("\\")+"/uploads/"+req.params.name)
 });
 
-// ---------------- REGISTRATIE ----------------
+// ---------------- ACCOUNTS ----------------
 
 app.get("/avatarWithId/:id",(req,res)=>{
     connection.query("select profielFotoLink as avatar from gebruiker where id =?",[req.params.id],(err,values)=>{
@@ -259,8 +252,6 @@ app.get("/GetMedewerkers",auth, ((req, res) =>{
        });
    }
 
-
-
 }));
 
 app.post("/deleteUser",auth,((req,res) => {
@@ -277,8 +268,8 @@ app.post("/deleteUser",auth,((req,res) => {
     }else{
         res.status(401).send("Je bent geen werkgever")
     }
-
 }));
+
 app.get("/getNextShift", auth, (req, res) => {
     console.log("Getting next shift...");
     var today = new Date();
@@ -297,6 +288,7 @@ app.get("/getNextShift", auth, (req, res) => {
         res.json(result)
     })
 });
+
 app.get("/getgebruikerinfo",auth,async (req,res)=>{
     console.log("Get user info");
     connection.query("SELECT firstName, lastName, email, phone, birth, profielFotoLink FROM roosterit.gebruiker where id= ?",[req.user.id], (error, results, fields) =>{
@@ -340,6 +332,7 @@ app.post('/ziekAccept', auth, (req, res) => {
         }
     })
 });
+
 app.post('/delNotif', auth, (req, res) => {
     console.log("start delNotif");
     connection.query('DELETE FROM Notifications WHERE id = ?', [req.body.notifId], (error, results, fields) => {
@@ -354,7 +347,8 @@ app.post('/delNotif', auth, (req, res) => {
     })
 });
 
-app.use("/rooster",roosterItemRoute);
+app.use("/rooster", roosterItemRoute);
+app.use("/account", accountRoute);
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports=app;
