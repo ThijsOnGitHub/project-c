@@ -16,6 +16,7 @@ interface IProps {
     serverLink:string,
     roosterItemId:number,
     notifId:number,
+    messageId:number,
     currentUser:number
 }
 
@@ -88,7 +89,23 @@ class ZiekMeld extends React.Component<IProps, IState> {
                 <table>
                     <tbody>
                         <tr>
-                            <td align={"center"}>{(this.state.RoosterAndPerson.userId == this.props.currentUser) ? "Je hebt jezelf ziek gemeld op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + " van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + ".\n Wil je je ziektemelding annuleren?" : this.state.RoosterAndPerson.naam + " heeft zich ziek gemeld, van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je deze dienst overnemen?"}</td>
+                            <td align={"center"}>
+                                {
+                                    (this.props.messageId == 1) ?
+                                        (this.state.RoosterAndPerson.userId === this.props.currentUser) ?
+                                            "Je hebt jezelf ziek gemeld op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + " van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + ".\n Wil je je ziektemelding annuleren?"
+                                            :
+                                            this.state.RoosterAndPerson.naam + " heeft zich ziek gemeld, van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je deze dienst overnemen?"
+                                        :
+                                        (this.props.messageId == 0) ?
+                                            (this.state.RoosterAndPerson.userId == this.props.currentUser) ?
+                                                "Je hebt om vervanging gevraagd op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + " van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + ".\n Wil je je aanvraag annuleren?"
+                                                :
+                                                this.state.RoosterAndPerson.naam + " heeft om vervangig gevraagd, van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je deze dienst overnemen?"
+                                            :
+                                            "[ERROR; Ongeldig messageId]"
+                                }
+                            </td>
                         </tr>
                         <tr>
                             <Link to={"/"}><button className="Button" onClick={this.accept}>Ja</button></Link>
