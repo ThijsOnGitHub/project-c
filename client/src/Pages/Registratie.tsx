@@ -10,6 +10,7 @@ interface IState {
     email: string,
     pass: string,
     secondPass: string,
+    secondPassSame: boolean,
     phone: string,
     birth: string,
     foto: string,
@@ -26,6 +27,7 @@ interface IState {
     // Beschrijf de toegestane symbolen voor de inputvelden.
     letters: RegExp,
     numbers: RegExp,
+    passwords: RegExp,
     // Sla op of inputvelden al zijn aangeraakt door de gebruiker.
     touched: {
         firstName: boolean,
@@ -59,6 +61,7 @@ class Registratie extends React.Component<IProps,IState>{
             email: '',
             pass: '',
             secondPass: '',
+            secondPassSame: false,
             phone: '',
             birth: '',
             foto: '',
@@ -73,8 +76,9 @@ class Registratie extends React.Component<IProps,IState>{
             checkemailSuccess: false,
             koppelgebruikerSuccess: false,
             // Beschrijf de toegestane symbolen voor de inputvelden. Geen spaties voor en na inputs, wel mogen in namen spaties zitten.
-            letters: /^[^\s][A-Z\sa-z]+[^\s]$/,
+            letters: /^[A-Za-z]?[A-Z\sa-z]*[A-Za-z]$/,
             numbers: /^[^\s][0-9]+[^\s]$/,
+            passwords: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){6,}$/,
             // Sla op of inputvelden al zijn aangeraakt door de gebruiker.
             touched: {
                 firstName: false,
@@ -128,20 +132,32 @@ class Registratie extends React.Component<IProps,IState>{
     }
 
     // Ververs de waarden wanneer deze veranderd worden door de gebruiker.
-    handleInputChange(event:React.ChangeEvent<HTMLInputElement>) {
+    handleInputChange = async (event:React.ChangeEvent<HTMLInputElement>) => {
         const target = event.target;
         // Laat de waarde de waarde zijn van het actieve veld. Als het input-type een checkbox is is de waarde of deze aangevinkt is of niet.
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
-        // Kijk of het ingevulde email uniek is of niet.
-        this.checkEmail();
-
         if (target.type === "file"){
             this.setState<never> ({[name+"File"]: target.files[0]})
         }
-        this.setState<never> ({[name]: value});
-    }
+
+        await this.setState<never> ({[name]: value});
+
+        // Voer een check uit of het ingevoerde email al in de database staat of niet wanneer het "email" inputveld wordt gewijzigd.
+        if (target.name === "email") {
+            this.checkEmail();
+        }
+
+        // Check of de waarden van het eerste en tweede wachtwoord gelijk zijn. Verander de state naar aanleiding van de uitkomst.
+        if(target.name === "pass" || target.name === "secondPass") {
+            if (this.state.secondPass == this.state.pass) {
+                await this.setState({secondPassSame: true});
+            } else {
+                await this.setState({secondPassSame: false})
+            }
+        }
+    };
 
     // Verander de waarde van touched voor een inputveld naar true.
     handleBlur = (field:string) => (event:React.FocusEvent) => {
@@ -157,21 +173,18 @@ class Registratie extends React.Component<IProps,IState>{
             body: JSON.stringify({email: this.state.email})
         }).then(res => res.json());
 
-        console.log(email.emailCheck);
-
         this.setState({checkemailSuccess: email.emailCheck});
     };
 
     validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterName:string, koppelCodeWerknemer:string, secondPass:string) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
-
         return {
             firstName: firstName.length === 0 || firstName.length >= 30 || !firstName.match(this.state.letters),
             lastName: lastName.length === 0 || lastName.length >= 30 || !lastName.match(this.state.letters),
             // Controlleer hier of een email al aanwezig is in de database of niet door een nieuwe functie aan te roepen.
             email: email.length === 0 || email.length >= 30 || this.state.checkemailSuccess,
-            pass: pass.length === 0,
-            secondPass: secondPass.length === 0 || !secondPass.match(this.state.pass),
+            pass: pass.length === 0 || !pass.match(this.state.passwords),
+            secondPass: secondPass.length === 0 || !this.state.secondPassSame,
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
             birth: birth.length === 0,
             roosterName: this.state.isWerkgever && roosterName.length === 0,
@@ -231,10 +244,8 @@ class Registratie extends React.Component<IProps,IState>{
         // Geef door dat de registratie succesvol is wanneer...
         if (this.state.isWerkgever && this.state.addgebruikerSuccess && this.state.addroosterSuccess) {
             this.setState({registratieSucces: true});
-            alert("Registratie succesvol.");
         } else if (!this.state.isWerkgever && this.state.addgebruikerSuccess && this.state.koppelgebruikerSuccess) {
             this.setState({registratieSucces: true});
-            alert("Registratie succesvol.");
         }
     };
 
@@ -340,7 +351,7 @@ class Registratie extends React.Component<IProps,IState>{
 
                 <button disabled={isDisabled} onClick={this.handleSubmit}>Registreer</button>
                 {
-                    this.state.registratieSucces && <Redirect to={{pathname: '/login', state: {id: '2'}}}/>
+                    this.state.registratieSucces && <Redirect to={{pathname: '/RegistratieFeedback'}}/>
                 }
 
                 </tbody>

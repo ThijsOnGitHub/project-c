@@ -3,6 +3,7 @@ import './App.css';
 import {BrowserRouter,Switch,Route} from "react-router-dom";
 import Menu from "./Components/Menu/Menu";
 import Registratie from "./Pages/Registratie";
+import RegistratieFeedback from "./Pages/RegistratieFeedback";
 import EmailVerificatie from "./Pages/EmailVerificatie";
 import addFunctions from "./Extra Functions/addFunctions";
 import Login from "./Pages/Login";
@@ -190,6 +191,7 @@ class App extends React.Component<{},IState>{
                                     :
                                     <Switch>
                                         <Route path="/registratie" render={() => <Registratie apiLink={this.state.apiLink}/>}/>
+                                        <Route path="/RegistratieFeedback" render={() => <RegistratieFeedback apiLink={this.state.apiLink}/>}/>
                                         <Route path="/" render={() => <Login updateAuth={this.updateAuth} apiLink={this.state.apiLink} changeHigherState={this.changeState} serverLink={this.state.serverLink}/>}/>
                                     </Switch>
                             }
