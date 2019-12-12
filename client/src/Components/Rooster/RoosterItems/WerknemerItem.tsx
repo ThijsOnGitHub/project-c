@@ -1,7 +1,8 @@
-import React from 'react'
+import React                           from 'react'
 import {ReactComponent as MoreOptions} from "../../../icons/more_horiz-24px.svg";
-import OptionWithIcon from "../../OptionWithIcon";
-import {itemComponentsData} from "../roosterData";
+import OptionWithIcon                  from "../../OptionWithIcon";
+import {itemComponentsData}            from "../roosterData";
+import { Link }                        from "react-router-dom";
 
 
 interface IProps {
@@ -39,10 +40,10 @@ class WerknemerItem extends React.Component<IProps> {
                     })}</p>
                     <details className="chooseMenu right">
                         <div>
-                            <OptionWithIcon icon="people-24px.svg" text="Vervanging regelen"
-                                            onClick={()=>this.ziekMelden(0)}/>
-                            <OptionWithIcon icon="local_hospital-24px.svg" text="Ziek melden"
-                                            onClick={()=>this.ziekMelden(1)}/>
+                            <Link to={'ZiekmeldFeedback'}><OptionWithIcon icon="people-24px.svg" text="Vervanging regelen"
+                                                                          onClick={()=>this.ziekMelden(0)}/></Link>
+                            <Link to={'ZiekmeldFeedback'}><OptionWithIcon icon="local_hospital-24px.svg" text="Ziek melden"
+                                                                          onClick={()=>this.ziekMelden(1)}/></Link>
                         </div>
                         <summary>
                             <MoreOptions width={35} height={35} className="onAccent right"/>

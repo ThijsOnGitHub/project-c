@@ -14,8 +14,10 @@ import loadingIcon from "./img/Loding-Icon-zwart.gif";
 import WerknemerItem from "./Components/Rooster/RoosterItems/WerknemerItem";
 import WerkgeversOverzicht from "./Pages/WerkgeversOverzicht";
 
-import ZiekMeld from "./Pages/ZiekMeld";
-import Rooster from "./Pages/Rooster";
+import ZiekMeld         from "./Pages/ZiekMeld";
+import Rooster          from "./Pages/Rooster";
+import ZiekmeldFeedback from "./Pages/ZiekmeldFeedback";
+import OvernameFeedback from "./Pages/OvernameFeedback";
 
 
 export interface IState {
@@ -178,6 +180,8 @@ class App extends React.Component<{},IState>{
                                         <Route path="/" exact render={() => <Home apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
                                         <Route path="/ZiekMeld/:roosterItemId/:notifId/:messageId"  render={(props:{match:{params:{roosterItemId:number, notifId:number, messageId:number}}}) => <ZiekMeld apiLink={this.state.apiLink} serverLink = {this.state.serverLink} roosterItemId={props.match.params.roosterItemId} notifId={props.match.params.notifId} messageId={props.match.params.messageId} currentUser={this.state.id}/>}/>
                                         <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink} isWerkgever={this.state.isWerkgever}/>}/>
+                                        <Route path="/ZiekmeldFeedback" render={() => <ZiekmeldFeedback/>}/>
+                                        <Route path="/OvernameFeedback" render={() => <OvernameFeedback/>}/>
                                         {
                                             this.state.isWerkgever?
                                                 <Switch>

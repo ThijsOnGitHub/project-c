@@ -108,7 +108,7 @@ class ZiekMeld extends React.Component<IProps, IState> {
                             </td>
                         </tr>
                         <tr>
-                            <Link to={"/"}><button className="Button" onClick={this.accept}>Ja</button></Link>
+                            <Link to={"/OvernameFeedback"}><button className="Button" onClick={this.accept}>Ja</button></Link>
                             <Link to={"/"}><button className="Button">Nee</button></Link>
                         </tr>
                     </tbody>
