@@ -8,53 +8,49 @@ interface IProps {
     itemData:itemComponentsData
 }
 
-class WerknemerItem extends React.Component<IProps>{
+class WerknemerItem extends React.Component<IProps> {
     ziekMelden=(messageType:number)=>{
         console.log(this.props.itemData);
-            fetch(
-                "http://localhost:5000/api/addnotif", {
-                    method:"post",
-                    headers:{
-                        "content-type":"application/json"
-                    },
-                    body:JSON.stringify({
-                        "person": this.props.itemData.UserData[0].userId,
-                        "messageId": messageType,
-                        "roosterId": 1,
-                        "roosterItemId": this.props.itemData.UserData[0].itemId
-                    })
-                }
-            );
-            fetch("http://localhost:5000/api/ziekMeld", {
-                method : 'post' ,
-                headers : {
-                    'content-type' : 'application/json' ,
-                    'authToken' : sessionStorage.getItem('authToken')
-                } ,
-                body : JSON.stringify({"roosterItemId" : this.props.itemData.UserData[0].itemId})
+        if(this.props.itemData.UserData[0].status==1) {
+            fetch("http://localhost:5000/api/addnotif", {
+                method:"post", headers:{
+                    "content-type":"application/json"
+                }, body:JSON.stringify({
+                    "person":this.props.itemData.UserData[0].userId, "messageId":messageType, "roosterId":1, "roosterItemId":this.props.itemData.UserData[0].itemId
+                })
             });
+            fetch("http://localhost:5000/api/ziekMeld", {
+                method:'post', headers:{
+                    'content-type':'application/json', 'authToken':sessionStorage.getItem('authToken')
+                }, body:JSON.stringify({"roosterItemId":this.props.itemData.UserData[0].itemId, "status":(messageType == 0) ? 2 : 3})
+            });
+        } else {
+            console.log('Bad status '+this.props.itemData.UserData[0].status)
+        }
     };
 
-
-
     render() {
-        return(
-            <div className="column isideItem">
+        return (<div className="column isideItem">
                 <div className="row">
-                    <p className="onAccent noMargin">{new Date(this.props.itemData.beginTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}-{new Date(this.props.itemData.eindTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}</p>
-                    <details className="chooseMenu right" >
+                    <p className="onAccent noMargin">{new Date(this.props.itemData.beginTijd).toLocaleTimeString("nl-NL", {
+                        hour:"2-digit", minute:"2-digit"
+                    })}-{new Date(this.props.itemData.eindTijd).toLocaleTimeString("nl-NL", {
+                        hour:"2-digit", minute:"2-digit"
+                    })}</p>
+                    <details className="chooseMenu right">
                         <div>
-                            <OptionWithIcon icon="people-24px.svg" text="Vervanging regelen" onClick={() => this.ziekMelden(0)}/>
-                            <OptionWithIcon icon="local_hospital-24px.svg" text="Ziek melden" onClick={() => this.ziekMelden(1)}/>
+                            <OptionWithIcon icon="people-24px.svg" text="Vervanging regelen"
+                                            onClick={()=>this.ziekMelden(0)}/>
+                            <OptionWithIcon icon="local_hospital-24px.svg" text="Ziek melden"
+                                            onClick={()=>this.ziekMelden(1)}/>
                         </div>
                         <summary>
-                                <MoreOptions width={35} height={35} className="onAccent right"/>
+                            <MoreOptions width={35} height={35} className="onAccent right"/>
                         </summary>
                     </details>
                 </div>
-            </div>
-        )
+            </div>)
     }
-
 }
+
 export default WerknemerItem

@@ -307,7 +307,7 @@ app.post('/getRoosterAndPerson', auth, (req, res) => {
 app.post('/ziekMeld', auth, (req, res) => {
     console.log("Start ziekMeld");
     console.log(req.body.roosterItemId);
-    connection.query("UPDATE roosterItems SET state = 2 WHERE itemId = ?", [req.body.roosterItemId], (error, results, fields) =>{
+    connection.query("UPDATE roosterItems SET state = ? WHERE itemId = ?", [req.body.status, req.body.roosterItemId], (error, results, fields) =>{
         if(error){
             res.status(500).send(error);
             console.log('ziekMeld failed')

@@ -88,7 +88,7 @@ app.delete("/remove/:id",[auth,yourItem],(req, res) => {
 app.post("/get",auth,(req,res)=>{
     console.log("start get rooster");
     console.log(req.body);
-    connection.query(`select rI.*,CONCAT(firstName,' ',lastName) as naam,itemId from gebruiker join roosterItems rI on gebruiker.id = rI.userId where ${req.user.isWerkgever? "roosterId=(select roosterId from gebruiker where id=?)" : "gebruiker.id=?" } and (datum >= ?) and (datum <= ?) `,[req.user.id,req.body.beginDatum,req.body.eindDatum],(err,values)=>{
+    connection.query(`select rI.*,CONCAT(firstName,' ',lastName) as naam,itemId, state as status from gebruiker join roosterItems rI on gebruiker.id = rI.userId where ${req.user.isWerkgever? "roosterId=(select roosterId from gebruiker where id=?)" : "gebruiker.id=?" } and (datum >= ?) and (datum <= ?) `,[req.user.id,req.body.beginDatum,req.body.eindDatum],(err,values)=>{
         if(err){
             console.log("get rooster failed");
             res.status(500).send(err)
