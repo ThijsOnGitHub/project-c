@@ -43,7 +43,6 @@ app.post("/add",auth,(req,res)=>{
     }
 })
 
-//this tekst is for a commit
 
 app.post("/change/:id",[auth,yourItem],(req, res) => {
     console.log(req.body.beginTijd)
