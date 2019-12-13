@@ -13,7 +13,6 @@ export interface IProps {
     beginTijd:Date
     hourHeight:number
     height:number
-    datum:Date
 }
 
 export type DagData=Omit<IProps,'renderItems'>

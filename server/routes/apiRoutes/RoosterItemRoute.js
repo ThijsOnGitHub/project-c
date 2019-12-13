@@ -1,9 +1,9 @@
 const express = require('express');
 app=express.Router();
-const auth=require("../middleware/verifytoken");
-const yourItem=require("../middleware/itemOfWerkgever")
+const auth=require("../../middleware/verifytoken");
+const yourItem=require("../../middleware/itemOfWerkgever")
 var mysql = require('mysql');
-var {serverSecret}=require('../serverSecret');
+var {serverSecret}=require('../../serverSecret');
 var connection=mysql.createConnection(serverSecret.databaseLogin);
 
 
@@ -43,6 +43,7 @@ app.post("/add",auth,(req,res)=>{
     }
 })
 
+//this tekst is for a commit
 
 app.post("/change/:id",[auth,yourItem],(req, res) => {
     console.log(req.body.beginTijd)
