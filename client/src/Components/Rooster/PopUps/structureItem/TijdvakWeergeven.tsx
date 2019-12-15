@@ -1,7 +1,4 @@
-import React, {Component} from "react";
-import {itemComponentsData} from "../../roosterData";
-import {ReactComponent as Done} from "../../../../icons/done-24px.svg";
-import {ReactComponent as Create} from "../../../../icons/create-24px.svg";
+import React, {Component, ReactElement} from "react";
 import {Person} from "../Inroosteren/WerknemerInroosteren";
 import TextField from "@material-ui/core/TextField";
 import {Chip} from "@material-ui/core";
@@ -9,22 +6,19 @@ import Avatar from "@material-ui/core/Avatar";
 import {Autocomplete} from "@material-ui/lab";
 import Functions from "../../../../Extra Functions/functions";
 import {roosterStructuurItemData} from "../../../../Pages/Rooster";
-import LosItemWijzigen from "../WijzigTijden/LosItemWijzigen";
+import DagoverzichtRooster, {WerknemerRenderObject} from "../../RoosterStructuur/DagoverzichtRooster";
+import RoosterItem from "../../RoosterItems/RoosterItem";
+import {DagData} from "../../RoosterStructuur/DagField";
+
 
 interface IProps {
     RoosterData:roosterStructuurItemData
     apiLink:string
     close:()=>void
-    add:(component:React.ReactElement<any, string | React.JSXElementConstructor<any>>)=>void
+    add:(component:React.ReactElement)=>void
 }
 
 export interface IState {
-    beginTijd:string
-    eindTijd:string
-    datum:Date
-    werkNemers:{userId:number,naam:string,beginTijd:string,eindTijd:string,itemId:number}[]
-    edit:boolean
-    validToSubmit:boolean
     names:Person[]
     newNames:Person[]
     selectedNames:Person[],
@@ -38,22 +32,19 @@ class TijdvakWeergeven extends Component<IProps,IState>{
     constructor(props:IProps){
         super(props)
         this.state={
-            beginTijd:"",
-            eindTijd:"",
-            datum:new Date(),
-            werkNemers:[],
-            edit:false,
-            validToSubmit:true,
             names:[],
             newNames:[],
             selectedNames:[],
-            inroosteren:false
+            inroosteren:false,
         }
         this.beginTijd=React.createRef()
         this.eindTijd=React.createRef()
     }
 
-
+    componentDidMount=async()=> {
+        await this.getUsers()
+        this.updateNewNames()
+    }
 
     getUsers= async ()=>{
         const result=await fetch(this.props.apiLink+"/GetMedewerkers",{headers:{authToken:sessionStorage.getItem("authToken")}})
@@ -62,9 +53,8 @@ class TijdvakWeergeven extends Component<IProps,IState>{
     }
 
     updateNewNames=async ()=>{
-        console.log(this.state.werkNemers)
         const personList=this.state.names.filter(value => {
-            return !this.state.werkNemers.some(value1 => value1.userId===value.id)
+            return !this.props.RoosterData.werknemers.some(value1 => value1.userId===value.id)
         })
         await this.setState({newNames:personList})
     }
@@ -80,9 +70,9 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    date: new Date(this.state.datum),
-                    beginTijd: this.state.beginTijd + ":00",
-                    eindTijd: this.state.eindTijd + ":00",
+                    date: new Date(this.props.RoosterData.datum),
+                    beginTijd: new Date(this.props.RoosterData.beginTijd).toLocaleTimeString(),
+                    eindTijd: new Date(this.props.RoosterData.eindTijd).toLocaleTimeString(),
                     users: names.map(value => value.id)
                 })
             })
@@ -93,63 +83,23 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                 var objects = names.map((value, index) => {
                     return Object.assign(value,{itemId:itemIds[index]})
                 });
-                this.setState(oldState=>{
-                    objects.forEach(value =>{
-                        oldState.werkNemers.push({beginTijd:this.state.beginTijd,eindTijd:this.state.eindTijd,naam:value.naam,itemId:value.itemId,userId:value.id})
-                    })
-                    return {selectedNames:[],werkNemers:oldState.werkNemers,inroosteren:false}},this.updateNewNames
-                )
+        this.setState({inroosteren:false,selectedNames:[]})
+    }
 
-      }
 
-    addGebruiker=()=>{
-        var werknemersNieuw=this.state.werkNemers
-        this.state.selectedNames.forEach((value,index) => {
-
+    getRenderdItems=():WerknemerRenderObject[]=>{
+        console.log(this.props.RoosterData.werknemers)
+        return this.props.RoosterData.werknemers.map(value => {
+            return {userId:value.userId,itemId:value.itemId,naam:value.naam,beginTijd:value.beginTijd,eindTijd:value.eindTijd,status:0,"function":
+                    (roosterData:DagData):ReactElement<RoosterItem>=>{
+                        return (
+                            <RoosterItem  roosterData={roosterData} beginTijd={value.beginTijd} eindTijd={value.eindTijd}>
+                                <div style={{backgroundColor:"var(--accent)",width:"100%",height:50}}></div>
+                            </RoosterItem>
+                        )}
+            }
         })
     }
-
-     componentDidMount=async ()  =>{
-        var userData=this.props.RoosterData.werknemers.map(value => {
-            return Object.assign(value,{beginTijd:new Date(this.props.RoosterData.beginTijd).toLocaleTimeString('nl-NL',{hour:"2-digit",minute:"2-digit"}),eindTijd:new Date(this.props.RoosterData.eindTijd).toLocaleTimeString('nl-NL',{hour:"2-digit",minute:"2-digit"})})
-        })
-        this.setState({
-            beginTijd:new Date(this.props.RoosterData.beginTijd).toLocaleTimeString('nl-NL',{hour:"2-digit",minute:"2-digit"}),
-            eindTijd:new Date(this.props.RoosterData.eindTijd).toLocaleTimeString('nl-NL',{hour:"2-digit",minute:"2-digit"}),
-            datum:new Date(this.props.RoosterData.datum),
-            werkNemers:userData
-        })
-        await this.getUsers()
-        this.updateNewNames()
-    }
-
-    handleInputChange=(event:React.ChangeEvent<HTMLInputElement>)=> {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        //: target.type=== 'time'? new Date(target.value)
-
-        if(target.checkValidity()){
-            this.setState({validToSubmit:true})
-        }else{
-            this.setState({validToSubmit:false})
-        }
-
-        this.setState<never>({
-            [name]: value
-        });
-    }
-
-    changeState=(functie:(oldState:IState)=>Partial<IState>)=>{
-       this.setState<never>((oldstate)=>{return functie(oldstate)},() => {
-           this.updateNewNames()
-           if(this.state.werkNemers.length===0){
-               this.props.close()
-           }
-       })
-    }
-
-
 
     render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
         return (
@@ -164,7 +114,7 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                             Datum:
                         </td>
                         <td>
-                            {this.state.datum.toLocaleDateString()}
+                            {new Date(this.props.RoosterData.datum).toLocaleDateString()}
                         </td>
                     </tr>
                     <tr>
@@ -185,7 +135,7 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                         </td>
                         <td>
                             <div className="row">
-                                <p>{this.state.beginTijd} - {this.state.eindTijd}</p>
+                                <p>{new Date(this.props.RoosterData.beginTijd).toLocaleTimeString()} - {new Date(this.props.RoosterData.eindTijd).toLocaleTimeString()}</p>
                             </div>
                         </td>
                     </tr>
@@ -226,7 +176,6 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                                 (this.state.inroosteren || this.state.selectedNames.length===0)  ||
                                 <button className="Button" onClick={ event => {
                                     this.inroosteren()
-                                    this.updateNewNames()
                                 }} >inroosteren</button>
                             }
 
@@ -234,9 +183,16 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                     </tr>
                     </tbody>
                 </table>
-                <table className="maxFullHeight overFlowAuto thinScrollBar minHeight">
+                {
 
+                 <table className="maxFullHeight overFlowAuto thinScrollBar minHeight">
+                    <DagoverzichtRooster  addPopUp={this.props.add} closePopUp={this.props.close} apiLink={this.props.apiLink} eindTijd={new Date(0,0,0,23,59,59)} beginTijd={new Date(0,0,0,0,0,0)} width={700} markerInterval={new Date(0,0,0,2)} renderItems={
+                        this.getRenderdItems()
+                    }/>
                 </table>
+
+                }
+
                 <button className="Button" onClick={this.props.close} >Sluiten</button>
             </div>
         )

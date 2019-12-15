@@ -22,7 +22,6 @@ import StructureItem from "../Components/Rooster/RoosterItems/StructureItem";
 import TijdvakWeergeven from "../Components/Rooster/PopUps/structureItem/TijdvakWeergeven";
 
 
-
 interface roosterStructuurData{
     id:number
     roosterid:number
@@ -40,7 +39,7 @@ interface IState {
     agendaJSON:fullRenderItem,
     beginDatum:Date,
     loading:boolean
-    popUpStack:React.ReactElement<any, string | React.JSXElementConstructor<any>>[]
+    popUpStack:React.ReactElement[]
     minTijd:Date
     maxTijd:Date
     roosterStructuurData:roosterStructuurData[]
@@ -72,6 +71,7 @@ class Rooster extends Component<IProps,IState>{
 
     refreshRooster=async ()=>{
         var renderdAgendaJSON:sortedData<roosterItemRenderFunc>
+
         //Hier wordt de data uit de server gehaald en in de state gezet
         this.setState({loading:true})
         var res=await fetch(this.props.apiLink+"/rooster/get",{
@@ -90,7 +90,6 @@ class Rooster extends Component<IProps,IState>{
         }
 
         var roosterData=new RoosterData(agendaJSON)
-
 
         this.setState({minTijd:roosterData.minTijd,maxTijd:roosterData.maxTijd})
 
@@ -127,13 +126,14 @@ class Rooster extends Component<IProps,IState>{
                     }
                 })
             })
+            console.log(itemsInTheWeek)
             var itemsInTheWeekRender=Object.assign({},itemsInTheWeek)
             var renderObject:sortedData<roosterItemRenderFunc>={}
             Object.entries(itemsInTheWeekRender).forEach(value => {
                 renderObject[value[0]]={}
                     Object.entries(value[1]).forEach(value1 => {
-                        var renderData=this.retrurnStructureItem(value1[1])
-                        renderObject[value[0]][value1[0]]=renderData
+                        console.log(value[1])
+                        renderObject[value[0]][value1[0]]=this.retrurnStructureItem(value1[1])
                     })
                 }
             )
@@ -147,7 +147,6 @@ class Rooster extends Component<IProps,IState>{
                 agendaJSON:renderdAgendaJSON,
             })
         })
-
         this.setState({loading:false})
     };
 
@@ -164,8 +163,7 @@ class Rooster extends Component<IProps,IState>{
         )
     };
 
-
-
+    
 
     updateRoosterStructure=async ()=>{
         const structuur=await fetch(this.props.apiLink+ "/RoosterStructuur/get",{
@@ -214,7 +212,9 @@ class Rooster extends Component<IProps,IState>{
             )})
     };
 
-    addPopUp=(item:React.ReactElement<any, string | React.JSXElementConstructor<any>>)=>{
+
+
+    addPopUp=(item:React.ReactElement)=>{
         this.setState(oldState=>{
             oldState.popUpStack.push(item)
             return {popUpStack:oldState.popUpStack}
@@ -235,7 +235,7 @@ class Rooster extends Component<IProps,IState>{
                     {
                         this.state.popUpStack.length!==0 &&
                         <PopUp>
-                            {this.state.popUpStack[0]}
+                            {this.state.popUpStack[this.state.popUpStack.length-1]}
                         </PopUp>
                     }
                     <div className='row'>

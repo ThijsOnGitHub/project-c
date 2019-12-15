@@ -2,7 +2,8 @@ class Functions{
 
     static  timeStringToDate = (timeString:string):Date=>{
         var timeList = timeString.split(":")
-        return new Date(0,0,0,parseInt(timeList[0]),parseInt(timeList[1]),parseInt(timeList[2]))
+        var date=new Date(0,0,0,parseInt(timeList[0]),parseInt(timeList[1]),parseInt(timeList.length>2?timeList[2]:"0"))
+        return date
     }
 
 

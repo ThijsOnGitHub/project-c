@@ -1,7 +1,7 @@
 import React from "react";
 import {roosterStructuurItemData} from "../../../Pages/Rooster";
 import {ReactComponent as CreateIcon} from "../../../icons/create-24px.svg";
-import {itemComponentsData} from "../roosterData";
+
 
 
 interface IState {
@@ -25,7 +25,6 @@ class StructureItem extends React.Component<IProps,IState>{
             changeRef:true
         }
         this.changeFuncties=()=>{
-            console.log()
             this.setState({changeRef:true})
         }
     }
