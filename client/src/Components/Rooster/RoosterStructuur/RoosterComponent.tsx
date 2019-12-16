@@ -1,14 +1,10 @@
-import React, {ReactElement} from 'react'
-import DagField, {DagData} from "./DagField";
+import React from 'react'
+import DagField from "./DagField";
 import TimeMarker from "./TimeMarker";
 import '../Rooster.css'
 import DagTitel from "./DagTitel";
-import RoosterItem from "../RoosterItems/RoosterItem";
 import {TimeMarkerTypes} from './TimeMarkerTypes';
 import {fullRenderItem} from "../roosterData";
-
-
-
 
 interface IProps {
     startDate:Date
@@ -18,7 +14,6 @@ interface IProps {
     markerInterval:Date
     renderItems:fullRenderItem
 }
-
 
 /*
     Dit component zorgt dat er een timemarker aan de linkerkant komt en er 7 dagen daarnaast staan
@@ -48,20 +43,18 @@ class RoosterComponent extends React.Component<IProps>{
                     </div>
                     <div className="roosterVelden ">
                         {/*Hier wordt de zijkant met de tijden gegenereerd  */}
-                    <TimeMarker type={TimeMarkerTypes.time} interval={this.props.markerInterval} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} />
+                    <TimeMarker type={TimeMarkerTypes.time} interval={this.props.markerInterval} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} lengte={this.props.height} />
                     <div className="row dag dagTijden">
                     {
-                        datums.map(value => <DagField  datum={value} renderItems={
+                        datums.map(value => <DagField renderItems={
                             /* *1 Hier worden alle roosterItems verdeeld over de dagen d.m.v. de datum die in het object stond */
                             this.props.renderItems[value.toISOString()]||{}
 
-                        } beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} height={this.props.height} markerInterval={this.props.markerInterval}/>)
+                        } beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} lengte={this.props.height} markerInterval={this.props.markerInterval}/>)
                     }
                     </div>
                     </div>
                 </div>
-
-
             </div>
             )
     }

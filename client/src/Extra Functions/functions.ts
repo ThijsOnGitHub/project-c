@@ -1,5 +1,12 @@
 class Functions{
-    
+
+    static  timeStringToDate = (timeString:string):Date=>{
+        var timeList = timeString.split(":")
+        var date=new Date(0,0,0,parseInt(timeList[0]),parseInt(timeList[1]),parseInt(timeList.length>2?timeList[2]:"0"))
+        return date
+    }
+
+
     static range = (max:number,min?:number):number[] => {
 
         var lijst= Array.from(Array(max+1-(min||0)).keys())

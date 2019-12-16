@@ -9,21 +9,40 @@ import WerkgeverItem from "../Components/Rooster/RoosterItems/WerkgeverItem";
 import PopUp from "../Components/Rooster/PopUps/PopUp";
 import ItemWijzigen from "../Components/Rooster/PopUps/WijzigTijden/ItemWijzigen";
 import RoosterData, {
+    BeginEindTijd,
     fullRenderItem,
     itemComponentsData,
     roosterItemRenderFunc
 } from "../Components/Rooster/roosterData";
 import OptionWithIcon from "../Components/OptionWithIcon";
 import WerknemerInroosteren from "../Components/Rooster/PopUps/Inroosteren/WerknemerInroosteren";
+import {sortDataOnTime, sortedData} from "../Components/Rooster/RoosterStructuur/sortData";
+import Functions from "../Extra Functions/functions";
+import StructureItem from "../Components/Rooster/RoosterItems/StructureItem";
+import TijdvakWeergeven from "../Components/Rooster/PopUps/structureItem/TijdvakWeergeven";
+
+
+interface roosterStructuurData{
+    id:number
+    roosterid:number
+    dagNummer:number
+    titel: string
+    aantalWerknemers:number
+    beginTijd:string
+    eindTijd:string
+    color:string
+}
+export type roosterStructuurItemData=roosterStructuurData & {werknemers:{beginTijd:Date,eindTijd:Date,naam:string,userId:number,itemId:number}[],datum:string,beginTijd:string,eindTijd:string}
+
 
 interface IState {
     agendaJSON:fullRenderItem,
     beginDatum:Date,
     loading:boolean
-    popUp:boolean
-    popUpContent:React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined
+    popUpStack:React.ReactElement[]
     minTijd:Date
     maxTijd:Date
+    roosterStructuurData:roosterStructuurData[]
 }
 
 interface IProps {
@@ -39,16 +58,22 @@ class Rooster extends Component<IProps,IState>{
             agendaJSON:{},
             beginDatum:new Date(),
             loading:true,
-            popUp:false,
-            popUpContent:<p>hallo</p>,
+            popUpStack:[],
             maxTijd:new Date(),
-            minTijd:new Date()
+            minTijd:new Date(),
+            roosterStructuurData:[]
         }
     }
 
+    componentDidMount=async ()=> {
+        this.updateRoosterStructure()
+    }
 
     refreshRooster=async ()=>{
+        var renderdAgendaJSON:sortedData<roosterItemRenderFunc>
+
         //Hier wordt de data uit de server gehaald en in de state gezet
+        this.setState({loading:true})
         var res=await fetch(this.props.apiLink+"/rooster/get",{
             method:"POST",
             headers:{
@@ -65,15 +90,64 @@ class Rooster extends Component<IProps,IState>{
         }
 
         var roosterData=new RoosterData(agendaJSON)
-        this.setState({minTijd:roosterData.minTijd,maxTijd:roosterData.maxTijd})
-        var renderdAgendaJSON=roosterData.getRenderdItems(this.retrurnRenderdItems)
 
-        this.setState({agendaJSON:{}},() => {
+        this.setState({minTijd:roosterData.minTijd,maxTijd:roosterData.maxTijd})
+
+        if(this.props.isWerkgever){
+            var copyData=this.state.roosterStructuurData.map(value => Object.assign({},value))
+            var sturctureData= copyData.map(value => {
+                var amountToAdd=(((value.dagNummer-1)%7)+7)%7
+                var datum=new Date(this.state.beginDatum.getTime()+amountToAdd*86400000)
+                var beginTijd=Functions.timeStringToDate(value.beginTijd).toJSON()
+                var eindTijd=Functions.timeStringToDate(value.eindTijd).toJSON()
+                var data=Object.assign(value,{datum:datum.toJSON(),werknemers:[],beginTijd:beginTijd,eindTijd:eindTijd})
+                return data
+            })
+            var itemsInTheWeek=sortDataOnTime(sturctureData)
+            Object.keys(itemsInTheWeek).forEach(value => {
+                var tijdItems=itemsInTheWeek[value]
+                var roosterItems=roosterData.data[value]
+                Object.keys(tijdItems).forEach(value1 => {
+                    var tijd=value1
+                    //Er komen geen structuur items tegelijkertijd
+                    var item=tijdItems[tijd]
+                    if(roosterItems !== undefined){
+                        var werknemersLijst=Object.entries(roosterItems)
+
+                        var tijden1=new BeginEindTijd(tijd)
+                        werknemersLijst.forEach(value2 => {
+                            var tijden2=new BeginEindTijd(value2[0])
+                            if(!(tijden1.beginTijdWaarde>=tijden2.eindTijdWaarde||tijden1.eindTijdWaarde<=tijden2.beginTijdWaarde)){
+                                value2[1].forEach(value3 => {
+                                    item.werknemers.push({beginTijd:tijden2.beginTijd,eindTijd:tijden2.eindTijd,userId:value3.userId,itemId:value3.itemId,naam:value3.naam})
+                                })
+                            }
+                        })
+                    }
+                })
+            })
+            console.log(itemsInTheWeek)
+            var itemsInTheWeekRender=Object.assign({},itemsInTheWeek)
+            var renderObject:sortedData<roosterItemRenderFunc>={}
+            Object.entries(itemsInTheWeekRender).forEach(value => {
+                renderObject[value[0]]={}
+                    Object.entries(value[1]).forEach(value1 => {
+                        console.log(value[1])
+                        renderObject[value[0]][value1[0]]=this.retrurnStructureItem(value1[1])
+                    })
+                }
+            )
+            renderdAgendaJSON=renderObject
+        }else{
+            renderdAgendaJSON=roosterData.getRenderdItems(this.retrurnRenderdItems)
+        }
+
+        await this.setState({agendaJSON:{}},() => {
             this.setState({
                 agendaJSON:renderdAgendaJSON,
-                loading:false
             })
         })
+        this.setState({loading:false})
     };
 
 
@@ -89,41 +163,79 @@ class Rooster extends Component<IProps,IState>{
         )
     };
 
+    
+
+    updateRoosterStructure=async ()=>{
+        const structuur=await fetch(this.props.apiLink+ "/RoosterStructuur/get",{
+            headers:{
+                authToken:sessionStorage.getItem("authToken")
+            }
+        })
+        const jsonStructuur:roosterStructuurData[]=await structuur.json()
+        await this.setState({roosterStructuurData:jsonStructuur})
+        this.refreshRooster()
+    }
+
+
+
+
+
     //Hier wordt gekozen welke items er moeten worden gegenereerd
     retrurnRenderdItems=(value:itemComponentsData,width?:string,startWidth?:string):roosterItemRenderFunc=>{
         return ((roosterData:DagData):ReactElement<RoosterItem>=>{
             return (
                 <RoosterItem  roosterData={roosterData} startWidth={startWidth} width={width} beginTijd={new Date(value.beginTijd)} eindTijd={new Date(value.eindTijd)}>
-                    {/* Hier komen de items in het rooster component*/}
-                    {
-                        this.props.isWerkgever?
-                            <WerkgeverItem
-                                onClick={event => {this.setState({popUp:true,
-                                //Als er op dit element wordt geklikt wordt de pop-up gevult met een element waarmee Actie Worden Uitgevoerd
-                                popUpContent:<ItemWijzigen close={this.closePopUp} RoosterData={value} apiLink={this.props.apiLink} />
-                            })}}
-                                apiLink={this.props.apiLink} itemData={value} />
-                            :
-                            <WerknemerItem itemData={value}/>
-                    }
+                {/* Hier komen de items in het rooster component*/}
+            {
+                this.props.isWerkgever?
+                    <WerkgeverItem
+                        onClick={event => {
+                            this.addPopUp(<ItemWijzigen close={this.closePopUp} RoosterData={value} apiLink={this.props.apiLink} />)
+                        }}
+                        apiLink={this.props.apiLink} itemData={value} />
+                    :
+                    <WerknemerItem itemData={value}/>
+            }
 
+        </RoosterItem>
+            )})
+    };
+
+    retrurnStructureItem=(value:roosterStructuurItemData,width?:string,startWidth?:string):roosterItemRenderFunc=>{
+        return ((roosterData:DagData):ReactElement<RoosterItem>=>{
+            return (
+                <RoosterItem  roosterData={roosterData} startWidth={startWidth} width={width} beginTijd={new Date(value.beginTijd)} eindTijd={new Date(value.eindTijd)}>
+                    <StructureItem onClick={() => {
+                        this.addPopUp(<TijdvakWeergeven RoosterData={value} apiLink={this.props.apiLink} close={this.closePopUp} add={this.addPopUp}/> )
+                    }} apiLink={this.props.apiLink} {...value}/>
                 </RoosterItem>
             )})
     };
 
 
+
+    addPopUp=(item:React.ReactElement)=>{
+        this.setState(oldState=>{
+            oldState.popUpStack.push(item)
+            return {popUpStack:oldState.popUpStack}
+        })
+    }
+
     closePopUp=()=>{
        this.refreshRooster()
-       this.setState({popUp:false})
+       this.setState(oldState=>{
+           oldState.popUpStack.pop()
+           return {popUpStack:oldState.popUpStack}
+       })
     };
 
     render() {
         return (
                 <div>
                     {
-                        this.state.popUp &&
+                        this.state.popUpStack.length!==0 &&
                         <PopUp>
-                            {this.state.popUpContent}
+                            {this.state.popUpStack[this.state.popUpStack.length-1]}
                         </PopUp>
                     }
                     <div className='row'>
@@ -133,7 +245,10 @@ class Rooster extends Component<IProps,IState>{
                             this.props.isWerkgever &&
                                 <div className="row">
                                     <button className="noHorPadding Button onAccent" onClick={event => {
-                                        this.setState({popUp:true,popUpContent:<WerknemerInroosteren apiLink={this.props.apiLink} close={this.closePopUp}/>})
+                                        this.setState(oldState=>{
+                                            oldState.popUpStack.push(<WerknemerInroosteren apiLink={this.props.apiLink} close={this.closePopUp}/>)
+                                            return {popUpStack:oldState.popUpStack}
+                                        })
                                     }} ><OptionWithIcon imgClass="onAccentFilter" icon={"person.svg"} text={"Werknemer Inroosteren"}/>
                                     </button>
                                 </div>
