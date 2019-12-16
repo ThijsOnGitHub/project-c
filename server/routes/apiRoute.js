@@ -2,13 +2,11 @@ const express = require('express');
 app = express.Router();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const roosterItemRoute = require('./RoosterItemRoute');
 const accountRoute = require('./accountRoute');
-const roosterItemRoute = require('./apiRoutes/RoosterItemRoute');
 const multer = require('multer');
 const auth=require("../middleware/verifytoken");
 const yourItem=require("../middleware/itemOfWerkgever");
-const roosterStructuur=require("./apiRoutes/RoosterStructuur");
-const accountRoute = require('./accountRoute');
 
 var mysql = require('mysql');
 var {serverSecret}=require('../serverSecret');
@@ -351,9 +349,6 @@ app.post('/delNotif', auth, (req, res) => {
 
 app.use("/rooster", roosterItemRoute);
 app.use("/account", accountRoute);
-app.use("/rooster",roosterItemRoute);
-app.use("/roosterstructuur",roosterStructuur);
-
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports=app;
