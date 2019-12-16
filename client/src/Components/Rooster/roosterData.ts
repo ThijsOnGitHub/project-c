@@ -196,7 +196,7 @@ class RoosterData {
                 var datumVak=returnObject[value.datum];
                 if(this.beginEindString(value.beginTijd,value.eindTijd) in datumVak){
                     var tijdVak=datumVak[this.beginEindString(value.beginTijd,value.eindTijd)];
-                    tijdVak.push({userId:value.userId,naam:value.naam,itemId:value.itemId})
+                    tijdVak.push({userId:value.userId,naam:value.naam,itemId:value.itemId,status:value.status})
                 }else{
                     if(new Date(value.beginTijd).getTime()<this.minTijd.getTime()){
                         this.minTijd=new Date(value.beginTijd)
@@ -204,7 +204,7 @@ class RoosterData {
                     if(new Date(value.eindTijd).getTime()>this.maxTijd.getTime()){
                         this.maxTijd=new Date(value.eindTijd)
                     }
-                    datumVak[this.beginEindString(value.beginTijd,value.eindTijd)]=[{userId:value.userId,naam:value.naam,itemId:value.itemId}]
+                    datumVak[this.beginEindString(value.beginTijd,value.eindTijd)]=[{userId:value.userId,naam:value.naam,itemId:value.itemId,status:value.status}]
                 }
             }else{
                 if(new Date(value.beginTijd).getTime()<this.minTijd.getTime()){
@@ -213,7 +213,7 @@ class RoosterData {
                 if(new Date(value.eindTijd).getTime()>this.maxTijd.getTime()){
                     this.maxTijd=new Date(value.eindTijd)
                 }
-                returnObject[value.datum]={[this.beginEindString(value.beginTijd,value.eindTijd)]:[{userId:value.userId,naam:value.naam,itemId:value.itemId}]}
+                returnObject[value.datum]={[this.beginEindString(value.beginTijd,value.eindTijd)]:[{userId:value.userId,naam:value.naam,itemId:value.itemId,status:value.status}]}
             }
 
         });
