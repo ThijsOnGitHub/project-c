@@ -4,9 +4,11 @@
   --accentColor:#622081;
   --negAccentColor:#ffffff;
   --lijnen:#6f6f6f ;
+  --font: 'Open Sans', 'sans-serif';
 }
 
 body{
+  font-family: var(--font);
   margin: 0;
   background: var(--background);
 }
@@ -26,7 +28,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   background: var(--accentColor);
   vertical-align: center;
 }
@@ -52,6 +54,8 @@ body{
   padding: 35px 0px 30px 100px;
 }
 
+
+
 .menu li .menuItem {
   display: inline-block;
   color: white;
@@ -62,7 +66,26 @@ body{
 .menu li .menuItem:hover {color: #c5a4d5;}
 .menu .menuItem.active {color: #af71cc;}
 
+.heightTable table{
+  display: block;
+}
 
+.minHeight{
+  min-height: 120px;
+}
+
+.hunderMaxHeight{
+   display: flex;
+  flex-direction: column;
+   max-height: 100%;
+ }
+.fullDiv{
+  height: 100%;
+}
+.overFlowAuto{
+  overflow-y: auto;
+  width: max-content;
+}
 
 .noDecoration{
   text-decoration: none;
@@ -79,13 +102,13 @@ body{
 .underlay h1{
   font-size: 25px;
   padding-top: 7px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   color: white;
   text-align: center;
   font-weight: 400;
 }
 .weighted{
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   font-weight: 700;
 }
 
@@ -105,7 +128,7 @@ body{
   color: black;
   padding: 10px;
   width:max-content;
-  z-index: 99;
+  z-index: 2;
 }
 .chooseMenu > summary::-webkit-details-marker {
   display: none;
@@ -170,7 +193,6 @@ position: fixed;
 
 body{
   margin: 0;
-    min-width: 750px;
 }
 
 
@@ -186,14 +208,14 @@ body{
 .underlay h1{
   font-size: 25px;
   padding-top: 7px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   color: white;
   text-align: center;
   font-weight: 400;
 }
 
 .weighted{
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   font-weight: 700;
 }
 
@@ -202,9 +224,15 @@ body{
 
 .onAccent{
     color:var(--negAccentColor);
-    fill:var(--negAccentColor)
-}
+    fill:var(--negAccentColor);
 
+}
+.onAccentFilter{
+  filter: invert(1);
+}
+.noTopMargin{
+  margin-top: 0;
+}
 
 /*---------------Login---------------*/
 #intro{
@@ -221,29 +249,9 @@ body{
   padding-top: 30px;
   padding-bottom: 40px;
 }
-input {
-  margin: auto;
-  border-radius: 50px;
-  width: 350px;
-  margin-bottom: 10px;
-  display: block;
-  padding: 15px 40px;
-  box-sizing: border-box;
-  border: 3px solid #ccc;
-  -webkit-transition: 0.5s;
-  transition: 0.5s;
-  outline: none;
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 400;
-  text-align: center;
-  color: #585858;
-  font-size: 18px;
-}
-input:focus {
-  border: 3px solid #555;
-}
+
 #intro table a{
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   font-weight: 800;
   text-decoration: none;
   text-align: right;
@@ -260,7 +268,7 @@ input:focus {
   color: white;
   padding: 15px;
   text-align: center;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   font-weight: 700;
   font-size: 25px;
   text-decoration: none;
@@ -293,7 +301,7 @@ button:hover {
   margin-top: -22px;
 }
 .top-menu h1{
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   color: white;
   text-align: center;
   display: block;
@@ -302,7 +310,7 @@ button:hover {
   padding-top: 45px;
 }
 .top-menu a{
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   text-decoration: none;
   color: white;
   display: inline-block;
@@ -325,13 +333,13 @@ nav {
 .underlay h1{
   font-size: 25px;
   padding-top: 7px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   color: white;
   text-align: center;
   font-weight: 400;
 }
 .weighted{
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   font-weight: 700;
 }
 
@@ -349,17 +357,23 @@ nav {
     display: flex!important;
     text-align: center;
     justify-content: center;
-    align-content: center;
-    margin-left: auto!important;
-    margin-right: auto!important;
+    align-items: center;
+  margin: auto;
 }
+
+
 
 #intro table{
   margin: auto;
   padding-top: 30px;
   padding-bottom: 40px;
 }
-input ,select{
+.MuiInputBase-input{
+  min-width: 100px!important;
+  width: auto!important;
+}
+
+form input,select,.styleInput input,input.styleInput{
   margin: auto;
   border-radius: 50px;
   /*width: fit-content;*/
@@ -371,13 +385,21 @@ input ,select{
   -webkit-transition: 0.5s;
   transition: 0.5s;
   outline: none;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   font-weight: 400;
   text-align: center;
   color: #585858;
   font-size: 18px;
 }
 
+
+form input{
+  width:350px;
+}
+
+form input:focus {
+  border: 3px solid #555;
+}
 select{
   border:none
 }
@@ -407,11 +429,9 @@ select  {
 
 }
 
-input:focus {
-  border: 3px solid #555;
-}
+
 #intro table a{
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   font-weight: 800;
   text-decoration: none;
   text-align: right;
@@ -428,7 +448,7 @@ input:focus {
   color: white;
   padding: 15px;
   text-align: center;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   font-weight: 700;
   font-size: 25px;
   text-decoration: none;
@@ -469,7 +489,7 @@ button:hover {
 }
 
 #reg table a {
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   font-weight: 800;
   text-decoration: none;
   text-align: right;
@@ -480,6 +500,74 @@ button:hover {
 #reg table a:hover {
   color: #af71cc;
 }
+/*
+table.werknemers {
+  border-collapse: collapse;
+  width: 10%;
+  text-align: right;
+
+  
+}
+
+table {
+  border-collapse: collapse;
+  width: 10%;
+  text-align: right;
+
+
+}
+
+
+
+
+table tbody td {
+  font-size: 12px;
+  word-spacing: inherit;
+  font-weight: bold;
+  color: #ffffff;
+}
+table td:nth-child(even){
+  background: #398AA4;
+}
+
+table thead{
+  background: #9932CC;
+  border-collapse: collapse;
+  text-align:left;
+
+}
+
+table thead th{
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align:left;
+  border-left: 2px solid #398AA4;
+}
+
+table tfoot td{
+  font-size: 13px;
+}
+
+
+table tfoot .links{
+  text-align: right;
+}
+
+table tfoot .links a{
+  display:inline-block;
+  background: #ffffff;
+  color: #398AA4;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+
+table#t01 {
+  width: 100%;
+  background-color: #f1f1c1;
+}
+*/
+
 
 #reg table button, #Login table button {
   background-color: #ad35d7;
@@ -487,7 +575,7 @@ button:hover {
   color: white;
   padding: 15px;
   text-align: center;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   font-weight: 700;
   font-size: 25px;
   text-decoration: none;
@@ -510,6 +598,13 @@ button:hover {
   border: 3px solid red;
 }
 .errorMessage{
+  color: red;
+}
+
+.error2 {
+  border: 3px solid red;
+}
+.error2Message{
   color: red;
 }
 /* Andere dingen */
@@ -541,6 +636,12 @@ button:hover {
 }
 
 .avatarMini{
+  min-width: 30px;
+  max-width: 30px;
+
+  min-height: 30px;
+  max-height: 30px;
+
   width: 30px;
   height: 30px;
 }
@@ -570,20 +671,40 @@ button:hover {
   padding: 7px;
   border-radius: 100000px;
   margin-right: 10px;
+  align-items: center;
 }
 
 .accountInformationMenu > p{
   margin: auto 5px;
 }
 
+
+.roosterItem{
+  color:var(--negAccentColor);
+
+}
+.roosterItem p{
+   margin-top: 0px;
+   margin-bottom: 0px;
+ }
+.roosterItem .name{
+margin-left: 5px;
+}
+
+
 .Button {
+  border: none;
   color: white;
   background: #622081;
   font-weight: bold;
-  padding: 10px;
+  padding:  10px;
   border-radius: 500px;
   margin: 10px;
   text-align: center;
+}
+.noHorPadding{
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .Home figure {
@@ -681,6 +802,11 @@ button:hover {
   font-weight: 600;
 }
 
+.noVertMargin{
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .rightValue{
   color: grey;
   width: 250px;
@@ -701,7 +827,7 @@ button:hover {
   -webkit-transition: 0.5s;
   transition: 0.5s;
   outline: none;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font);
   font-weight: 400;
   text-align: left;
   color: #585858;
@@ -709,4 +835,31 @@ button:hover {
 }
 #account input:focus{
   border: 2px solid #ccc;
+}
+
+.thinScrollBar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.thinScrollBar::-webkit-scrollbar-button{
+  height: 5px;
+}
+/* Track */
+.thinScrollBar::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #e2e2e2;
+}
+
+/* Handle */
+.thinScrollBar::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.thinScrollBar::-webkit-scrollbar-thumb:hover{
+  background: #555;
+}
+.thinScrollBar::-webkit-scrollbar-corner{
+  display: none;
 }
