@@ -27,7 +27,7 @@ class LosItemWijzigen extends Component<IProps,IState>{
 
 
     constructor(props:IProps){
-        super(props)
+        super(props);
         this.state={
             edit:false,
             validToSubmit:true,
@@ -52,12 +52,12 @@ class LosItemWijzigen extends Component<IProps,IState>{
         }
 
         this.props.changeHigherState(oldState=>{
-            var werknemer=oldState.werkNemers[this.props.index]
+            var werknemer=oldState.werkNemers[this.props.index];
             // @ts-ignore
-            werknemer[name]=value
+            werknemer[name]=value;
             return {werkNemers:oldState.werkNemers}
         });
-    }
+    };
 
     render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
         return (
@@ -91,7 +91,7 @@ class LosItemWijzigen extends Component<IProps,IState>{
                             (this.state.edit?
                                 <Done onClick={async ()=>{
                                     if(this.state.validToSubmit) {
-                                        this.setState({edit: false})
+                                        this.setState({edit: false});
                                         await fetch(this.props.apiLink + "/rooster/change/" + this.props.itemId, {
                                             method: "POST",
                                             headers: {
@@ -104,8 +104,8 @@ class LosItemWijzigen extends Component<IProps,IState>{
                                             })
                                         })
                                     }else{
-                                        console.log("hello")
-                                        this.beginTijd.current.reportValidity()
+                                        console.log("hello");
+                                        this.beginTijd.current.reportValidity();
                                         this.eindTijd.current.reportValidity()
                                     }
                                 }} />

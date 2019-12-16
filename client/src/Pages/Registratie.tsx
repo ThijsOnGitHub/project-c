@@ -1,5 +1,6 @@
 import React, {MouseEventHandler} from 'react';
 import {Link} from "react-router-dom";
+import {Redirect} from 'react-router-dom';
 import ProfielFotoBijsnijder from "../Components/ProfielFotoBijsnijder";
 
 interface IState {
@@ -8,6 +9,8 @@ interface IState {
     lastName: string,
     email: string,
     pass: string,
+    secondPass: string,
+    secondPassSame: boolean,
     phone: string,
     birth: string,
     foto: string,
@@ -15,15 +18,23 @@ interface IState {
     roosterName: string,
     koppelCodeWerknemer: string,
     koppelCodeWerkgever: string,
+    // Feedback
+    registratieSucces: boolean,
+    addgebruikerSuccess: boolean,
+    addroosterSuccess: boolean,
+    checkemailSuccess: boolean,
+    koppelgebruikerSuccess: boolean,
     // Beschrijf de toegestane symbolen voor de inputvelden.
     letters: RegExp,
     numbers: RegExp,
+    passwords: RegExp,
     // Sla op of inputvelden al zijn aangeraakt door de gebruiker.
     touched: {
         firstName: boolean,
         lastName: boolean,
         email: boolean,
         pass: boolean,
+        secondPass: boolean,
         phone: boolean,
         birth: boolean,
         roosterName: boolean,
@@ -49,6 +60,8 @@ class Registratie extends React.Component<IProps,IState>{
             lastName: '',
             email: '',
             pass: '',
+            secondPass: '',
+            secondPassSame: false,
             phone: '',
             birth: '',
             foto: '',
@@ -56,15 +69,23 @@ class Registratie extends React.Component<IProps,IState>{
             roosterName: '',
             koppelCodeWerknemer: '',
             koppelCodeWerkgever: '',
-            // Beschrijf de toegestane symbolen voor de inputvelden.
-            letters: /^[A-Za-z]+$/,
-            numbers: /^[0-9]+$/,
+            // Feedback
+            registratieSucces: false,
+            addgebruikerSuccess: false,
+            addroosterSuccess: false,
+            checkemailSuccess: false,
+            koppelgebruikerSuccess: false,
+            // Beschrijf de toegestane symbolen voor de inputvelden. Geen spaties voor en na inputs, wel mogen in namen spaties zitten.
+            letters: /^[A-Za-z]?[A-Z\sa-z]*[A-Za-z]$/,
+            numbers: /^[^\s][0-9]+[^\s]$/,
+            passwords: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){6,}$/,
             // Sla op of inputvelden al zijn aangeraakt door de gebruiker.
             touched: {
                 firstName: false,
                 lastName: false,
                 email: false,
                 pass: false,
+                secondPass: false,
                 phone: false,
                 birth: false,
                 roosterName: false,
@@ -81,24 +102,37 @@ class Registratie extends React.Component<IProps,IState>{
     }
 
     componentDidMount() {
-        let value = this.generateKoppelCode();
-        this.setState({koppelCodeWerkgever: value});
+        this.generateKoppelCode();
     };
 
-    generateKoppelCode() {
-        let value = (Math.floor(Math.random() * 100000) + 1).toString();
-        return value;
-    }
+    generateKoppelCode = async () => {
+        // Genereer een willekeurige serie van nummers.
+        let value: string = (Math.floor(Math.random() * 100000 ) + 1).toString();
+
+        // Controlleer of de gegenereerde koppelcode al in de database staat.
+        let koppelcode: any = await fetch(this.props.apiLink + "/account/checkkoppelcode", {
+            headers: {'Content-Type': 'application/json'},
+            method: 'POST',
+            body: JSON.stringify({value})
+        }).then(res => res.json());
+
+        // Verwerk de feedback vanuit de server.
+        if (koppelcode.koppelCodeCheck == 0) {
+            this.setState({koppelCodeWerkgever: value});
+        } else if (koppelcode.koppelCodeCheck == 1) {
+            this.generateKoppelCode();
+        }
+    };
 
     // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
     canBeSubmitted() {
-        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCodeWerknemer);
+        const errors = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCodeWerknemer, this.state.secondPass);
         const isDisabled = Object.values(errors).some(value => value);
         return !isDisabled;
     }
 
     // Ververs de waarden wanneer deze veranderd worden door de gebruiker.
-    handleInputChange(event:React.ChangeEvent<HTMLInputElement>) {
+    handleInputChange = async (event:React.ChangeEvent<HTMLInputElement>) => {
         const target = event.target;
         // Laat de waarde de waarde zijn van het actieve veld. Als het input-type een checkbox is is de waarde of deze aangevinkt is of niet.
         const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -107,8 +141,23 @@ class Registratie extends React.Component<IProps,IState>{
         if (target.type === "file"){
             this.setState<never> ({[name+"File"]: target.files[0]})
         }
-        this.setState<never> ({[name]: value});
-    }
+
+        await this.setState<never> ({[name]: value});
+
+        // Voer een check uit of het ingevoerde email al in de database staat of niet wanneer het "email" inputveld wordt gewijzigd.
+        if (target.name === "email") {
+            this.checkEmail();
+        }
+
+        // Check of de waarden van het eerste en tweede wachtwoord gelijk zijn. Verander de state naar aanleiding van de uitkomst.
+        if(target.name === "pass" || target.name === "secondPass") {
+            if (this.state.secondPass == this.state.pass) {
+                await this.setState({secondPassSame: true});
+            } else {
+                await this.setState({secondPassSame: false})
+            }
+        }
+    };
 
     // Verander de waarde van touched voor een inputveld naar true.
     handleBlur = (field:string) => (event:React.FocusEvent) => {
@@ -117,13 +166,25 @@ class Registratie extends React.Component<IProps,IState>{
         });
     };
 
-    validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterName:string, koppelCodeWerknemer:string) {
+    checkEmail = async () => {
+        let email: any = await fetch(this.props.apiLink + "/account/checkemail", {
+            headers: {'Content-Type': 'application/json'},
+            method: 'POST',
+            body: JSON.stringify({email: this.state.email})
+        }).then(res => res.json());
+
+        this.setState({checkemailSuccess: email.emailCheck});
+    };
+
+    validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterName:string, koppelCodeWerknemer:string, secondPass:string) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
         return {
             firstName: firstName.length === 0 || firstName.length >= 30 || !firstName.match(this.state.letters),
             lastName: lastName.length === 0 || lastName.length >= 30 || !lastName.match(this.state.letters),
-            email: email.length === 0 || email.length >= 30,
-            pass: pass.length === 0 || pass.length >= 30,
+            // Controlleer hier of een email al aanwezig is in de database of niet door een nieuwe functie aan te roepen.
+            email: email.length === 0 || email.length >= 30 || this.state.checkemailSuccess,
+            pass: pass.length === 0 || !pass.match(this.state.passwords),
+            secondPass: secondPass.length === 0 || !this.state.secondPassSame,
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
             birth: birth.length === 0,
             roosterName: this.state.isWerkgever && roosterName.length === 0,
@@ -138,7 +199,8 @@ class Registratie extends React.Component<IProps,IState>{
         // Laat de data niet verstuurd worden wanneer de input validatie niet succesvol is.
         if (!this.canBeSubmitted()) {return;}
 
-        let wachten = await this.setState({blackCircle:false});
+        // Stel de informatie samen voor het toevoegen van de gebruiker.
+        await this.setState({blackCircle:false});
         let image = null;
         if (this.state.foto != "") {image = await this.state.getImage();}
 
@@ -150,33 +212,47 @@ class Registratie extends React.Component<IProps,IState>{
         });
 
         // Voeg de gebruiker toe aan de database.
-        console.log("sending");
-        await fetch(this.props.apiLink+"/addgebruiker",{
+        let addgebruiker: any = await fetch(this.props.apiLink+"/account/addgebruiker",{
             method:'POST',
             body:formData
-        }).then(value => console.log(value));
+        }).then(res => res.json());
+        // Verwerk de feedback vanuit de server.
+        this.setState({addgebruikerSuccess: addgebruiker.addgebruikerSuccess});
 
         // Maak een nieuw rooster aan in de database.
         if (this.state.isWerkgever) {
-            fetch(this.props.apiLink + "/addrooster", {
+            let addrooster: any = await fetch(this.props.apiLink + "/account/addrooster", {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
                 body: JSON.stringify({roosterName: this.state.roosterName, koppelCodeWerkgever: this.state.koppelCodeWerkgever, email: this.state.email})
-            });
+            }).then(res => res.json());
+            // Verwerk de feedback vanuit de server.
+            this.setState({addroosterSuccess: addrooster.addroosterSuccess});
         }
+
+        // Koppel een gebruiker aan het rooster dat bij zijn koppelcode hoort.
         if (!this.state.isWerkgever) {
-            fetch(this.props.apiLink + "/koppelgebruiker", {
+            let koppelgebruiker: any = await fetch(this.props.apiLink + "/account/koppelgebruiker", {
                 headers: {'Content-Type': 'application/json'},
                 method: 'PUT',
                 body: JSON.stringify({email: this.state.email, koppelCodeWerknemer: this.state.koppelCodeWerknemer})
-            });
+            }).then(res => res.json());
+            // Verwerk de feedback vanuit de server.
+            this.setState({koppelgebruikerSuccess: koppelgebruiker.koppelgebruikerSuccess})
+        }
+
+        // Geef door dat de registratie succesvol is wanneer...
+        if (this.state.isWerkgever && this.state.addgebruikerSuccess && this.state.addroosterSuccess) {
+            this.setState({registratieSucces: true});
+        } else if (!this.state.isWerkgever && this.state.addgebruikerSuccess && this.state.koppelgebruikerSuccess) {
+            this.setState({registratieSucces: true});
         }
     };
 
     // Verzamel de inputs van de gebruiker om die in de state op te slaan.
     render() {
-        type fields = {birth: boolean, email: boolean, firstName: boolean, lastName: boolean, pass: boolean, phone: boolean, roosterName: boolean, koppelCodeWerknemer: boolean}
-        const errors:fields = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCodeWerknemer);
+        type fields = {birth: boolean, email: boolean, firstName: boolean, lastName: boolean, pass: boolean, phone: boolean, roosterName: boolean, koppelCodeWerknemer: boolean, secondPass: boolean}
+        const errors:fields = this.validate(this.state.firstName, this.state.lastName, this.state.email, this.state.pass, this.state.phone, this.state.birth, this.state.roosterName, this.state.koppelCodeWerknemer, this.state.secondPass);
         const isDisabled = Object.values(errors).some(value => value);
 
         // Valideer of een fout getoond zou moeten worden.
@@ -241,6 +317,12 @@ class Registratie extends React.Component<IProps,IState>{
                                type='password' name="pass" value={this.state.pass} placeholder="Wachtwoord" onChange={this.handleInputChange}/></td>
                 </tr>
                 <tr>
+                    <label>Bevestiging wachtwoord</label>
+                    <td><input className={shouldMarkError('secondPass') ? "error" : ""}
+                               onBlur={this.handleBlur('secondPass')}
+                               type='password' name="secondPass" value={this.state.secondPass} placeholder="Wachtwoord" onChange={this.handleInputChange}/></td>
+                </tr>
+                <tr>
                     <label>Account voor werkgever</label>
                     <td><input type='checkbox' name="isWerkgever" checked={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange} /></td>
                 </tr>
@@ -268,6 +350,9 @@ class Registratie extends React.Component<IProps,IState>{
                 }
 
                 <button disabled={isDisabled} onClick={this.handleSubmit}>Registreer</button>
+                {
+                    this.state.registratieSucces && <Redirect to={{pathname: '/RegistratieFeedback'}}/>
+                }
 
                 </tbody>
             </table>

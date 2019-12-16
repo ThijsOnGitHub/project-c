@@ -500,6 +500,74 @@ button:hover {
 #reg table a:hover {
   color: #af71cc;
 }
+/*
+table.werknemers {
+  border-collapse: collapse;
+  width: 10%;
+  text-align: right;
+
+  
+}
+
+table {
+  border-collapse: collapse;
+  width: 10%;
+  text-align: right;
+
+
+}
+
+
+
+
+table tbody td {
+  font-size: 12px;
+  word-spacing: inherit;
+  font-weight: bold;
+  color: #ffffff;
+}
+table td:nth-child(even){
+  background: #398AA4;
+}
+
+table thead{
+  background: #9932CC;
+  border-collapse: collapse;
+  text-align:left;
+
+}
+
+table thead th{
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align:left;
+  border-left: 2px solid #398AA4;
+}
+
+table tfoot td{
+  font-size: 13px;
+}
+
+
+table tfoot .links{
+  text-align: right;
+}
+
+table tfoot .links a{
+  display:inline-block;
+  background: #ffffff;
+  color: #398AA4;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+
+table#t01 {
+  width: 100%;
+  background-color: #f1f1c1;
+}
+*/
+
 
 #reg table button, #Login table button {
   background-color: #ad35d7;
@@ -530,6 +598,13 @@ button:hover {
   border: 3px solid red;
 }
 .errorMessage{
+  color: red;
+}
+
+.error2 {
+  border: 3px solid red;
+}
+.error2Message{
   color: red;
 }
 /* Andere dingen */

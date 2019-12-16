@@ -1,18 +1,20 @@
 const express = require('express');
-app=express.Router();
+app = express.Router();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+
 const roosterItemRoute = require('./apiRoutes/RoosterItemRoute')
 const multer = require('multer');
 const auth=require("../middleware/verifytoken");
 const yourItem=require("../middleware/itemOfWerkgever")
 const roosterStructuur=require("./apiRoutes/RoosterStructuur")
+const accountRoute = require('./accountRoute');
+const yourItem=require("../middleware/itemOfWerkgever");
+
 
 var mysql = require('mysql');
 var {serverSecret}=require('../serverSecret');
 var connection=mysql.createConnection(serverSecret.databaseLogin);
-
-
 
 var storage= multer.diskStorage({
     destination: function(req,file,cb){
@@ -30,12 +32,6 @@ var storage= multer.diskStorage({
 
 var upload=multer({storage:storage});
 
-
-
-
-
-
-
 app.post("/addbedrijf",(req,res)=>{
     var data=req.body;
     console.log("posting:");
@@ -50,21 +46,19 @@ app.post("/addbedrijf",(req,res)=>{
     })
 });
 
-
-
 app.get("/avatar/:name",(req,res)=>{
     console.log(__dirname.split("/"));
     res.sendFile(__dirname.split("\\").slice(0,-1).join("\\")+"/uploads/"+req.params.name)
 });
 
-// ---------------- REGISTRATIE ----------------
+// ---------------- ACCOUNTS ----------------
 
 app.get("/avatarWithId/:id",(req,res)=>{
     connection.query("select profielFotoLink as avatar from gebruiker where id =?",[req.params.id],(err,values)=>{
         if(err){
             res.status(500).send(err)
         }else{
-            console.log(values)
+            console.log(values);
             if(values.length===0){
                 res.status(400)
             }else{
@@ -73,7 +67,7 @@ app.get("/avatarWithId/:id",(req,res)=>{
 
         }
     })
-})
+});
 
 app.get("/GetMedewerkers",auth, ((req, res) =>{
     if(req.user.isWerkgever){
@@ -83,107 +77,9 @@ app.get("/GetMedewerkers",auth, ((req, res) =>{
     }else{
         res.status(401).send("Je bent geen werkgever")
     }
-}))
-// Zend een POST request dat de data uit de front-end in de database krijgt en daarmee een nieuwe gebruiker aanmaakt.
-app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
-    let data = req.body;
-    let image = "defaultAvatar.png";
+}));
 
-    if (req.file !== undefined) {image = req.file.filename;}
-    data.pass = await bcrypt.hash(data.pass, 10 );
-console.log(data)
-    connection.query("INSERT INTO gebruiker (firstName, lastName, email, pass, phone, birth, profielFotoLink, isWerkgever) VALUES (?,?,?,?,?,?,?,?)",[data.firstName, data.lastName, data.email, data.pass, data.phone, data.birth,image ,data.isWerkgever==='true'],
-    (error, results, fields) => {
-        if (error) {
-            console.log(error);
-            res.status(422).json;
-            res.json({message:error});
-        } else {
-            res.status(201).send(data.firstName + " toegevoegd.");
-            console.log(data.firstName + " toegevoegd.");
-
-            // Hier wordt het verificatie-email verstuurd. Wanneer we ook op andere plekken email gaan gebruiken kan deze code centraler opgeslagen worden.
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: 'roosteritHRO@gmail.com',
-                    pass: 'hogeschoolr'
-                }
-            });
-
-            const mailOptions = {
-                from: 'roosteritHRO@gmail.com',
-                to: data.email,
-                subject: 'Verificatie RoosterIt',
-                html: ` 
-                <h1>Geachte meneer/mevrouw ${data.lastName},</h1><p>Volg deze link om uw registratie te voltooien:</p>
-                <p><a href='http://localhost:3000/emailverificatie/${data.email}'>Verifieer email</a></p>
-                `
-            };
-
-            transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email verstuurd: ' + info.response);
-                }
-            });
-        }
-    })
-});
-
-// Voeg een rooster toe aan de database met de verstuurde naam.
-app.post("/addrooster", (req, res) => {
-    let data = req.body;
-    connection.query("INSERT INTO rooster (roosterName) VALUES (?)", [data.roosterName], (error, results, fields) => {
-        if (error) {
-            console.log(error);
-            res.status(422);
-            res.json({message: error});
-        } else {
-            console.log("Rooster " + data.roosterName + " toegevoegd.");
-        }
-    });
-
-    // Haal het roosterId op van het zojuist aangemaakte rooster.
-    connection.query("SELECT roosterId FROM rooster WHERE roosterName = (?)", [data.roosterName], (error, results, fields) => {
-        let roosterId = results[0].roosterId;
-
-        // Voeg de gegenereerde koppelcode toe aan de database.
-        connection.query("INSERT INTO koppelCode (koppelCode, roosterId) VALUES (?,?)", [data.koppelCodeWerkgever, roosterId], (error, results, fields) => {
-            console.log("Koppelcode toegevoegd.");
-
-            // Update in de gebruikerstabel de werkgever met het roosterId van het rooster dat hij heeft aangemaakt.
-            connection.query("UPDATE gebruiker SET roosterId = ? WHERE email = ?", [roosterId, data.email], (error, results, fields) => {});
-        });
-    });
-});
-
-app.put("/koppelgebruiker", (req, res) => {
-    let data = req.body;
-
-    // Haal het roosterId op van het rooster dat bij de ingevoerde koppelcode hoort.
-    connection.query("SELECT roosterId FROM koppelCode WHERE koppelCode = ?", [data.koppelCodeWerknemer], (error, results, fields) => {
-       let roosterId = results[0].roosterId;
-
-        // Update in de gebruikerstabel de werknemer met het roosterId dat bij de ingevoerde koppelcode past.
-       connection.query("UPDATE gebruiker SET roosterId = ? WHERE email = ?", [roosterId, data.email], (error, results, fields) => {
-           console.log("Gebruiker gekoppeld aan rooster " + roosterId);
-       });
-    });
-});
-
-// Activeer een gebruiker in de database nadat deze de link in de verificatie-email heeft gevolgd.
-app.put("/activeergebruiker", (req, res) => {
-    let data = req.body;
-    console.log("Activeren gebruiker:");
-    connection.query("UPDATE gebruiker SET verificatie = 1 WHERE email = (?)", [data.email], (error, results, fields) =>{
-        res.json(results);
-        console.log("Gebruiker geactiveerd.");
-    });
-});
-
-// Update user
+// Update user via de accountpagina
 app.put("/updategebruiker",auth, (req, res) => {
     let data = req.body;
     console.log("Updaten gebruiker...:");
@@ -201,7 +97,7 @@ app.put("/updategebruiker",auth, (req, res) => {
 app.post("/addnotif",async (req, res) => {
     var data = req.body;
     console.log("Notificatie toevoegen: ");
-    connection.query("INSERT INTO Notifications (userId, messageType, roosterId) VALUES (?,?,?)", [data.person, data.messageId, data.roosterId],
+    connection.query("INSERT INTO Notifications (userId, messageType, roosterId, roosterItemId) VALUES (?,?,?,?)", [data.person, data.messageId, data.roosterId, data.roosterItemId],
         (error, results, fields) => {
             if (error) {
                 console.log(error);
@@ -217,7 +113,7 @@ app.post("/addnotif",async (req, res) => {
 
 app.get("/getnotifs", (req, res) => {
     console.log("Getting notifs...");
-    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id', [], (err, result, val) => {
+    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink, roosterItemId, Notifications.id AS notifId FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id ORDER BY Notifications.id DESC', [], (err, result, val) => {
         if (err !== null) {
             console.log(err);
             res.status(400).send()
@@ -225,6 +121,33 @@ app.get("/getnotifs", (req, res) => {
         res.json(result)
     })
 });
+
+app.get("/GetMedewerkers",auth, ((req, res) =>{
+
+   if(req.user.isWerkgever){
+       connection.query("SELECT id, firstName, lastName FROM gebruiker WHERE roosterid = 1", [], ( err, result, val) => {
+           res.json(result)
+       });
+   }
+
+}));
+
+app.post("/deleteUser",auth,((req,res) => {
+    console.log(req.body)
+    if(req.user.isWerkgever){
+        connection.query("DELETE FROM gebruiker WHERE id = ?  ", [req.body.id], (err,values,field)=>{
+            if(err){
+                res.status(500).send(err)
+            }else{
+                res.status(200).send()
+
+            }
+        })
+    }else{
+        res.status(401).send("Je bent geen werkgever")
+    }
+}));
+
 app.get("/getNextShift", auth, (req, res) => {
     console.log("Getting next shift...");
     var today = new Date();
@@ -232,7 +155,7 @@ app.get("/getNextShift", auth, (req, res) => {
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     today = yyyy + '/' + mm + '/' + dd;
-    connection.query('SELECT datum, beginTijd, eindTijd FROM roosterItems WHERE (datum > ?) AND (userId = ?) LIMIT 1', [today, req.user.id], (err, result, val) => {
+    connection.query('SELECT datum, beginTijd, eindTijd FROM roosterItems WHERE (datum > ?) AND (userId = ?) ORDER BY datum LIMIT 1', [today, req.user.id], (err, result, val) => {
         if (err !== null) {
             console.log(err);
             res.status(500).send()
@@ -243,6 +166,7 @@ app.get("/getNextShift", auth, (req, res) => {
         res.json(result)
     })
 });
+
 app.get("/getgebruikerinfo",auth,async (req,res)=>{
     console.log("Get user info");
     connection.query("SELECT firstName, lastName, email, phone, birth, profielFotoLink FROM roosterit.gebruiker where id= ?",[req.user.id], (error, results, fields) =>{
@@ -250,8 +174,63 @@ app.get("/getgebruikerinfo",auth,async (req,res)=>{
     });
 });
 
+
+app.post('/getRoosterAndPerson', auth, (req, res) => {
+    console.log("Getting sick person's data...");
+    connection.query("SELECT concat(firstName, ' ', lastName) as naam, beginTijd, eindTijd, datum FROM roosterit.Notifications LEFT JOIN roosterItems rI on Notifications.roosterItemId = rI.itemId LEFT JOIN gebruiker g on Notifications.userId = g.id WHERE Notifications.roosterItemId = ?", [req.body.roosterItemId], (error, results, fields) =>{
+        console.log(results);
+        res.json(results[0])
+    });
+});
+
+app.post('/ziekMeld', auth, (req, res) => {
+    console.log("Start ziekMeld");
+    console.log(req.body.roosterItemId);
+    connection.query("UPDATE roosterItems SET state = 2 WHERE itemId = ?", [req.body.roosterItemId], (error, results, fields) =>{
+        if(error){
+            res.status(500).send(error);
+            console.log('ziekMeld failed')
+        }
+        else {
+            res.status(200).send();
+            console.log('ziekMeld succeeded')
+        }
+    })
+});
+
+app.post('/ziekAccept', auth, (req, res) => {
+    console.log("start ziekAccept");
+    connection.query("UPDATE roosterItems SET userId = ?, state = 1 WHERE itemId = ?", [req.user.id, req.body.roosterItemId], (error, results, fields) =>{
+        if(error){
+            res.status(500).send(error);
+            console.log('ziekAccept failed', error)
+        }
+        else {
+            res.status(200).send();
+            console.log('ziekAccept succeeded')
+        }
+    })
+});
+
+app.post('/delNotif', auth, (req, res) => {
+    console.log("start delNotif");
+    connection.query('DELETE FROM Notifications WHERE id = ?', [req.body.notifId], (error, results, fields) => {
+        if(error){
+            res.status(500).send(error);
+            console.log('delNotif failed', error)
+        }
+        else {
+            res.status(200).send();
+            console.log('delNotif succeeded')
+        }
+    })
+});
+
+app.use("/rooster", roosterItemRoute);
+app.use("/account", accountRoute);
 app.use("/rooster",roosterItemRoute)
 app.use("/roosterstructuur",roosterStructuur)
+
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports=app;

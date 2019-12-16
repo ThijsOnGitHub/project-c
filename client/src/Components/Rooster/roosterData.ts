@@ -22,14 +22,15 @@ export class BeginEindTijd{
     public beginTijdWaarde:number
     public eindTijdWaarde:number
 
+
     static createBeginEindTijd(beginTijd:string,eindTijd:string){
         return beginTijd+";"+eindTijd
     }
     constructor(beginEindTijd:string){
         const gesplitst=beginEindTijd.split(";");
-        this.beginTijd=new Date(gesplitst[0])
-        this.eindTijd=new Date(gesplitst[1])
-        this.beginTijdWaarde=this.beginTijd.getTime()
+        this.beginTijd=new Date(gesplitst[0]);
+        this.eindTijd=new Date(gesplitst[1]);
+        this.beginTijdWaarde=this.beginTijd.getTime();
         this.eindTijdWaarde=this.eindTijd.getTime()
     }
 
@@ -60,11 +61,11 @@ class RoosterData {
         var allIntersecties:number[][] = [];
 
         itemIndexLijst.forEach((value1, index) => {
-            var tijden1=new BeginEindTijd(value1)
+            var tijden1=new BeginEindTijd(value1);
             var lijst: number[]=[index];
             itemIndexLijst.forEach(((value2, index2) => {
                 if(index!==index2){
-                    var tijden2=new BeginEindTijd(value2)
+                    var tijden2=new BeginEindTijd(value2);
                     var isIntersect=false;
                     if(!(tijden1.beginTijdWaarde>=tijden2.eindTijdWaarde||tijden1.eindTijdWaarde<=tijden2.beginTijdWaarde)){
                         lijst.push(index2)
@@ -120,7 +121,7 @@ class RoosterData {
             const datumJSON=this.data[value];
             var ObjectList=Object.keys(formatJson[value]);
 
-            var intersecties=this.getInterSecties(ObjectList)
+            var intersecties=this.getInterSecties(ObjectList);
 
             var amountOfIntersecties:{[id:string]:number}={};
             var indexen:number[]=[];
@@ -130,14 +131,14 @@ class RoosterData {
             });
 
             indexen.sort((a, b) => {
-                const tijda=new BeginEindTijd(ObjectList[a])
-                const tijdb=new BeginEindTijd(ObjectList[b])
+                const tijda=new BeginEindTijd(ObjectList[a]);
+                const tijdb=new BeginEindTijd(ObjectList[b]);
                 return tijdb.getLength()-tijda.getLength()
             });
 
             var itemSort=indexen.sort((a, b) => amountOfIntersecties[b]-amountOfIntersecties[a]);
 
-            var itemStyleData=this.styleItemObject(itemSort,intersecties)
+            var itemStyleData=this.styleItemObject(itemSort,intersecties);
 
             ObjectList.forEach((value1, index) => {
                 const gesplitst=value1.split(";");
