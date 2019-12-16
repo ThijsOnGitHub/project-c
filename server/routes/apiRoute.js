@@ -2,11 +2,15 @@ const express = require('express');
 app = express.Router();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
-const roosterItemRoute = require('./RoosterItemRoute');
-const accountRoute = require('./accountRoute');
+
+const roosterItemRoute = require('./apiRoutes/RoosterItemRoute')
 const multer = require('multer');
 const auth=require("../middleware/verifytoken");
+const yourItem=require("../middleware/itemOfWerkgever")
+const roosterStructuur=require("./apiRoutes/RoosterStructuur")
+const accountRoute = require('./accountRoute');
 const yourItem=require("../middleware/itemOfWerkgever");
+
 
 var mysql = require('mysql');
 var {serverSecret}=require('../serverSecret');
@@ -296,6 +300,7 @@ app.get("/getgebruikerinfo",auth,async (req,res)=>{
     });
 });
 
+
 app.post('/getRoosterAndPerson', auth, (req, res) => {
     console.log("Getting sick person's data...");
     connection.query("SELECT concat(firstName, ' ', lastName) as naam, beginTijd, eindTijd, datum, Notifications.userId FROM roosterit.Notifications LEFT JOIN roosterItems rI on Notifications.roosterItemId = rI.itemId LEFT JOIN gebruiker g on Notifications.userId = g.id WHERE Notifications.roosterItemId = ?", [req.body.roosterItemId], (error, results, fields) =>{
@@ -349,6 +354,9 @@ app.post('/delNotif', auth, (req, res) => {
 
 app.use("/rooster", roosterItemRoute);
 app.use("/account", accountRoute);
+app.use("/rooster",roosterItemRoute)
+app.use("/roosterstructuur",roosterStructuur)
+
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports=app;

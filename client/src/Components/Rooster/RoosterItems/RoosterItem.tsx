@@ -37,7 +37,7 @@ class RoosterItem extends React.Component<IProps,IState>{
     render() {
 
         return(
-            <div  className="absolute roosterItem" style={{top:this.state.top,height:this.state.length,maxHeight:this.state.length,left:this.props.startWidth||0,width:this.props.width||"100%"}}>
+            <div  className="absolute roosterItem" style={this.props.roosterData.verticaal?{left:this.state.top,width:this.state.length,maxWidth:this.state.length,top:this.props.startWidth||0,height:this.props.width||50}:{top:this.state.top,height:this.state.length,maxHeight:this.state.length,left:this.props.startWidth||0,width:this.props.width||"100%"}}>
                 {this.props.children}
             </div>
         )

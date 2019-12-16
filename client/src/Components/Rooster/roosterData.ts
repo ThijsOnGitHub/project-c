@@ -5,6 +5,9 @@ import RoosterItem from "./RoosterItems/RoosterItem";
 
 export interface itemComponentsData { beginTijd: string, eindTijd: string, datum: string, UserData: { naam: string, userId: number,itemId:number,status:number }[] }
 export interface roosterItem { datum: string, beginTijd: string, eindTijd: string, userId: number, naam: string,itemId:number, status:number }
+export interface UserData {
+naam: string, userId: number,itemId:number,status:number
+}
 export type itemValues={ naam: string, userId: number }[]
 export interface formatedDayItem { [tijd: string]: { naam: string, userId: number,itemId:number, status:number }[] }
 export interface formatedRoosterItems{ [datum: string]: formatedDayItem }
@@ -13,12 +16,16 @@ export interface dayRenderItem { [tijd: string]: roosterItemRenderFunc }
 export interface fullRenderItem{ [datum: string]: dayRenderItem }
 
 
-class BeginEindTijd{
-    public beginTijd:Date;
-    public eindTijd:Date;
-    public beginTijdWaarde:number;
-    public eindTijdWaarde:number;
+export class BeginEindTijd{
+    public beginTijd:Date
+    public eindTijd:Date
+    public beginTijdWaarde:number
+    public eindTijdWaarde:number
 
+
+    static createBeginEindTijd(beginTijd:string,eindTijd:string){
+        return beginTijd+";"+eindTijd
+    }
     constructor(beginEindTijd:string){
         const gesplitst=beginEindTijd.split(";");
         this.beginTijd=new Date(gesplitst[0]);
@@ -26,6 +33,8 @@ class BeginEindTijd{
         this.beginTijdWaarde=this.beginTijd.getTime();
         this.eindTijdWaarde=this.eindTijd.getTime()
     }
+
+
 
     public getLength(){
         return this.eindTijdWaarde-this.beginTijdWaarde
@@ -46,8 +55,6 @@ class RoosterData {
     private isSubListOf2=(list1:number[],list2:number[])=>{
         return list1.every(value => list2.includes(value))
     };
-
-
 
     //Deze functie maakt lijsten met alle intersectie die er zijn
     getInterSecties(itemIndexLijst:string[]):number[][]{
@@ -144,8 +151,6 @@ class RoosterData {
         return formatJson
     };
 
-
-
     private beginEindString=(beginTijd:string,eindTijd:string):string=>{
         return beginTijd+";"+eindTijd
     };
@@ -162,22 +167,18 @@ class RoosterData {
                     tijdVak.push({userId:value.userId,naam:value.naam,itemId:value.itemId, status:value.status})
                 }else{
                     if(new Date(value.beginTijd).getTime()<this.minTijd.getTime()){
-                        console.log("new MaxTijd");
                         this.minTijd=new Date(value.beginTijd)
                     }
                     if(new Date(value.eindTijd).getTime()>this.maxTijd.getTime()){
-                        console.log("new MaxTijd");
                         this.maxTijd=new Date(value.eindTijd)
                     }
                     datumVak[this.beginEindString(value.beginTijd,value.eindTijd)]=[{userId:value.userId,naam:value.naam,itemId:value.itemId, status:value.status }]
                 }
             }else{
                 if(new Date(value.beginTijd).getTime()<this.minTijd.getTime()){
-                    console.log("new MaxTijd");
                     this.minTijd=new Date(value.beginTijd)
                 }
                 if(new Date(value.eindTijd).getTime()>this.maxTijd.getTime()){
-                    console.log("new MaxTijd");
                     this.maxTijd=new Date(value.eindTijd)
                 }
                 returnObject[value.datum]={[this.beginEindString(value.beginTijd,value.eindTijd)]:[{userId:value.userId,naam:value.naam,itemId:value.itemId, status:value.status}]}
@@ -187,5 +188,36 @@ class RoosterData {
         return returnObject
     };
 
+
+    private sortOnData=(json:roosterItem[]):formatedRoosterItems=>{
+        var returnObject:formatedRoosterItems={};
+        json.forEach(value => {
+            if(value.datum in returnObject){
+                var datumVak=returnObject[value.datum];
+                if(this.beginEindString(value.beginTijd,value.eindTijd) in datumVak){
+                    var tijdVak=datumVak[this.beginEindString(value.beginTijd,value.eindTijd)];
+                    tijdVak.push({userId:value.userId,naam:value.naam,itemId:value.itemId})
+                }else{
+                    if(new Date(value.beginTijd).getTime()<this.minTijd.getTime()){
+                        this.minTijd=new Date(value.beginTijd)
+                    }
+                    if(new Date(value.eindTijd).getTime()>this.maxTijd.getTime()){
+                        this.maxTijd=new Date(value.eindTijd)
+                    }
+                    datumVak[this.beginEindString(value.beginTijd,value.eindTijd)]=[{userId:value.userId,naam:value.naam,itemId:value.itemId}]
+                }
+            }else{
+                if(new Date(value.beginTijd).getTime()<this.minTijd.getTime()){
+                    this.minTijd=new Date(value.beginTijd)
+                }
+                if(new Date(value.eindTijd).getTime()>this.maxTijd.getTime()){
+                    this.maxTijd=new Date(value.eindTijd)
+                }
+                returnObject[value.datum]={[this.beginEindString(value.beginTijd,value.eindTijd)]:[{userId:value.userId,naam:value.naam,itemId:value.itemId}]}
+            }
+
+        });
+        return returnObject
+    };
 
 }export default RoosterData

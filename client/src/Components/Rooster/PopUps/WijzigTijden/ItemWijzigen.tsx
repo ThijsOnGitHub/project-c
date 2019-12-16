@@ -101,12 +101,6 @@ class ItemWijzigen extends Component<IProps,IState>{
 
       }
 
-    addGebruiker=()=>{
-        var werknemersNieuw=this.state.werkNemers
-        this.state.selectedNames.forEach((value,index) => {
-
-        })
-    }
 
      componentDidMount=async ()  =>{
         var userData=this.props.RoosterData.UserData.map(value => {
