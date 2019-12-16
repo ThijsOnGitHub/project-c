@@ -8,6 +8,7 @@ const multer = require('multer');
 const auth=require("../middleware/verifytoken");
 const yourItem=require("../middleware/itemOfWerkgever");
 const roosterStructuur=require("./apiRoutes/RoosterStructuur");
+const accountRoute = require('./accountRoute');
 
 var mysql = require('mysql');
 var {serverSecret}=require('../serverSecret');
