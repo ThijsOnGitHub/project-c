@@ -324,7 +324,7 @@ app.post('/ziekMeld', auth, (req, res) => {
 
 app.post('/ziekAccept', auth, (req, res) => {
     console.log("start ziekAccept");
-    connection.query("UPDATE roosterItems SET userId = ?, state = 1 WHERE itemId = ?", [req.user.id, req.body.roosterItemId], (error, results, fields) =>{
+    connection.query("UPDATE roosterItems SET userId = ?, state = 1 WHERE itemId = ?", [req.body.secondUser, req.body.roosterItemId], (error, results, fields) =>{
         if(error){
             res.status(500).send(error);
             console.log('ziekAccept failed', error)

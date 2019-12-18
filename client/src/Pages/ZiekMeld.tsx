@@ -17,7 +17,8 @@ interface IProps {
     roosterItemId:number,
     notifId:number,
     messageId:number,
-    currentUser:number
+    currentUser:number,
+    secondUser:number
 }
 
 class ZiekMeld extends React.Component<IProps, IState> {
@@ -69,7 +70,7 @@ class ZiekMeld extends React.Component<IProps, IState> {
                 authToken:sessionStorage.getItem('authToken'),
                 "content-type":"application/json"
             },
-            body:JSON.stringify({notifId:this.props.notifId})});
+            body:JSON.stringify({secondUser: this.props.secondUser, notifId:this.props.notifId})});
     };
 
     getRoosterAndPerson = () => {
