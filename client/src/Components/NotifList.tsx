@@ -6,7 +6,7 @@ interface IProps{
 }
 
 interface IState{
-    notifs:{name:string,messageType:number,profielFotoLink:string, roosterItemId:number, notifId:number}[]
+    notifs:{name:string,messageType:number,profielFotoLink:string, roosterItemId:number, notifId:number, isForBoss:boolean}[]
 }
 
 class NotifList extends React.Component<IProps, IState> {

@@ -17,7 +17,7 @@ class WerknemerItem extends React.Component<IProps> {
                 method:"post", headers:{
                     "content-type":"application/json"
                 }, body:JSON.stringify({
-                    "person":this.props.itemData.UserData[0].userId, "messageId":messageType, "roosterId":1, "roosterItemId":this.props.itemData.UserData[0].itemId
+                    "person":this.props.itemData.UserData[0].userId, "messageId":messageType, "roosterId":1, "roosterItemId":this.props.itemData.UserData[0].itemId, "isForBoss":false
                 })
             });
             fetch("http://localhost:5000/api/ziekMeld", {
