@@ -38,8 +38,25 @@ class ZiekMeld extends React.Component<IProps, IState> {
         this.getRoosterAndPerson()
     }
 
-    accept = () => {
-        console.log("Changing schedule item to new user...");
+    acceptZiekmeld = () => {
+        console.log("Sending approval item...");
+        fetch(this.props.apiLink+'/delNotif', {method:'post',
+            headers:{
+                authToken:sessionStorage.getItem('authToken'),
+                "content-type":"application/json"
+            },
+            body:JSON.stringify({notifId:this.props.notifId})});
+        fetch("http://localhost:5000/api/addnotif", {
+            method:"post", headers:{
+                "content-type":"application/json"
+            }, body:JSON.stringify({
+                "person":this.props.currentUser, "messageId":4, "roosterId":1, "roosterItemId":this.props.roosterItemId, "isForBoss":true
+            })
+        });
+    };
+
+    acceptApproval = () => {
+        console.log('Transferring schedule item to new user...');
         fetch(this.props.apiLink+"/ziekAccept", {method:"post",
             headers:{
                 authToken:sessionStorage.getItem("authToken"),
@@ -52,7 +69,7 @@ class ZiekMeld extends React.Component<IProps, IState> {
                 authToken:sessionStorage.getItem('authToken'),
                 "content-type":"application/json"
             },
-            body:JSON.stringify({notifId:this.props.notifId})})
+            body:JSON.stringify({notifId:this.props.notifId})});
     };
 
     getRoosterAndPerson = () => {
@@ -103,12 +120,15 @@ class ZiekMeld extends React.Component<IProps, IState> {
                                                 :
                                                 this.state.RoosterAndPerson.naam + " heeft om vervangig gevraagd, van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je deze dienst overnemen?"
                                             :
-                                            "[ERROR; Ongeldig messageId]"
+                                            (this.props.messageId == 4) ?
+                                                'OK this works. Lol'
+                                                :
+                                                '[ERROR: Ongeldig messageId]'
                                 }
                             </td>
                         </tr>
                         <tr>
-                            <Link to={"/OvernameFeedback"}><button className="Button" onClick={this.accept}>Ja</button></Link>
+                            <Link to={"/OvernameFeedback"}><button className="Button" onClick={(this.props.messageId != 4) ? this.acceptZiekmeld : this.acceptApproval}>Ja</button></Link>
                             <Link to={"/"}><button className="Button">Nee</button></Link>
                         </tr>
                     </tbody>
