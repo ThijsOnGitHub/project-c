@@ -6,7 +6,6 @@ const nodemailer = require('nodemailer');
 const roosterItemRoute = require('./apiRoutes/RoosterItemRoute')
 const multer = require('multer');
 const auth=require("../middleware/verifytoken");
-const yourItem=require("../middleware/itemOfWerkgever")
 const roosterStructuur=require("./apiRoutes/RoosterStructuur")
 const accountRoute = require('./accountRoute');
 const yourItem=require("../middleware/itemOfWerkgever");
