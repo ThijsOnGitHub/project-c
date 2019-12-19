@@ -218,7 +218,7 @@ app.put("/updategebruiker",auth, (req, res) => {
 
 app.post("/addnotif",async (req, res) => {
     console.log("Notificatie toevoegen: ");
-    connection.query("INSERT INTO Notifications (userId, messageType, roosterId, roosterItemId, isForBoss) VALUES (?,?,?,?,?)", [req.body.person, req.body.messageId, req.body.roosterId, req.body.roosterItemId, req.body.isForBoss],
+    connection.query("INSERT INTO Notifications (userId, messageType, roosterId, roosterItemId, isForBoss, secondUser) VALUES (?,?,?,?,?,?)", [req.body.person, req.body.messageId, req.body.roosterId, req.body.roosterItemId, req.body.isForBoss, req.body.secondUser],
         (error, results, fields) => {
             if (error) {
                 console.log(error);
@@ -234,7 +234,7 @@ app.post("/addnotif",async (req, res) => {
 
 app.get("/getnotifs", auth, (req, res) => {
     console.log("Getting notifs...");
-    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink, roosterItemId, Notifications.id AS notifId, isForBoss FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id WHERE Notifications.roosterId = (select roosterId from gebruiker where id = ?) ORDER BY Notifications.id DESC', [req.user.id], (err, result, val) => {
+    connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink, roosterItemId, Notifications.id AS notifId, isForBoss FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id WHERE Notifications.roosterId = (select roosterId from gebruiker where id = ?) AND isForBoss = ? ORDER BY Notifications.id DESC', [req.user.id, req.body.isForBoss], (err, result, val) => {
         if (err !== null) {
             console.log(err);
             res.status(400).send(err)

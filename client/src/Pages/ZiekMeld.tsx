@@ -51,7 +51,7 @@ class ZiekMeld extends React.Component<IProps, IState> {
             method:"post", headers:{
                 "content-type":"application/json"
             }, body:JSON.stringify({
-                "person":this.props.currentUser, "messageId":4, "roosterId":1, "roosterItemId":this.props.roosterItemId, "isForBoss":true
+                "person":this.props.currentUser, "messageId":4, "roosterId":1, "roosterItemId":this.props.roosterItemId, "isForBoss":true, "secondUser":this.state.RoosterAndPerson.userId
             })
         });
     };

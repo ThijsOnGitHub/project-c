@@ -34,6 +34,7 @@ export interface IState {
     id:number
 }
 
+
 class App extends React.Component<{},IState>{
   constructor(props:object) {
       super(props);
@@ -67,6 +68,8 @@ class App extends React.Component<{},IState>{
   };
 
 
+
+
   getUserData= async ()=>{
       var result = await fetch(this.state.apiLink+"/getgebruikerinfo",
           {headers:
@@ -85,7 +88,7 @@ class App extends React.Component<{},IState>{
       const jwtObject=jsonwebtoken.decode(jwt);
       console.log(jwtObject);
       if(typeof jwtObject!=="string"){
-          jwtObject.exp=jwtObject.exp-60
+          jwtObject.exp=jwtObject.exp-60;
           return jwtObject
       }
       return null

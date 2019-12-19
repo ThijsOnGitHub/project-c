@@ -33,7 +33,7 @@ class Home extends React.Component<IProps,IState>{
             phone: "",
             birth: "",
             profielFotoLink: "",
-            isWerkgever: ""
+            isWerkgever: ''
         };
         this.handleInputChange=this.handleInputChange.bind(this);
         this.lijst=["firstName","lastName","email","phone","birth","profielfoto","isWerkgever"];
@@ -97,7 +97,7 @@ class Home extends React.Component<IProps,IState>{
                         <div className='HomeInfoC'>
                             <img className='avatar' width='80' height='80' src={this.state.content.length>0 && this.props.apiLink+"/avatar/"+ this.state.content[0].profielFotoLink} alt='profielfoto'/>
                         </div>
-                        <NotifList apiLink={this.props.apiLink} />
+                        <NotifList apiLink={this.props.apiLink} isWerkgever={null} />
                     </div>
                 </div>
             </div>
