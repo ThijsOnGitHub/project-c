@@ -1,10 +1,9 @@
 import React         from "react";
 import Notification  from "../Components/Notification";
-import werkgever from "../App"
 
 interface IProps{
     apiLink:string
-    isWerkgever:string
+    isWerkgever:boolean
 }
 
 interface IState{
