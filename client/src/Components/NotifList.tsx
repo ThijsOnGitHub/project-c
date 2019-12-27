@@ -23,7 +23,6 @@ class NotifList extends React.Component<IProps, IState> {
 
     componentDidMount() : void{
         this.getnotifs(false);
-        console.log("Werkgever: ", this.props.isWerkgever);
         if (this.props.isWerkgever) {
             this.getnotifs(true)
         }
@@ -31,9 +30,11 @@ class NotifList extends React.Component<IProps, IState> {
 
 
     getnotifs = (isForBoss:boolean) => {
+        console.log("Going to fetch notifs. isWerkgever: " + this.props.isWerkgever + ", isForBoss: " + isForBoss);
         fetch("http://localhost:5000/api/getnotifs", {method:'post',
             headers:{
-                authToken:sessionStorage.getItem("authToken")
+                authToken:sessionStorage.getItem("authToken"),
+                "content-type":"application/json"
             },
             body: JSON.stringify({"isForBoss":isForBoss})
         })

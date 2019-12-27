@@ -232,7 +232,7 @@ app.post("/addnotif",async (req, res) => {
         })
 });
 
-app.get("/getnotifs", auth, (req, res) => {
+app.post("/getnotifs", auth, (req, res) => {
     console.log("Getting notifs...");
     connection.query('SELECT CONCAT(firstName, " " , lastName) as name, messageType, profielFotoLink, roosterItemId, Notifications.id AS notifId, isForBoss FROM Notifications JOIN gebruiker ON Notifications.userId = gebruiker.id WHERE Notifications.roosterId = (select roosterId from gebruiker where id = ?) AND isForBoss = ? ORDER BY Notifications.id DESC', [req.user.id, req.body.isForBoss], (err, result, val) => {
         if (err !== null) {
