@@ -8,6 +8,10 @@ interface IState{
         eindTijd:string,
         datum:string,
         userId:number
+    },
+    secondUser:{
+        naam:string,
+        userId:number
     }
 }
 
@@ -17,8 +21,7 @@ interface IProps {
     roosterItemId:number,
     notifId:number,
     messageId:number,
-    currentUser:number,
-    secondUser:number
+    currentUser:number
 }
 
 class ZiekMeld extends React.Component<IProps, IState> {
@@ -30,6 +33,10 @@ class ZiekMeld extends React.Component<IProps, IState> {
                 beginTijd : "" ,
                 eindTijd : "" ,
                 datum : "",
+                userId:null
+            },
+            secondUser:{
+                naam:"",
                 userId:null
             }
         }
@@ -70,7 +77,7 @@ class ZiekMeld extends React.Component<IProps, IState> {
                 authToken:sessionStorage.getItem('authToken'),
                 "content-type":"application/json"
             },
-            body:JSON.stringify({secondUser: this.props.secondUser, notifId:this.props.notifId})});
+            body:JSON.stringify({secondUser: this.state.secondUser, notifId:this.props.notifId})});
     };
 
     getRoosterAndPerson = () => {
@@ -98,7 +105,31 @@ class ZiekMeld extends React.Component<IProps, IState> {
                     console.log(json);
                     this.setState({RoosterAndPerson:json})
                 }
+            );
+        fetch(this.props.apiLink+"/getSecondUser", {method:"post",
+        headers:
+            {
+                authToken:sessionStorage.getItem("authToken"),
+                "content-type":"application/json"
+            },
+        body: JSON.stringify({notifId:this.props.notifId})
+        })
+            .then(
+                (u) => {
+                    try{
+                        return u.json()
+                    }
+                    catch(error){
+                        console.error(error)
+                    }
+                }
             )
+                .then(
+                    (json) => {
+                        console.log(json);
+                        this.setState({secondUser:json})
+                    }
+                );
     };
 
     render() {
@@ -122,7 +153,7 @@ class ZiekMeld extends React.Component<IProps, IState> {
                                                 this.state.RoosterAndPerson.naam + " heeft om vervangig gevraagd, van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je deze dienst overnemen?"
                                             :
                                             (this.props.messageId == 4) ?
-                                                'OK this works. Lol'
+                                                this.state.RoosterAndPerson.naam + " wil de dienst van " + this.state.secondUser.naam + " overnemen, van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je hier goedkeuring voor geven?"
                                                 :
                                                 '[ERROR: Ongeldig messageId]'
                                 }

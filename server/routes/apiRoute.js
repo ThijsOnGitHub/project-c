@@ -350,6 +350,20 @@ app.post('/delNotif', auth, (req, res) => {
     })
 });
 
+app.post('/getSecondUser', auth, (req, res) => {
+    console.log('start getSecondUser');
+    connection.query("SELECT concat(firstName, ' ', lastName) as naam, id FROM gebruiker WHERE id = (SELECT secondUser FROM Notifications WHERE Notifications.id = ?)", [req.body.notifId], (error, results, fields) => {
+        if(error){
+            res.status(500).send(error);
+            console.log('getSecondUser failed', error)
+        }
+        else {
+            res.status(200).send(results);
+            console.log('getSecondUser succeeded')
+        }
+    })
+});
+
 app.use("/rooster", roosterItemRoute);
 app.use("/account", accountRoute);
 app.use("/rooster",roosterItemRoute);

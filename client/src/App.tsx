@@ -182,7 +182,7 @@ class App extends React.Component<{},IState>{
                                     <Switch>
                                         <Route path="/MyAccount" render={() => <MyAccount apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
                                         <Route path="/" exact render={() => <Home apiLink={this.state.apiLink} serverLink={this.state.serverLink} isWerkgever={this.state.isWerkgever}/>}/>
-                                        <Route path="/ZiekMeld/:roosterItemId/:notifId/:messageId"  render={(props:{match:{params:{roosterItemId:number, notifId:number, messageId:number, secondUser:number}}}) => <ZiekMeld apiLink={this.state.apiLink} serverLink = {this.state.serverLink} roosterItemId={props.match.params.roosterItemId} notifId={props.match.params.notifId} messageId={props.match.params.messageId} secondUser={props.match.params.secondUser} currentUser={this.state.id}/>}/>
+                                        <Route path="/ZiekMeld/:roosterItemId/:notifId/:messageId"  render={(props:{match:{params:{roosterItemId:number, notifId:number, messageId:number}}}) => <ZiekMeld apiLink={this.state.apiLink} serverLink = {this.state.serverLink} roosterItemId={props.match.params.roosterItemId} notifId={props.match.params.notifId} messageId={props.match.params.messageId} currentUser={this.state.id}/>}/>
                                         <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink} isWerkgever={this.state.isWerkgever}/>}/>
                                         <Route path="/ZiekmeldFeedback" render={() => <ZiekmeldFeedback/>}/>
                                         <Route path="/OvernameFeedback" render={() => <OvernameFeedback/>}/>
