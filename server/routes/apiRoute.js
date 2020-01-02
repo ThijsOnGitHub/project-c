@@ -80,8 +80,7 @@ app.get("/GetMedewerkers",auth, ((req, res) =>{
 app.put("/updategebruiker",auth, (req, res) => {
     let data = req.body;
     console.log("Updaten gebruiker...:");
-    data.newWachtwoord2 = bcrypt.hash(data.newWachtwoord, 10 );
-    connection.query("UPDATE gebruiker SET firstName = (?), lastName = (?), email = (?), phone = (?), pass = (?) WHERE Id = (?)", [data.newVoornaam, data.newAchternaam, data.newEmail, data.newTelefoon, data.newWachtwoord2, req.user.id], (error, results, fields) =>{
+    connection.query("UPDATE gebruiker SET firstName = (?), lastName = (?), email = (?), phone = (?), pass = (?) WHERE Id = (?)", [data.newVoornaam, data.newAchternaam, data.newEmail, data.newTelefoon, data.newWachtwoord, req.user.id], (error, results, fields) =>{
         res.json(results);
         if (error) {
             console.log(error);
