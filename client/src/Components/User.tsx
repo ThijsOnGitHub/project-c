@@ -166,7 +166,7 @@ render(){
                     </tr>
                     <tr>
                         <td className="leftInfo"><p>Wachtwoord:</p></td>
-                        <td className="rightValue"><p>{this.props.wachtwoord}</p></td>
+                        <td className="rightValue"><p>**********</p></td>
                         <td><input className={shouldMarkError('newWachtwoord') ? "error" : ""}
                                    onBlur={this.handleBlur('newWachtwoord')} onChange={this.handleInputChange} type='password' name="newWachtwoord" value={this.state.newWachtwoord}/></td>
                     </tr>

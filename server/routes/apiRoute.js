@@ -7,7 +7,7 @@ const auth=require("../middleware/verifytoken");
 const yourItem=require("../middleware/itemOfWerkgever")
 const roosterStructuur=require("./apiRoutes/RoosterStructuur")
 const accountRoute = require('./accountRoute');
-
+const bcrypt = require('bcrypt');
 
 
 var mysql = require('mysql');
@@ -62,7 +62,6 @@ app.get("/avatarWithId/:id",(req,res)=>{
             }else{
                 res.sendFile(__dirname.split("\\").slice(0,-1).join("\\")+"/uploads/"+values[0].avatar)
             }
-
         }
     })
 });
@@ -81,7 +80,8 @@ app.get("/GetMedewerkers",auth, ((req, res) =>{
 app.put("/updategebruiker",auth, (req, res) => {
     let data = req.body;
     console.log("Updaten gebruiker...:");
-    connection.query("UPDATE gebruiker SET firstName = (?), lastName = (?), email = (?), phone = (?) WHERE Id = (?)", [data.newVoornaam, data.newAchternaam, data.newEmail, data.newTelefoon, req.user.id], (error, results, fields) =>{
+    data.newWachtwoord2 = bcrypt.hash(data.newWachtwoord, 10 );
+    connection.query("UPDATE gebruiker SET firstName = (?), lastName = (?), email = (?), phone = (?), pass = (?) WHERE Id = (?)", [data.newVoornaam, data.newAchternaam, data.newEmail, data.newTelefoon, data.newWachtwoord2, req.user.id], (error, results, fields) =>{
         res.json(results);
         if (error) {
             console.log(error);
