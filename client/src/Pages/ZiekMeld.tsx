@@ -80,7 +80,7 @@ class ZiekMeld extends React.Component<IProps, IState> {
             body:JSON.stringify({secondUser: this.state.secondUser, notifId:this.props.notifId})});
     };
 
-    getRoosterAndPerson = () => {
+    getRoosterAndPerson = async () => {
         console.log("Getting person and schedule info NOW!");
         fetch(this.props.apiLink+"/getRoosterAndPerson", {method:"post",
             headers:
@@ -106,30 +106,15 @@ class ZiekMeld extends React.Component<IProps, IState> {
                     this.setState({RoosterAndPerson:json})
                 }
             );
-        fetch(this.props.apiLink+"/getSecondUser", {method:"post",
+        let secondUser = await fetch(this.props.apiLink+"/getSecondUser", {method:"post",
         headers:
             {
                 authToken:sessionStorage.getItem("authToken"),
                 "content-type":"application/json"
             },
         body: JSON.stringify({notifId:this.props.notifId})
-        })
-            .then(
-                (u) => {
-                    try{
-                        return u.json()
-                    }
-                    catch(error){
-                        console.error(error)
-                    }
-                }
-            )
-                .then(
-                    (json) => {
-                        console.log(json);
-                        this.setState({secondUser:json})
-                    }
-                );
+        }).then(res => res.json());
+        this.setState({secondUser:secondUser})
     };
 
     render() {
@@ -142,18 +127,18 @@ class ZiekMeld extends React.Component<IProps, IState> {
                                 {
                                     (this.props.messageId == 1) ?
                                         (this.state.RoosterAndPerson.userId === this.props.currentUser) ?
-                                            "Je hebt jezelf ziek gemeld op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + " van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + ".\n Wil je je ziektemelding annuleren?"
+                                            "Je hebt jezelf ziek gemeld op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + " van " + new Date(this.state.RoosterAndPerson.beginTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " tot " + new Date(this.state.RoosterAndPerson.eindTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + ".\n Wil je je ziektemelding annuleren?"
                                             :
-                                            this.state.RoosterAndPerson.naam + " heeft zich ziek gemeld, van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je deze dienst overnemen?"
+                                            this.state.RoosterAndPerson.naam + " heeft zich ziek gemeld, van " + new Date(this.state.RoosterAndPerson.beginTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " tot " + new Date(this.state.RoosterAndPerson.eindTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je deze dienst overnemen?"
                                         :
                                         (this.props.messageId == 0) ?
                                             (this.state.RoosterAndPerson.userId == this.props.currentUser) ?
-                                                "Je hebt om vervanging gevraagd op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + " van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + ".\n Wil je je aanvraag annuleren?"
+                                                "Je hebt om vervanging gevraagd op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + " van " + new Date(this.state.RoosterAndPerson.beginTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " tot " + new Date(this.state.RoosterAndPerson.eindTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + ".\n Wil je je aanvraag annuleren?"
                                                 :
-                                                this.state.RoosterAndPerson.naam + " heeft om vervangig gevraagd, van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je deze dienst overnemen?"
+                                                this.state.RoosterAndPerson.naam + " heeft om vervangig gevraagd, van " + new Date(this.state.RoosterAndPerson.beginTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " tot " + new Date(this.state.RoosterAndPerson.eindTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je deze dienst overnemen?"
                                             :
                                             (this.props.messageId == 4) ?
-                                                this.state.RoosterAndPerson.naam + " wil de dienst van " + this.state.secondUser.naam + " overnemen, van " + this.state.RoosterAndPerson.beginTijd + " tot " + this.state.RoosterAndPerson.eindTijd + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je hier goedkeuring voor geven?"
+                                                this.state.RoosterAndPerson.naam + " wil de dienst van " + this.state.secondUser.naam + " overnemen, van " + new Date(this.state.RoosterAndPerson.beginTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " tot " + new Date(this.state.RoosterAndPerson.eindTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je hier goedkeuring voor geven?"
                                                 :
                                                 '[ERROR: Ongeldig messageId]'
                                 }
