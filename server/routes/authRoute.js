@@ -2,7 +2,7 @@ const express=require("express");
 router=express.Router();
 const mysql = require('mysql');
 const jwt=require("jsonwebtoken");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 var {serverSecret}=require('../serverSecret');
 var connection=mysql.createConnection(serverSecret.databaseLogin);
 

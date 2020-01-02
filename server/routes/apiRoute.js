@@ -1,6 +1,5 @@
 const express = require('express');
 app = express.Router();
-const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const roosterItemRoute = require('./apiRoutes/RoosterItemRoute')
 const multer = require('multer');
