@@ -32,7 +32,10 @@ interface roosterStructuurData{
     eindTijd:string
     color:string
 }
-export type roosterStructuurItemData=roosterStructuurData & {werknemers:{beginTijd:Date,eindTijd:Date,naam:string,userId:number,itemId:number}[],datum:string,beginTijd:string,eindTijd:string}
+
+export interface Werknemer{beginTijd:Date,eindTijd:Date,naam:string,userId:number,itemId:number}
+export interface Werknemers{werknemers:Werknemer[]}
+export type roosterStructuurItemData=roosterStructuurData & {datum:string,beginTijd:string,eindTijd:string} & Werknemers
 
 
 interface IState {

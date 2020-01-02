@@ -2,14 +2,13 @@ const express = require('express');
 app = express.Router();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
-
 const roosterItemRoute = require('./apiRoutes/RoosterItemRoute')
 const multer = require('multer');
 const auth=require("../middleware/verifytoken");
 const yourItem=require("../middleware/itemOfWerkgever")
 const roosterStructuur=require("./apiRoutes/RoosterStructuur")
 const accountRoute = require('./accountRoute');
-const yourItem=require("../middleware/itemOfWerkgever");
+
 
 
 var mysql = require('mysql');
@@ -228,7 +227,6 @@ app.post('/delNotif', auth, (req, res) => {
 
 app.use("/rooster", roosterItemRoute);
 app.use("/account", accountRoute);
-app.use("/rooster",roosterItemRoute)
 app.use("/roosterstructuur",roosterStructuur)
 
 
