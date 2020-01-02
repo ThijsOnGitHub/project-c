@@ -7,6 +7,7 @@ interface IState {
     newAchternaam:string,
     newEmail:string,
     newTelefoon:string,
+    newWachtwoord: string,
     updateDone: boolean,
     letters: RegExp,
     numbers: RegExp,
@@ -14,7 +15,8 @@ interface IState {
         newVoornaam: boolean,
         newAchternaam: boolean,
         newEmail: boolean,
-        newTelefoon: boolean
+        newTelefoon: boolean,
+        newWachtwoord: boolean
     }
 }
 
@@ -25,6 +27,7 @@ interface IProps {
     lastName:string
     mail:string
     telefoon:string
+    wachtwoord:string
     geboorte:string
     serverLink:string
 
@@ -40,6 +43,7 @@ class User extends React.Component<IProps,IState> {
             newAchternaam: '',
             newEmail: '',
             newTelefoon: '',
+            newWachtwoord: '',
             updateDone: false,
             letters: /^[A-Za-z]+$/,
             numbers: /^[0-9]+$/,
@@ -47,7 +51,8 @@ class User extends React.Component<IProps,IState> {
                 newVoornaam: false,
                 newAchternaam: false,
                 newEmail: false,
-                newTelefoon: false
+                newTelefoon: false,
+                newWachtwoord: false
             }
         }
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -59,7 +64,8 @@ class User extends React.Component<IProps,IState> {
             newVoornaam: this.props.firstName,
             newAchternaam: this.props.lastName,
             newEmail: this.props.mail,
-            newTelefoon: this.props.telefoon
+            newTelefoon: this.props.telefoon,
+            newWachtwoord: this.props.wachtwoord
             }
         )
     }
@@ -75,7 +81,8 @@ class User extends React.Component<IProps,IState> {
                 newVoornaam: this.state.newVoornaam,
                 newAchternaam: this.state.newAchternaam,
                 newEmail: this.state.newEmail,
-                newTelefoon: this.state.newTelefoon
+                newTelefoon: this.state.newTelefoon,
+                newWachtwoord: this.state.newWachtwoord
 
             })
 
@@ -96,25 +103,26 @@ class User extends React.Component<IProps,IState> {
             touched: {...this.state.touched, [field]: true},
         });
     };
-    validate(newVoornaam:string, newAchternaam:string, newEmail:string, newTelefoon:string,) {
+    validate(newVoornaam:string, newAchternaam:string, newEmail:string, newTelefoon:string, newWachtwoord:string) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
         return {
             newVoornaam: newVoornaam.length === 0 || newVoornaam.length >= 30 || !newVoornaam.match(this.state.letters),
             newAchternaam: newAchternaam.length === 0 || newAchternaam.length >= 30 || !newAchternaam.match(this.state.letters),
             newEmail: !newEmail.includes("@") || (newEmail.length === 0 || newEmail.length >= 30),
             newTelefoon: newTelefoon.length < 9 || newTelefoon.length >= 11 || !newTelefoon.match(this.state.numbers),
+            newWachtwoord: newTelefoon.length < 9 || newTelefoon.length >= 11 || !newTelefoon.match(this.state.numbers),
         };
     }
     // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
     canBeSubmitted() {
-        const errors = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon);
+        const errors = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon, this.state.newWachtwoord);
         const isDisabled = Object.values(errors).some(value => value);
         return !isDisabled;
     }
 
 render(){
-    type fields = {newVoornaam: boolean, newAchternaam: boolean, newEmail: boolean, newTelefoon: boolean}
-    const errors:fields = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon);
+    type fields = {newVoornaam: boolean, newAchternaam: boolean, newEmail: boolean, newTelefoon: boolean, newWachtwoord: boolean}
+    const errors:fields = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon, this.state.newWachtwoord);
     const isDisabled = Object.values(errors).some(value => value);
 
     // Valideer of een fout getoond zou moeten worden.
@@ -155,6 +163,12 @@ render(){
                         <td className="rightValue"><p>{this.props.mail}</p></td>
                         <td><input className={shouldMarkError('newEmail') ? "error" : ""}
                                    onBlur={this.handleBlur('newEmail')} onChange={this.handleInputChange} type='text' name="newEmail" value={this.state.newEmail}/></td>
+                    </tr>
+                    <tr>
+                        <td className="leftInfo"><p>Wachtwoord:</p></td>
+                        <td className="rightValue"><p>{this.props.wachtwoord}</p></td>
+                        <td><input className={shouldMarkError('newWachtwoord') ? "error" : ""}
+                                   onBlur={this.handleBlur('newWachtwoord')} onChange={this.handleInputChange} type='text' name="newWachtwoord" value={this.state.newWachtwoord}/></td>
                     </tr>
                     <tr>
                         <td className="leftInfo"><p>Telefoonnummer:</p></td>

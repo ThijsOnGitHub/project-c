@@ -167,7 +167,7 @@ app.get("/getNextShift", auth, (req, res) => {
 
 app.get("/getgebruikerinfo",auth,async (req,res)=>{
     console.log("Get user info");
-    connection.query("SELECT firstName, lastName, email, phone, birth, profielFotoLink FROM roosterit.gebruiker where id= ?",[req.user.id], (error, results, fields) =>{
+    connection.query("SELECT firstName, lastName, email, phone, pass, birth, profielFotoLink FROM roosterit.gebruiker where id= ?",[req.user.id], (error, results, fields) =>{
         res.json(results)
     });
 });
