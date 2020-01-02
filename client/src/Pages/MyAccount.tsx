@@ -4,12 +4,12 @@ import "../Components/User";
 var API_LINK='http://localhost:5000/api';
 
 interface IState {
-    content:{firstName:string,lastName:string,email:string,phone:string,password:string,birth:string,profielFotoLink:string}[],
+    content:{firstName:string,lastName:string,email:string,phone:string,pass:string,birth:string,profielFotoLink:string}[],
     firstName: string,
     lastName:string,
     email: string,
     phone: string,
-    password: string,
+    pass: string,
     birth: string,
     profielFotoLink: string,
     isWerkgever: string
@@ -30,12 +30,12 @@ class MyAccount extends React.Component<IProps,IState>{
             lastName: "",
             email: "",
             phone: "",
-            password: "",
+            pass: "",
             birth: "",
             profielFotoLink: "",
             isWerkgever: ""
         };
-        this.lijst=["firstName","lastName","email","phone","password","birth","profielfoto","isWerkgever"];
+        this.lijst=["firstName","lastName","email","phone","pass","birth","profielfoto","isWerkgever"];
         this.refreshData=this.refreshData.bind(this)
     }
 
@@ -64,7 +64,7 @@ class MyAccount extends React.Component<IProps,IState>{
                                                               lastName={value.lastName}
                                                               mail={value.email}
                                                               telefoon={value.phone}
-                                                              wachtwoord={value.password}
+                                                              wachtwoord={value.pass}
                                                               geboorte={value.birth}
                                                               avatar={value.profielFotoLink} apiLink={this.props.apiLink}/>})}
             </div>
