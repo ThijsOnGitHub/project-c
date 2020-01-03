@@ -46,7 +46,7 @@ class NextShift extends React.Component<IProps, IState> {
         return(
             <div className='NextShift'>
                 <p>{(this.state.NextShift) ? new Date(this.state.NextShift.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}):"Je hebt geen volgende dienst."}</p>
-                <p>van {(this.state.NextShift) ? new Date(this.state.NextShift.beginTijd).toLocaleTimeString("nl-NL", {hour: '2-digit', minute:'2-digit'}) : "--:--"} tot {(this.state.NextShift) ? new Date(this.state.NextShift.eindTijd).toLocaleTimeString("nl-NL", {hour: '2-digit', minute:'2-digit'}): "--:--"}</p>
+                <p>van {(this.state.NextShift) ? this.state.NextShift.beginTijd.split(":").slice(0,-1).join(":") : "--:--"} tot {(this.state.NextShift) ? this.state.NextShift.eindTijd.split(":").slice(0,-1).join(":"): "--:--"}</p>
             </div>
         )
     }
