@@ -10,8 +10,8 @@ interface IState{
         userId:number
     },
     secondUser:{
-        naam:string,
-        userId:number
+        userId:number,
+        naam:string
     }
 }
 
@@ -36,8 +36,8 @@ class ZiekMeld extends React.Component<IProps, IState> {
                 userId:null
             },
             secondUser:{
-                naam:"",
-                userId:null
+                userId:null,
+                naam:""
             }
         }
     }
@@ -114,7 +114,9 @@ class ZiekMeld extends React.Component<IProps, IState> {
             },
         body: JSON.stringify({notifId:this.props.notifId})
         }).then(res => res.json());
-        this.setState({secondUser:secondUser})
+        console.log("secondUser JSON as saved in state BEFORE setState: " +JSON.stringify(this.state.secondUser));
+        this.setState({secondUser:secondUser});
+        console.log("secondUser JSON as saved in state AFTER setState: " +JSON.stringify(this.state.secondUser))
     };
 
     render() {
@@ -138,7 +140,7 @@ class ZiekMeld extends React.Component<IProps, IState> {
                                                 this.state.RoosterAndPerson.naam + " heeft om vervangig gevraagd, van " + new Date(this.state.RoosterAndPerson.beginTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " tot " + new Date(this.state.RoosterAndPerson.eindTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je deze dienst overnemen?"
                                             :
                                             (this.props.messageId == 4) ?
-                                                this.state.RoosterAndPerson.naam + " wil de dienst van " + this.state.secondUser.naam + " overnemen, van " + new Date(this.state.RoosterAndPerson.beginTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " tot " + new Date(this.state.RoosterAndPerson.eindTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je hier goedkeuring voor geven?"
+                                                this.state.RoosterAndPerson.naam + " wil de dienst van " + this.state.secondUser["naam"] + " overnemen, van " + new Date(this.state.RoosterAndPerson.beginTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " tot " + new Date(this.state.RoosterAndPerson.eindTijd).toLocaleTimeString("nl-NL", {hour: 'numeric', minute:'numeric'}) + " op " + new Date(this.state.RoosterAndPerson.datum).toLocaleDateString("nl-NL", {weekday:"long", day:"numeric", month:"long", year:"numeric"}) + ".\nWil je hier goedkeuring voor geven?"
                                                 :
                                                 '[ERROR: Ongeldig messageId]'
                                 }
