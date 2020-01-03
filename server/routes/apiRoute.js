@@ -358,7 +358,7 @@ app.post('/getSecondUser', auth, (req, res) => {
             console.log('getSecondUser failed', error)
         }
         else {
-            res.status(200).send(results);
+            res.status(200).send(results[0]);
             console.log('getSecondUser succeeded')
         }
     })
