@@ -79,6 +79,7 @@ app.get("/GetMedewerkers",auth, ((req, res) =>{
 // Update user via de accountpagina
 app.put("/updategebruiker",auth, (req, res) => {
     let data = req.body;
+    data.newWachtwoord = bcrypt.hash(data.newWachtwoord, 10 );
     console.log("Updaten gebruiker...:");
     connection.query("UPDATE gebruiker SET firstName = (?), lastName = (?), email = (?), phone = (?), pass = (?) WHERE Id = (?)", [data.newVoornaam, data.newAchternaam, data.newEmail, data.newTelefoon, data.newWachtwoord, req.user.id], (error, results, fields) =>{
         res.json(results);
@@ -90,7 +91,6 @@ app.put("/updategebruiker",auth, (req, res) => {
 });
 
 // ---------------- NOTIFICATIES ----------------
-
 app.post("/addnotif",async (req, res) => {
     var data = req.body;
     console.log("Notificatie toevoegen: ");
