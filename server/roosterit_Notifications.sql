@@ -1,0 +1,2 @@
+INSERT INTO roosterit.Notifications (id, userId, messageType, roosterId, roosterItemId, isForBoss, secondUser) VALUES (197, 118, 4, 1, 329, 1, 120);
+INSERT INTO roosterit.Notifications (id, userId, messageType, roosterId, roosterItemId, isForBoss, secondUser) VALUES (198, 118, 0, 1, 287, 0, null);
