@@ -12,7 +12,7 @@ const accountRoute = require('./accountRoute');
 
 var mysql = require('mysql');
 var {serverSecret}=require('../serverSecret');
-var connection=mysql.createConnection(serverSecret.databaseLogin);
+var connection=mysql.createPool(serverSecret.databaseLogin);
 
 var storage= multer.diskStorage({
     destination: function(req,file,cb){
@@ -45,13 +45,16 @@ app.post("/addbedrijf",(req,res)=>{
 });
 
 app.get("/avatar/:name",(req,res)=>{
+    console.log("start getting avatar")
     console.log(__dirname.split("/"));
     res.sendFile(__dirname.split("\\").slice(0,-1).join("\\")+"/uploads/"+req.params.name)
+    console.log("succeed getting avatar")
 });
 
 // ---------------- ACCOUNTS ----------------
 
 app.get("/avatarWithId/:id",(req,res)=>{
+    console.log("start getting avatar")
     connection.query("select profielFotoLink as avatar from gebruiker where id =?",[req.params.id],(err,values)=>{
         if(err){
             res.status(500).send(err)
@@ -65,6 +68,7 @@ app.get("/avatarWithId/:id",(req,res)=>{
 
         }
     })
+console.log("succeed getting avatar")
 });
 
 app.get("/GetMedewerkers",auth, ((req, res) =>{

@@ -1,12 +1,12 @@
 const express = require('express');
 app = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const mysql = require('mysql');
 
 const multer = require('multer');
 const {serverSecret} = require('../serverSecret');
-const connection = mysql.createConnection(serverSecret.databaseLogin);
+const connection = mysql.createPool(serverSecret.databaseLogin);
 
 
 const storage = multer.diskStorage({
