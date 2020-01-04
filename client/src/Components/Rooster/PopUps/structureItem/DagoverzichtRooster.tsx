@@ -3,7 +3,7 @@ import DagField from "../../RoosterStructuur/DagField";
 import TimeMarker from "../../RoosterStructuur/TimeMarker";
 import '../../Rooster.css'
 import LosItemWijzigen, {changeHigerStateFunc} from "../WijzigTijden/LosItemWijzigen";
-import {dayRenderItem, roosterItemRenderFunc, UserData} from "../../roosterData";
+import {dayRenderItem, roosterItemRenderFunc, UserData} from "../../Rooster Classes/roosterData";
 import {TimeMarkerTypes} from "../../RoosterStructuur/TimeMarkerTypes";
 
 

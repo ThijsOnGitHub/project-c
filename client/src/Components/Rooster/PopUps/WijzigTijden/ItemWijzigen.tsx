@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {itemComponentsData} from "../../roosterData";
+import {itemComponentsData} from "../../Rooster Classes/roosterData";
 import LosItemWijzigen, {changeHigherStateInsideFunc} from "./LosItemWijzigen";
 import {ReactComponent as Done} from "../../../../icons/done-24px.svg";
 import {ReactComponent as Create} from "../../../../icons/create-24px.svg";
