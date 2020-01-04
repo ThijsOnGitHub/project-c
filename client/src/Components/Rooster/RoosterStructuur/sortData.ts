@@ -1,4 +1,4 @@
-import {BeginEindTijd} from "../roosterData"
+import {BeginEindTijd} from "../Rooster Classes/roosterData"
 
 export interface sortedData<Data> {
     [data:string]:{[beginEindTijd:string]:Data}

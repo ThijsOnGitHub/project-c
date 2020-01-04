@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import {itemComponentsData} from "../../roosterData";
-import LosItemWijzigen from "./LosItemWijzigen";
+import {itemComponentsData} from "../../Rooster Classes/roosterData";
+import LosItemWijzigen, {changeHigherStateInsideFunc} from "./LosItemWijzigen";
 import {ReactComponent as Done} from "../../../../icons/done-24px.svg";
 import {ReactComponent as Create} from "../../../../icons/create-24px.svg";
 import {Person} from "../Inroosteren/WerknemerInroosteren";
@@ -9,6 +9,7 @@ import {Chip} from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import {Autocomplete} from "@material-ui/lab";
 import Functions from "../../../../Extra Functions/functions";
+import {roosterStructuurItemData, Werknemer, Werknemers} from "../../../../Pages/Rooster";
 
 interface IProps {
     RoosterData:itemComponentsData
@@ -16,11 +17,10 @@ interface IProps {
     close:()=>void
 
 }
-export interface IState {
+export interface IState extends Werknemers {
     beginTijd:string
     eindTijd:string
     datum:Date
-    werkNemers:{userId:number,naam:string,beginTijd:string,eindTijd:string,itemId:number}[]
     edit:boolean
     validToSubmit:boolean
     names:Person[]
@@ -39,7 +39,7 @@ class ItemWijzigen extends Component<IProps,IState>{
             beginTijd:"",
             eindTijd:"",
             datum:new Date(),
-            werkNemers:[],
+            werknemers:[],
             edit:false,
             validToSubmit:true,
             names:[],
@@ -61,9 +61,9 @@ class ItemWijzigen extends Component<IProps,IState>{
     }
 
     updateNewNames=async ()=>{
-        console.log(this.state.werkNemers)
+        console.log(this.state.werknemers)
         const personList=this.state.names.filter(value => {
-            return !this.state.werkNemers.some(value1 => value1.userId===value.id)
+            return !this.state.werknemers.some(value1 => value1.userId===value.id)
         })
         await this.setState({newNames:personList})
     }
@@ -94,9 +94,9 @@ class ItemWijzigen extends Component<IProps,IState>{
                 });
                 this.setState(oldState=>{
                     objects.forEach(value =>{
-                        oldState.werkNemers.push({beginTijd:this.state.beginTijd,eindTijd:this.state.eindTijd,naam:value.naam,itemId:value.itemId,userId:value.id})
+                        oldState.werknemers.push({beginTijd:new Date(this.state.beginTijd),eindTijd:new Date(this.state.eindTijd),naam:value.naam,itemId:value.itemId,userId:value.id})
                     })
-                    return {selectedNames:[],werkNemers:oldState.werkNemers,inroosteren:false}},this.updateNewNames
+                    return {selectedNames:[],werknemers:oldState.werknemers,inroosteren:false}},this.updateNewNames
                 )
 
       }
@@ -104,13 +104,13 @@ class ItemWijzigen extends Component<IProps,IState>{
 
      componentDidMount=async ()  =>{
         var userData=this.props.RoosterData.UserData.map(value => {
-            return Object.assign(value,{beginTijd:new Date(this.props.RoosterData.beginTijd).toLocaleTimeString('nl-NL',{hour:"2-digit",minute:"2-digit"}),eindTijd:new Date(this.props.RoosterData.eindTijd).toLocaleTimeString('nl-NL',{hour:"2-digit",minute:"2-digit"})})
+            return Object.assign(value,{beginTijd:new Date(this.props.RoosterData.beginTijd),eindTijd:new Date(this.props.RoosterData.eindTijd)})
         })
         this.setState({
             beginTijd:new Date(this.props.RoosterData.beginTijd).toLocaleTimeString('nl-NL',{hour:"2-digit",minute:"2-digit"}),
             eindTijd:new Date(this.props.RoosterData.eindTijd).toLocaleTimeString('nl-NL',{hour:"2-digit",minute:"2-digit"}),
             datum:new Date(this.props.RoosterData.datum),
-            werkNemers:userData
+            werknemers:userData
         })
         await this.getUsers()
         this.updateNewNames()
@@ -133,10 +133,10 @@ class ItemWijzigen extends Component<IProps,IState>{
         });
     }
 
-    changeState=(functie:(oldState:IState)=>Partial<IState>)=>{
+    changeState=(functie:changeHigherStateInsideFunc)=>{
        this.setState<never>((oldstate)=>{return functie(oldstate)},() => {
            this.updateNewNames()
-           if(this.state.werkNemers.length===0){
+           if(this.state.werknemers.length===0){
                this.props.close()
            }
        })
@@ -183,8 +183,8 @@ class ItemWijzigen extends Component<IProps,IState>{
                                 this.state.edit?
                                     <Done onClick={() => {
                                         if(this.state.validToSubmit){
-                                            console.log(this.state.werkNemers)
-                                            var newWerknemers=this.state.werkNemers.map(value=>{
+                                            console.log(this.state.werknemers)
+                                            var newWerknemers=this.state.werknemers.map(value=>{
                                                 fetch(this.props.apiLink+"/rooster/change/"+value.itemId,{
                                                     method:"POST",
                                                     headers:{
@@ -194,10 +194,10 @@ class ItemWijzigen extends Component<IProps,IState>{
                                                     body:JSON.stringify({beginTijd:this.state.beginTijd+":00",eindTijd:this.state.eindTijd+":00"})
                                                 })
 
-                                                return {...value,beginTijd:this.state.beginTijd,eindTijd:this.state.eindTijd}
+                                                return {...value,beginTijd:new Date(this.state.beginTijd),eindTijd:new Date(this.state.eindTijd)}
                                             })
                                             console.log(newWerknemers)
-                                            this.changeState(oldState => ({werkNemers:newWerknemers}))
+                                            this.changeState(oldState => ({werknemers:newWerknemers}))
                                             this.setState({edit: false})
                                         }else {
                                             this.beginTijd.current.reportValidity()
@@ -257,9 +257,11 @@ class ItemWijzigen extends Component<IProps,IState>{
                     </tbody>
                 </table>
                 <table className="maxFullHeight overFlowAuto thinScrollBar minHeight">
-                    {this.state.werkNemers.map((value,index) => {
+                    {this.state.werknemers.map((value, index) => {
                         return(
-                           <LosItemWijzigen changeHigherState={this.changeState} index={index} itemId={value.itemId} userId={value.userId} naam={value.naam} beginTijd={value.beginTijd} eindTijd={value.eindTijd} apiLink={this.props.apiLink}/>
+                           <LosItemWijzigen changeHigherState={this.changeState} index={index} itemId={value.itemId} userId={value.userId} naam={value.naam} beginTijd={value.beginTijd.toJSON()} eindTijd={value.eindTijd.toJSON()} apiLink={this.props.apiLink}>
+                            <p>{this.state.beginTijd.split(":").slice(0,-1).join(":")}-{this.state.eindTijd.split(":").slice(0,-1).join(":")}</p>
+                           </LosItemWijzigen>
                         )
                     })}
                 </table>

@@ -2,9 +2,10 @@ const express=require("express");
 router=express.Router();
 const mysql = require('mysql');
 const jwt=require("jsonwebtoken");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 var {serverSecret}=require('../serverSecret');
-var connection=mysql.createConnection(serverSecret.databaseLogin);
+
+var connection=mysql.createPool(serverSecret.databaseLogin);
 
 const expireTime="5m"
 
@@ -12,6 +13,7 @@ router.post("/Login", (req,res) => {
     console.log(req.body);
     connection.query("SELECT email,pass,id,verificatie=1 as verificatie,isWerkgever =1 as isWerkgever FROM gebruiker where email = ?", [req.body.email], (err, values, fields) => {
         console.log("Got data from Database");
+        console.log(err)
             if (err || values.length === 0) {
                 res.status(401).send("Wachtwoord of E-mail niet geldig")
             } else {
@@ -50,6 +52,7 @@ router.get("/refresh",(req, res) => {
         if(err){
             res.status(401).send()
         }
+        console.log(values)
         if(values.length!==0){
             const token=req.header("refreshToken");
             jwt.verify(token,serverSecret.refreshSecret,(err1, decoded) => {

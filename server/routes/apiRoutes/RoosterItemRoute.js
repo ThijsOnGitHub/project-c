@@ -4,7 +4,7 @@ const auth=require("../../middleware/verifytoken");
 const yourItem=require("../../middleware/itemOfWerkgever")
 var mysql = require('mysql');
 var {serverSecret}=require('../../serverSecret');
-var connection=mysql.createConnection(serverSecret.databaseLogin);
+var connection=mysql.createPool(serverSecret.databaseLogin);
 
 
 app.post("/add",auth,(req,res)=>{

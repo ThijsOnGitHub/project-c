@@ -4,7 +4,7 @@ import TimeMarker from "./TimeMarker";
 import '../Rooster.css'
 import DagTitel from "./DagTitel";
 import {TimeMarkerTypes} from './TimeMarkerTypes';
-import {fullRenderItem} from "../roosterData";
+import {fullRenderItem} from "../Rooster Classes/roosterData";
 
 interface IProps {
     startDate:Date

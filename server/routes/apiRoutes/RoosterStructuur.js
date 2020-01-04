@@ -3,7 +3,7 @@ app=express.Router();
 const auth=require("../../middleware/verifytoken");
 var mysql = require('mysql');
 var {serverSecret}=require('../../serverSecret');
-var connection=mysql.createConnection(serverSecret.databaseLogin);
+var connection=mysql.createPool(serverSecret.databaseLogin);
 
 
 app.get("/get",auth,(req, res) => {

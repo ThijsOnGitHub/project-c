@@ -13,16 +13,17 @@ import RoosterData, {
     fullRenderItem,
     itemComponentsData,
     roosterItemRenderFunc
-} from "../Components/Rooster/roosterData";
+} from "../Components/Rooster/Rooster Classes/roosterData";
 import OptionWithIcon from "../Components/OptionWithIcon";
 import WerknemerInroosteren from "../Components/Rooster/PopUps/Inroosteren/WerknemerInroosteren";
 import {sortDataOnTime, sortedData} from "../Components/Rooster/RoosterStructuur/sortData";
 import Functions from "../Extra Functions/functions";
 import StructureItem from "../Components/Rooster/RoosterItems/StructureItem";
 import TijdvakWeergeven from "../Components/Rooster/PopUps/structureItem/TijdvakWeergeven";
+import StructureData from "../Components/Rooster/Rooster Classes/StructureData";
 
 
-interface roosterStructuurData{
+export interface roosterStructuurData{
     id:number
     roosterid:number
     dagNummer:number
@@ -32,7 +33,10 @@ interface roosterStructuurData{
     eindTijd:string
     color:string
 }
-export type roosterStructuurItemData=roosterStructuurData & {werknemers:{beginTijd:Date,eindTijd:Date,naam:string,userId:number,itemId:number}[],datum:string,beginTijd:string,eindTijd:string}
+
+export interface Werknemer{beginTijd:Date,eindTijd:Date,naam:string,userId:number,itemId:number}
+export interface Werknemers{werknemers:Werknemer[]}
+export type roosterStructuurItemData=roosterStructuurData & {datum:string,beginTijd:string,eindTijd:string} & Werknemers
 
 
 interface IState {
@@ -94,50 +98,7 @@ class Rooster extends Component<IProps,IState>{
         this.setState({minTijd:roosterData.minTijd,maxTijd:roosterData.maxTijd})
 
         if(this.props.isWerkgever){
-            var copyData=this.state.roosterStructuurData.map(value => Object.assign({},value))
-            var sturctureData= copyData.map(value => {
-                var amountToAdd=(((value.dagNummer-1)%7)+7)%7
-                var datum=new Date(this.state.beginDatum.getTime()+amountToAdd*86400000)
-                var beginTijd=Functions.timeStringToDate(value.beginTijd).toJSON()
-                var eindTijd=Functions.timeStringToDate(value.eindTijd).toJSON()
-                var data=Object.assign(value,{datum:datum.toJSON(),werknemers:[],beginTijd:beginTijd,eindTijd:eindTijd})
-                return data
-            })
-            var itemsInTheWeek=sortDataOnTime(sturctureData)
-            Object.keys(itemsInTheWeek).forEach(value => {
-                var tijdItems=itemsInTheWeek[value]
-                var roosterItems=roosterData.data[value]
-                Object.keys(tijdItems).forEach(value1 => {
-                    var tijd=value1
-                    //Er komen geen structuur items tegelijkertijd
-                    var item=tijdItems[tijd]
-                    if(roosterItems !== undefined){
-                        var werknemersLijst=Object.entries(roosterItems)
-
-                        var tijden1=new BeginEindTijd(tijd)
-                        werknemersLijst.forEach(value2 => {
-                            var tijden2=new BeginEindTijd(value2[0])
-                            if(!(tijden1.beginTijdWaarde>=tijden2.eindTijdWaarde||tijden1.eindTijdWaarde<=tijden2.beginTijdWaarde)){
-                                value2[1].forEach(value3 => {
-                                    item.werknemers.push({beginTijd:tijden2.beginTijd,eindTijd:tijden2.eindTijd,userId:value3.userId,itemId:value3.itemId,naam:value3.naam})
-                                })
-                            }
-                        })
-                    }
-                })
-            })
-            console.log(itemsInTheWeek)
-            var itemsInTheWeekRender=Object.assign({},itemsInTheWeek)
-            var renderObject:sortedData<roosterItemRenderFunc>={}
-            Object.entries(itemsInTheWeekRender).forEach(value => {
-                renderObject[value[0]]={}
-                    Object.entries(value[1]).forEach(value1 => {
-                        console.log(value[1])
-                        renderObject[value[0]][value1[0]]=this.retrurnStructureItem(value1[1])
-                    })
-                }
-            )
-            renderdAgendaJSON=renderObject
+            renderdAgendaJSON=StructureData.getRenderdItems(this.state.roosterStructuurData,roosterData,this.state.beginDatum,this.retrurnStructureItem)
         }else{
             renderdAgendaJSON=roosterData.getRenderdItems(this.retrurnRenderdItems)
         }
