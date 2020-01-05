@@ -218,7 +218,7 @@ app.put("/updategebruiker",auth, (req, res) => {
 
 app.post("/addnotif",async (req, res) => {
     console.log("Notificatie toevoegen: ");
-    connection.query("INSERT INTO Notifications (userId, messageType, roosterId, roosterItemId, isForBoss, secondUser) VALUES (?,?,?,?,?,?)", [req.body.person, req.body.messageId, req.body.roosterId, req.body.roosterItemId, req.body.isForBoss, req.body.secondUser],
+    connection.query("INSERT INTO Notifications (userId, messageType, roosterId, roosterItemId, isForBoss, secondUser) VALUES (?,?,(select roosterId from gebruiker where gebruiker.id = ?),?,?,?)", [req.body.person, req.body.messageId, req.body.person, req.body.roosterItemId, req.body.isForBoss, req.body.secondUser],
         (error, results, fields) => {
             if (error) {
                 console.log(error);
@@ -332,6 +332,19 @@ app.post('/ziekAccept', auth, (req, res) => {
         else {
             res.status(200).send();
             console.log('ziekAccept succeeded')
+        }
+    })
+});
+app.post("/resetState", auth, (req, res) => {
+    console.log("start resetState");
+    connection.query("UPDATE roosterItems SET state = 1 WHERE itemId = ?", [req.body.roosterItemId], (error, results, fields) => {
+        if(error){
+            res.status(500).send(error);
+            console.log("resetState failed, ", error)
+        }
+        else {
+            res.status(200).send();
+            console.log('resetState succeeded')
         }
     })
 });

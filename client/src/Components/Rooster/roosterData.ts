@@ -17,10 +17,10 @@ export interface fullRenderItem{ [datum: string]: dayRenderItem }
 
 
 export class BeginEindTijd{
-    public beginTijd:Date
-    public eindTijd:Date
-    public beginTijdWaarde:number
-    public eindTijdWaarde:number
+    public beginTijd:Date;
+    public eindTijd:Date;
+    public beginTijdWaarde:number;
+    public eindTijdWaarde:number;
 
 
     static createBeginEindTijd(beginTijd:string,eindTijd:string){

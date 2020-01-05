@@ -63,6 +63,21 @@ class ZiekMeld extends React.Component<IProps, IState> {
         });
     };
 
+    deleteSwitch = () => {
+        fetch(this.props.apiLink+'/delNotif', {method:'post',
+            headers:{
+                authToken:sessionStorage.getItem('authToken'),
+                "content-type":"application/json"
+            },
+            body:JSON.stringify({notifId:this.props.notifId})});
+        fetch(this.props.apiLink+"/resetState", {method:"post",
+            headers:{
+                authToken:sessionStorage.getItem('authToken'),
+                "content-type":"application/json"
+            },
+            body:JSON.stringify({roosterItemId:this.props.roosterItemId})})
+    };
+
     acceptApproval = () => {
         console.log('Transferring schedule item to new user...');
         fetch(this.props.apiLink+"/ziekAccept", {method:"post",
@@ -147,8 +162,8 @@ class ZiekMeld extends React.Component<IProps, IState> {
                             </td>
                         </tr>
                         <tr>
-                            <Link to={"/OvernameFeedback"}><button className="Button" onClick={(this.props.messageId != 4) ? this.acceptZiekmeld : this.acceptApproval}>Ja</button></Link>
-                            <Link to={"/"}><button className="Button">Nee</button></Link>
+                            <Link to={(this.state.RoosterAndPerson.userId == this.props.currentUser) ? "/OvernameFeedback/"+ 2 + "/" + true : (this.props.messageId != 4) ? "/OvernameFeedback/" + 1 + "/" + true : "/OvernameFeedback/" + 0 + "/" + true}><button className="Button" onClick={(this.state.RoosterAndPerson.userId == this.props.currentUser) ? this.deleteSwitch : (this.props.messageId != 4) ? this.acceptZiekmeld : this.acceptApproval}>Ja</button></Link>
+                            <Link to={(this.state.RoosterAndPerson.userId == this.props.currentUser) ? "/OvernameFeedback/"+ 2 + "/" + false : (this.props.messageId != 4) ? "/OvernameFeedback/" + 1 + "/" + false : "/OvernameFeedback/" + 0 + "/" + false}><button className="Button" onClick={(this.props.messageId != 4) ? null : this.deleteSwitch}>Nee</button></Link>
                         </tr>
                     </tbody>
                 </table>
