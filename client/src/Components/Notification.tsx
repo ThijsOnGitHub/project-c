@@ -12,7 +12,7 @@ interface IProps {
 
 class NotificationItem extends React.Component<IProps> {
     render() {
-        let messages = [" wil voor een dienst vervangen worden.", " heeft zich ziek gemeld.", " gaat op vakantie.", " heeft je rooster bijgewerkt.", " wil goedkeuring voor een dienstruil."];
+        let messages = [" wil voor een dienst vervangen worden.", " heeft zich ziek gemeld.", " heeft je vervangingsaanvraag afgekeurd.", " heeft je rooster bijgewerkt.", " wil goedkeuring voor een dienstruil."];
         return (
             <Link to={
                 (this.props.messageId == 0 || this.props.messageId == 1) ?
