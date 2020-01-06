@@ -1,6 +1,6 @@
-import {DagData} from "./RoosterStructuur/DagField";
+import {DagData} from "../RoosterStructuur/DagField";
 import {ReactElement} from "react";
-import RoosterItem from "./RoosterItems/RoosterItem";
+import RoosterItem from "../RoosterItems/RoosterItem";
 
 
 export interface itemComponentsData { beginTijd: string, eindTijd: string, datum: string, UserData: { naam: string, userId: number,itemId:number,status:number }[] }
@@ -48,7 +48,7 @@ class RoosterData {
     public minTijd:Date=new Date(0,0,0,7);
 
     constructor(data:roosterItem[]) {
-        this.data=this.sortOnSameTime(data)
+        this.data=this.sortOnSameTime(data.slice())
     }
 
     //Deze functie kijk of lijst1 een sublijst van lijst2 is

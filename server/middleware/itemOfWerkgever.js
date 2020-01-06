@@ -1,6 +1,6 @@
 var mysql = require('mysql');
 var {serverSecret}=require('../serverSecret');
-var connection=mysql.createConnection(serverSecret.databaseLogin);
+var connection=mysql.createPool(serverSecret.databaseLogin);
 
 
 module.exports=function itemOfWerkgever(req, res, next) {

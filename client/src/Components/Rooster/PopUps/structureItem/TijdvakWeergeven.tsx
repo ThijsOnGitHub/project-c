@@ -5,10 +5,11 @@ import {Chip} from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import {Autocomplete} from "@material-ui/lab";
 import Functions from "../../../../Extra Functions/functions";
-import {roosterStructuurItemData} from "../../../../Pages/Rooster";
-import DagoverzichtRooster, {WerknemerRenderObject} from "../../RoosterStructuur/DagoverzichtRooster";
+import {roosterStructuurItemData, Werknemers} from "../../../../Pages/Rooster";
+import DagoverzichtRooster, {WerknemerRenderObject} from "./DagoverzichtRooster";
 import RoosterItem from "../../RoosterItems/RoosterItem";
 import {DagData} from "../../RoosterStructuur/DagField";
+import {changeHigherStateInsideFunc} from "../WijzigTijden/LosItemWijzigen";
 
 
 interface IProps {
@@ -18,7 +19,7 @@ interface IProps {
     add:(component:React.ReactElement)=>void
 }
 
-export interface IState {
+export interface IState extends Werknemers{
     names:Person[]
     newNames:Person[]
     selectedNames:Person[],
@@ -32,6 +33,7 @@ class TijdvakWeergeven extends Component<IProps,IState>{
     constructor(props:IProps){
         super(props)
         this.state={
+            werknemers:[],
             names:[],
             newNames:[],
             selectedNames:[],
@@ -42,6 +44,7 @@ class TijdvakWeergeven extends Component<IProps,IState>{
     }
 
     componentDidMount=async()=> {
+        this.setState({werknemers:this.props.RoosterData.werknemers})
         await this.getUsers()
         this.updateNewNames()
     }
@@ -83,7 +86,12 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                 var objects = names.map((value, index) => {
                     return Object.assign(value,{itemId:itemIds[index]})
                 });
-        this.setState({inroosteren:false,selectedNames:[]})
+        this.setState(oldState=>{
+            objects.forEach(value =>{
+                oldState.werknemers.push({beginTijd:new Date(this.props.RoosterData.beginTijd),eindTijd:new Date(this.props.RoosterData.eindTijd),naam:value.naam,itemId:value.itemId,userId:value.id})
+            })
+            return {selectedNames:[],werknemers:oldState.werknemers,inroosteren:false}}
+        )
     }
 
 
@@ -97,6 +105,15 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                                 <div style={{backgroundColor:"var(--accent)",width:"100%",height:50}}></div>
                             </RoosterItem>
                         )}
+            }
+        })
+    }
+
+    changeThisState=(functie:changeHigherStateInsideFunc)=>{
+        this.setState<never>((oldstate)=>{return functie(oldstate)},() => {
+            this.updateNewNames()
+            if(this.state.werknemers.length===0){
+                this.props.close()
             }
         })
     }
@@ -186,7 +203,7 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                 {
 
                  <table className="maxFullHeight overFlowAuto thinScrollBar minHeight">
-                    <DagoverzichtRooster  addPopUp={this.props.add} closePopUp={this.props.close} apiLink={this.props.apiLink} eindTijd={new Date(0,0,0,23,59,59)} beginTijd={new Date(0,0,0,0,0,0)} width={700} markerInterval={new Date(0,0,0,2)} renderItems={
+                    <DagoverzichtRooster  addPopUp={this.props.add} closePopUp={this.props.close} apiLink={this.props.apiLink} eindTijd={new Date(0,0,0,23,59,59)} beginTijd={new Date(0,0,0,0,0,0)} width={700} markerInterval={new Date(0,0,0,2)} changeHigherState={this.changeThisState} renderItems={
                         this.getRenderdItems()
                     }/>
                 </table>

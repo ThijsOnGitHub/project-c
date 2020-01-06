@@ -1,7 +1,7 @@
 import React from 'react'
 import TimeMarker from "./TimeMarker";
 import {TimeMarkerTypes} from "./TimeMarkerTypes";
-import {dayRenderItem} from "../roosterData";
+import {dayRenderItem} from "../Rooster Classes/roosterData";
 
 
 
