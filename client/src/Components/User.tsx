@@ -90,20 +90,34 @@ class User extends React.Component<IProps,IState> {
 
     // Converteer de waarden uit de state naar een JSON string om die in een POST request te plaatsen en te versturen.
     handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        if (this.state.wantToChangePassword){
+            fetch(this.props.apiLink + "/updategebruiker2", {
+                headers: {'Content-Type': 'application/json', authToken: sessionStorage.getItem('authToken')},
+                method: 'PUT',
+                body: JSON.stringify({
+                    newVoornaam: this.state.newVoornaam,
+                    newAchternaam: this.state.newAchternaam,
+                    newEmail: this.state.newEmail,
+                    newTelefoon: this.state.newTelefoon,
+                    newPass: this.state.newPass1
+                })
 
-        // Maak een nieuw rooster aan in de database.
-        fetch(this.props.apiLink + "/updategebruiker", {
-            headers: {'Content-Type': 'application/json', authToken: sessionStorage.getItem('authToken')},
-            method: 'PUT',
-            body: JSON.stringify({
-                newVoornaam: this.state.newVoornaam,
-                newAchternaam: this.state.newAchternaam,
-                newEmail: this.state.newEmail,
-                newTelefoon: this.state.newTelefoon,
-                newPass: this.state.newPass1
-            })
+            });
+        }
+        else{
+            // Maak een nieuw rooster aan in de database.
+            fetch(this.props.apiLink + "/updategebruiker", {
+                headers: {'Content-Type': 'application/json', authToken: sessionStorage.getItem('authToken')},
+                method: 'PUT',
+                body: JSON.stringify({
+                    newVoornaam: this.state.newVoornaam,
+                    newAchternaam: this.state.newAchternaam,
+                    newEmail: this.state.newEmail,
+                    newTelefoon: this.state.newTelefoon,
+                })
 
-        });
+            });
+        }
 
         this.setState({updateDone: true});
     };
