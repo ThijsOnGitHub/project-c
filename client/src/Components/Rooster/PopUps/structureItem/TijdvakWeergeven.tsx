@@ -96,8 +96,7 @@ class TijdvakWeergeven extends Component<IProps,IState>{
 
 
     getRenderdItems=():WerknemerRenderObject[]=>{
-        console.log(this.props.RoosterData.werknemers)
-        return this.props.RoosterData.werknemers.map(value => {
+        return this.state.werknemers.map(value => {
             return {userId:value.userId,itemId:value.itemId,naam:value.naam,beginTijd:value.beginTijd,eindTijd:value.eindTijd,status:0,"function":
                     (roosterData:DagData):ReactElement<RoosterItem>=>{
                         return (
