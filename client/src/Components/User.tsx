@@ -14,6 +14,7 @@ interface IState {
     updateDone: boolean,
     checkemailSuccess: boolean,
     checkoldpasswordSuccess: boolean,
+    wantToChangePassword: boolean,
     letters: RegExp,
     numbers: RegExp,
     passwords: RegExp,
@@ -56,6 +57,7 @@ class User extends React.Component<IProps,IState> {
             updateDone: false,
             checkemailSuccess: false,
             checkoldpasswordSuccess: false,
+            wantToChangePassword: false,
             letters: /^[A-Za-z]+$/,
             numbers: /^[0-9]+$/,
             passwords: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){6,}$/,
@@ -169,7 +171,7 @@ class User extends React.Component<IProps,IState> {
             newTelefoon: newTelefoon.length < 9 || newTelefoon.length >= 11 || !newTelefoon.match(this.state.numbers),
             OldPass: !this.state.checkoldpasswordSuccess,
             newPass1: newPass1.length === 0 || !newPass1.match(this.state.passwords),
-            newPass2: newPass2.length === 0 || !this.state.secondPassSame,
+            newPass2: newPass2 != newPass1,
 
 
         };
@@ -226,29 +228,44 @@ render(){
                                    onBlur={this.handleBlur('newEmail')} onChange={this.handleInputChange} type='text' name="newEmail" value={this.state.newEmail}/></td>
                     </tr>
                     <tr>
-                        <td className="leftInfo"><p>Oud wachtwoord:</p></td>
-                        <td className="rightValue"><p>**********</p></td>
-                        <td><input className={shouldMarkError('OldPass') ? "error" : ""}
-                                   onBlur={this.handleBlur('OldPass')} onChange={this.handleInputChange} type='text' name="OldPass" value={this.state.OldPass}/></td>
-                    </tr>
-                    <tr>
-                        <td className="leftInfo"><p>Nieuw wachtwoord:</p></td>
-                        <td className="rightValue"><p></p></td>
-                        <td><input className={shouldMarkError('newPass1') ? "error" : ""}
-                                   onBlur={this.handleBlur('newPass1')} onChange={this.handleInputChange} type='text' name="newPass1" value={this.state.newPass1}/></td>
-                    </tr>
-                    <tr>
-                        <td className="leftInfo"><p>Bevestig nieuw wachtwoord:</p></td>
-                        <td className="rightValue"><p></p></td>
-                        <td><input className={shouldMarkError('newPass2') ? "error" : ""}
-                                   onBlur={this.handleBlur('newPass2')} onChange={this.handleInputChange} type='text' name="newPass2" value={this.state.newPass2}/></td>
-                    </tr>
-                    <tr>
                         <td className="leftInfo"><p>Telefoonnummer:</p></td>
                         <td className="rightValue"><p>{this.props.telefoon}</p></td>
                         <td><input className={shouldMarkError('newTelefoon') ? "error" : ""}
                                    onBlur={this.handleBlur('newTelefoon')} onChange={this.handleInputChange} type='text' name="newTelefoon" value={this.state.newTelefoon}/></td>
                     </tr>
+                    <tr>
+                        <td className="leftInfo"><p>Verander huidig wachtwoord:</p></td>
+                        <td className="rightValue"></td>
+                        <td><input type='checkbox' name="wantToChangePassword" checked={this.state.wantToChangePassword} placeholder="false" onChange={this.handleInputChange} /></td>
+                    </tr>
+
+
+
+                    { this.state.wantToChangePassword ?
+                        <tr>
+                            <td className="leftInfo"><p>Oud wachtwoord:</p></td>
+                            <td className="rightValue"><p>**********</p></td>
+                            <td><input className={shouldMarkError('OldPass') ? "error" : ""}
+                                       onBlur={this.handleBlur('OldPass')} onChange={this.handleInputChange} type='text' name="OldPass" value={this.state.OldPass}/></td>
+                        </tr> : ''
+                    }
+                    { this.state.wantToChangePassword ?
+                        <tr>
+                            <td className="leftInfo"><p>Nieuw wachtwoord:</p></td>
+                            <td className="rightValue"><p></p></td>
+                            <td><input className={shouldMarkError('newPass1') ? "error" : ""}
+                                       onBlur={this.handleBlur('newPass1')} onChange={this.handleInputChange} type='text' name="newPass1" value={this.state.newPass1}/></td>
+                        </tr> : ''
+                    }
+                    { this.state.wantToChangePassword ?
+                        <tr>
+                            <td className="leftInfo"><p>Bevestig nieuw wachtwoord:</p></td>
+                            <td className="rightValue"><p></p></td>
+                            <td><input className={shouldMarkError('newPass2') ? "error" : ""}
+                                       onBlur={this.handleBlur('newPass2')} onChange={this.handleInputChange} type='text' name="newPass2" value={this.state.newPass2}/></td>
+                        </tr>: ''
+                    }
+                    
                     <tr>
                         <td colSpan={3}><button disabled={isDisabled}  onClick={this.handleSubmit}>Wijzigen</button></td>
                     </tr>
