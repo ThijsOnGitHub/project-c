@@ -11,6 +11,7 @@ import MyAccount from "./Pages/MyAccount";
 import * as jsonwebtoken from 'jsonwebtoken'
 import loadingIcon from "./img/Loding-Icon-zwart.gif";
 import Rooster from "./Pages/Rooster";
+import TijdvakPagina from "./Pages/Tijdvakken";
 
 export interface IState {
     apiLink:string
@@ -167,9 +168,12 @@ class App extends React.Component<{},IState>{
                                         <Route path="/MyAccount" render={() => <MyAccount apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
                                         <Route path="/" exact render={() => <Home apiLink={this.state.apiLink} serverLink={this.state.serverLink}/>}/>
                                         <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink} isWerkgever={this.state.isWerkgever}/>}/>
+
                                         {
                                             this.state.isWerkgever?
                                                 <Switch>
+                                                    <Route path="/Tijdvakken" render={() => <TijdvakPagina apiLink={this.state.apiLink} />}/>
+
                                                 </Switch>:
                                                 <Switch>
                                                 </Switch>

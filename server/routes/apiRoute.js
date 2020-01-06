@@ -84,6 +84,15 @@ app.get("/GetMedewerkers",auth, ((req, res) =>{
         res.status(401).send("Je bent geen werkgever")
     }
 }))
+
+app.get("/GetTijdvakItems", auth, ((req, res) => {
+    if(req.roosterStructuurData.isWerkgever){
+        connection.query("SELECT (id, roosterId, dagNummer, titel, aantalWerknemers, beginTijd, eindTijd, color) ")
+        res.status(200).json(result)
+    }
+
+
+}))
 // Zend een POST request dat de data uit de front-end in de database krijgt en daarmee een nieuwe gebruiker aanmaakt.
 app.post("/addgebruiker", upload.single('profielFoto'), async (req, res) => {
     let data = req.body;

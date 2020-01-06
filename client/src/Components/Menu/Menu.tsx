@@ -41,7 +41,15 @@ class Menu extends React.Component <IProps,IState>{
                         <div>
                             <MenuItem tekst={"Registeren"} path={'/Registratie'}/>.
                         </div>
-
+                {
+                    this.props.isWerkgever&&this.props.loggedIn?
+                    <li>
+                    <MenuItem tekst={"Tijdvakken"} path={"/TijdvakPagina"}/>
+                    </li>
+                    :
+                    <li>
+                    </li>
+                }
                 }
                 </ul>
                 {
