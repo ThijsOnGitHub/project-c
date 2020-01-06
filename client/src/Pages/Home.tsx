@@ -4,8 +4,6 @@ import { ReactComponent as CalendarIcon } from "../calendar.svg";
 import { ReactComponent as MoneyIcon } from "../money.svg";
 import NotifList from "../Components/NotifList";
 import NextShift from "../Components/NextShift";
-import {Redirect} from "react-router-dom"
-var API_LINK='http://localhost:5000/api';
 
 interface IState {
     content:{firstName:string,lastName:string,email:string,phone:string,birth:string,profielFotoLink:string}[],

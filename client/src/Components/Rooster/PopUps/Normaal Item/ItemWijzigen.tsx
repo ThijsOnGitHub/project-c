@@ -147,7 +147,7 @@ class ItemWijzigen extends Component<IProps,IState>{
     render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
         return (
             <div className="hunderMaxHeight heightTable scrolOverflow">
-                <h1 className="noTopMargin">Wijzig Roosteritem</h1>
+                <h1 className="noTopMargin">Wijzig werktijden</h1>
                 <table>
                     <tbody >
                     <tr>
@@ -164,7 +164,7 @@ class ItemWijzigen extends Component<IProps,IState>{
                         <td>
                         </td>
                         <td>
-                            Begintijden:
+                            Tijden:
                         </td>
                         <td>
                             {
