@@ -66,8 +66,8 @@ class User extends React.Component<IProps,IState> {
                 newAchternaam: false,
                 newEmail: false,
                 newTelefoon: false,
-                OldPass: false,
-                newPass1: false,
+                OldPass: true,
+                newPass1: true,
                 newPass2: false
             }
         };
@@ -101,7 +101,6 @@ class User extends React.Component<IProps,IState> {
                 newEmail: this.state.newEmail,
                 newTelefoon: this.state.newTelefoon,
                 newPass: this.state.newPass1
-
             })
 
         });
@@ -162,7 +161,7 @@ class User extends React.Component<IProps,IState> {
             this.setState({checkoldpasswordSuccess: result});
     };
 
-    validate(newVoornaam:string, newAchternaam:string, newEmail:string, newTelefoon:string, OldPass:string, newPass1: string, newPass2: string) {
+    validate1(newVoornaam:string, newAchternaam:string, newEmail:string, newTelefoon:string, OldPass:string, newPass1: string, newPass2: string) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
         return {
             newVoornaam: newVoornaam.length === 0 || newVoornaam.length >= 30 || !newVoornaam.match(this.state.letters),
@@ -176,25 +175,50 @@ class User extends React.Component<IProps,IState> {
 
         };
     }
+
+    validate2(newVoornaam:string, newAchternaam:string, newEmail:string, newTelefoon:string) {
+        // Als een waarde hier true is betekent dat dat het veld niet valide is.
+        return {
+            newVoornaam: newVoornaam.length === 0 || newVoornaam.length >= 30 || !newVoornaam.match(this.state.letters),
+            newAchternaam: newAchternaam.length === 0 || newAchternaam.length >= 30 || !newAchternaam.match(this.state.letters),
+            newEmail: !newEmail.includes("@") || (newEmail.length === 0 || newEmail.length >= 30) || !this.state.checkemailSuccess && (this.state.newEmail != this.props.mail),
+            newTelefoon: newTelefoon.length < 9 || newTelefoon.length >= 11 || !newTelefoon.match(this.state.numbers),
+        };
+    }
+
     // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
-    canBeSubmitted() {
-        const errors = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon,this.state.OldPass, this.state.newPass1, this.state.newPass2);
-        const isDisabled = Object.values(errors).some(value => value);
-        return !isDisabled;
+    canBeSubmitted1() {
+        const errors1 = this.validate1(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon,this.state.OldPass, this.state.newPass1, this.state.newPass2);
+        const isDisabled1 = Object.values(errors1).some(value => value);
+        return !isDisabled1;
+    }
+    canBeSubmitted2() {
+        const errors2 = this.validate2(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon);
+        const isDisabled2 = Object.values(errors2).some(value => value);
+        return !isDisabled2;
     }
 
 render(){
-    type fields = {newVoornaam: boolean, newAchternaam: boolean, newEmail: boolean, newTelefoon: boolean, OldPass: boolean, newPass1: boolean, newPass2: boolean}
-    const errors:fields = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon, this.state.OldPass, this.state.newPass1, this.state.newPass2);
-    const isDisabled = Object.values(errors).some(value => value);
+    type fields1 = {newVoornaam: boolean, newAchternaam: boolean, newEmail: boolean, newTelefoon: boolean, OldPass: boolean, newPass1: boolean, newPass2: boolean}
+    const errors1:fields1 = this.validate1(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon, this.state.OldPass, this.state.newPass1, this.state.newPass2);
+    const isDisabled1 = Object.values(errors1).some(value => value);
 
     // Valideer of een fout getoond zou moeten worden.
-    const shouldMarkError = (field: keyof typeof errors) => {
-        const hasError = errors[field];
+    const shouldMarkError = (field: keyof typeof errors1) => {
+        const hasError = errors1[field];
         const shouldShow = this.state.touched[field];
         return hasError ? shouldShow : false;
     };
 
+    type fields2 = {newVoornaam: boolean, newAchternaam: boolean, newEmail: boolean, newTelefoon: boolean}
+    const errors2:fields2 = this.validate2(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon);
+    const isDisabled2 = Object.values(errors2).some(value => value);
+
+    const shouldMarkError2 = (field: keyof typeof errors2) => {
+        const hasError = errors2[field];
+        const shouldShow = this.state.touched[field];
+        return hasError ? shouldShow : false;
+    };
     return(
         <div id="reg">
         <form id="account">
@@ -211,26 +235,26 @@ render(){
                     <tr>
                         <td className="leftInfo"><p>Voornaam:</p></td>
                         <td className="rightValue"><p>{this.props.firstName}</p></td>
-                        <td><input className={shouldMarkError('newVoornaam') ? "error" : ""}
+                        <td><input className={shouldMarkError2('newVoornaam') ? "error" : ""}
                                    onBlur={this.handleBlur('newVoornaam')}
                                    type='text' name="newVoornaam" value={this.state.newVoornaam} onChange={this.handleInputChange}/></td>
                     </tr>
                     <tr>
                         <td className="leftInfo"><p>Achternaam:</p></td>
                         <td className="rightValue"><p>{this.props.lastName}</p></td>
-                        <td><input className={shouldMarkError('newAchternaam') ? "error" : ""}
+                        <td><input className={shouldMarkError2('newAchternaam') ? "error" : ""}
                                    onBlur={this.handleBlur('newAchternaam')} onChange={this.handleInputChange} type='text' name="newAchternaam" value={this.state.newAchternaam}/></td>
                     </tr>
                     <tr>
                         <td className="leftInfo"><p>Email:</p></td>
                         <td className="rightValue"><p>{this.props.mail}</p></td>
-                        <td><input className={shouldMarkError('newEmail') ? "error" : ""}
+                        <td><input className={shouldMarkError2('newEmail') ? "error" : ""}
                                    onBlur={this.handleBlur('newEmail')} onChange={this.handleInputChange} type='text' name="newEmail" value={this.state.newEmail}/></td>
                     </tr>
                     <tr>
                         <td className="leftInfo"><p>Telefoonnummer:</p></td>
                         <td className="rightValue"><p>{this.props.telefoon}</p></td>
-                        <td><input className={shouldMarkError('newTelefoon') ? "error" : ""}
+                        <td><input className={shouldMarkError2('newTelefoon') ? "error" : ""}
                                    onBlur={this.handleBlur('newTelefoon')} onChange={this.handleInputChange} type='text' name="newTelefoon" value={this.state.newTelefoon}/></td>
                     </tr>
                     <tr>
@@ -265,10 +289,18 @@ render(){
                                        onBlur={this.handleBlur('newPass2')} onChange={this.handleInputChange} type='password' name="newPass2" value={this.state.newPass2}/></td>
                         </tr>: ''
                     }
-
-                    <tr>
-                        <td colSpan={3}><button disabled={isDisabled}  onClick={this.handleSubmit}>Wijzigen</button></td>
-                    </tr>
+                    {this.state.wantToChangePassword ?
+                        <tr>
+                            <td colSpan={3}>
+                                <button disabled={isDisabled1} onClick={this.handleSubmit}>Wijzigen</button>
+                            </td>
+                        </tr> :
+                        <tr>
+                            <td colSpan={3}>
+                                <button disabled={isDisabled2} onClick={this.handleSubmit}>Wijzigen</button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
                 </table>
             </form>
