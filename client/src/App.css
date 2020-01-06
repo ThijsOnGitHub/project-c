@@ -546,8 +546,8 @@ table#t01 {
   margin: auto;
 }
 
-.error {
-  border: 3px solid red;
+.error,form .error {
+  border: 3px solid red!important;
 }
 
 .validationMessage {

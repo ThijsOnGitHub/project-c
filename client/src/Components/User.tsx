@@ -1,5 +1,5 @@
-import React from'react'
-import {Redirect} from 'react-router-dom'
+import React from 'react';
+import {Redirect} from 'react-router-dom';
 import {posix} from "path";
 
 interface IState {
@@ -8,6 +8,7 @@ interface IState {
     newEmail:string,
     newTelefoon:string,
     updateDone: boolean,
+    checkemailSuccess: boolean,
     letters: RegExp,
     numbers: RegExp,
     touched: {
@@ -31,7 +32,6 @@ interface IProps {
 }
 
 class User extends React.Component<IProps,IState> {
-    private lijst: (keyof IState)[]
 
     constructor(props: IProps) {
         super(props);
@@ -41,6 +41,7 @@ class User extends React.Component<IProps,IState> {
             newEmail: '',
             newTelefoon: '',
             updateDone: false,
+            checkemailSuccess: false,
             letters: /^[A-Za-z]+$/,
             numbers: /^[0-9]+$/,
             touched: {
@@ -49,7 +50,7 @@ class User extends React.Component<IProps,IState> {
                 newEmail: false,
                 newTelefoon: false
             }
-        }
+        };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
     }
@@ -83,25 +84,40 @@ class User extends React.Component<IProps,IState> {
         this.setState({updateDone: true});
     };
 
-    handleInputChange = (event:React.ChangeEvent<HTMLInputElement>) =>{
+    handleInputChange = async (event:React.ChangeEvent<HTMLInputElement>) =>{
         const target = event.target;
         // Laat de waarde de waarde zijn van het actieve veld. Als het input-type een checkbox is is de waarde of deze aangevinkt is of niet.
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-        this.setState<never> ({[name]: value});
+        console.log(this.state.checkemailSuccess);
+        if (target.name === "newEmail") {this.checkEmail(); }
+
+        await this.setState<never> ({[name]: value});
     }
+
     // Verander de waarde van touched voor een inputveld naar true.
     handleBlur = (field:string) => (event:React.FocusEvent) => {
         this.setState({
             touched: {...this.state.touched, [field]: true},
         });
     };
+
+    checkEmail = async () => {
+        let email: any = await fetch(this.props.apiLink + "/account/checkemail", {
+            headers: {'Content-Type': 'application/json'},
+            method: 'POST',
+            body: JSON.stringify({email: this.state.newEmail})
+        }).then(res => res.json());
+
+        this.setState({checkemailSuccess: email.emailCheck});
+    };
+
     validate(newVoornaam:string, newAchternaam:string, newEmail:string, newTelefoon:string,) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
         return {
             newVoornaam: newVoornaam.length === 0 || newVoornaam.length >= 30 || !newVoornaam.match(this.state.letters),
             newAchternaam: newAchternaam.length === 0 || newAchternaam.length >= 30 || !newAchternaam.match(this.state.letters),
-            newEmail: !newEmail.includes("@") || (newEmail.length === 0 || newEmail.length >= 30),
+            newEmail: !newEmail.includes("@") || (newEmail.length === 0 || newEmail.length >= 30) || !this.state.checkemailSuccess && (this.state.newEmail != this.props.mail),
             newTelefoon: newTelefoon.length < 9 || newTelefoon.length >= 11 || !newTelefoon.match(this.state.numbers),
         };
     }
@@ -123,7 +139,7 @@ render(){
         const shouldShow = this.state.touched[field];
         return hasError ? shouldShow : false;
     };
-        console.log(this.state.updateDone)
+
     return(
         <div id="reg">
         <form id="account">
