@@ -167,7 +167,7 @@ class User extends React.Component<IProps,IState> {
             newAchternaam: newAchternaam.length === 0 || newAchternaam.length >= 30 || !newAchternaam.match(this.state.letters),
             newEmail: !newEmail.includes("@") || (newEmail.length === 0 || newEmail.length >= 30) || !this.state.checkemailSuccess && (this.state.newEmail != this.props.mail),
             newTelefoon: newTelefoon.length < 9 || newTelefoon.length >= 11 || !newTelefoon.match(this.state.numbers),
-            OldPass: this.state.checkoldpasswordSuccess,
+            OldPass: !this.state.checkoldpasswordSuccess,
             newPass1: newPass1.length === 0 || !newPass1.match(this.state.passwords),
             newPass2: newPass2.length === 0 || !this.state.secondPassSame,
 

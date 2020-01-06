@@ -112,7 +112,7 @@ app.post("/checkpassword", async (req, res) => {
 
                 }else{
                     console.log(results)
-                    res.json(resultss);
+                    res.json(result);
                 }
             })
         }
