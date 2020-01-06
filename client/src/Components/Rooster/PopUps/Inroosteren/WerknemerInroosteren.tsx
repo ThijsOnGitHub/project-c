@@ -3,7 +3,6 @@ import {Autocomplete} from "@material-ui/lab";
 import {Chip} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 export interface Person{
     id:number

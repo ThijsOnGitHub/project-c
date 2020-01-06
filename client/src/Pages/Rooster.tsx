@@ -7,7 +7,7 @@ import RoosterItem from "../Components/Rooster/RoosterItems/RoosterItem";
 import WerknemerItem from "../Components/Rooster/RoosterItems/WerknemerItem";
 import WerkgeverItem from "../Components/Rooster/RoosterItems/WerkgeverItem";
 import PopUp from "../Components/Rooster/PopUps/PopUp";
-import ItemWijzigen from "../Components/Rooster/PopUps/WijzigTijden/ItemWijzigen";
+import ItemWijzigen from "../Components/Rooster/PopUps/Normaal Item/ItemWijzigen";
 import RoosterData, {
     BeginEindTijd,
     fullRenderItem,

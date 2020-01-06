@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {ReactComponent as Create} from '../../../../icons/create-24px.svg'
 import {ReactComponent as Done} from '../../../../icons/done-24px.svg'
 import {ReactComponent as Delete} from '../../../../icons/close-24px.svg'
-import {Werknemer, Werknemers} from "../../../../Pages/Rooster";
+import {Werknemers} from "../../../../Pages/Rooster";
 import Functions from "../../../../Extra Functions/functions";
 
 export type changeHigherStateInsideFunc=<T extends Werknemers, >(oldState:T)=> Werknemers

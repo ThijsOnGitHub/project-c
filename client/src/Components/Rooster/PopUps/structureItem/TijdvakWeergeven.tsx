@@ -9,7 +9,7 @@ import {roosterStructuurItemData, Werknemers} from "../../../../Pages/Rooster";
 import DagoverzichtRooster, {WerknemerRenderObject} from "./DagoverzichtRooster";
 import RoosterItem from "../../RoosterItems/RoosterItem";
 import {DagData} from "../../RoosterStructuur/DagField";
-import {changeHigherStateInsideFunc} from "../WijzigTijden/LosItemWijzigen";
+import {changeHigherStateInsideFunc} from "../Normaal Item/LosItemWijzigen";
 
 
 interface IProps {
@@ -96,8 +96,7 @@ class TijdvakWeergeven extends Component<IProps,IState>{
 
 
     getRenderdItems=():WerknemerRenderObject[]=>{
-        console.log(this.props.RoosterData.werknemers)
-        return this.props.RoosterData.werknemers.map(value => {
+        return this.state.werknemers.map(value => {
             return {userId:value.userId,itemId:value.itemId,naam:value.naam,beginTijd:value.beginTijd,eindTijd:value.eindTijd,status:0,"function":
                     (roosterData:DagData):ReactElement<RoosterItem>=>{
                         return (
@@ -121,7 +120,7 @@ class TijdvakWeergeven extends Component<IProps,IState>{
     render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
         return (
             <div className="hunderMaxHeight heightTable scrolOverflow">
-                <h1 className="noTopMargin">Wijzig Roosteritem</h1>
+                <h1 className="noTopMargin">Wijzig werktijden</h1>
                 <table>
                     <tbody >
                     <tr>
@@ -138,7 +137,7 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                         <td>
                         </td>
                         <td>
-                            Titel Tijdvak:
+                            Naam tijdvak:
                         </td>
                         <td>
                             {this.props.RoosterData.titel}
@@ -148,17 +147,17 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                         <td>
                         </td>
                         <td>
-                            Begintijden:
+                            Tijden:
                         </td>
                         <td>
                             <div className="row">
-                                <p>{new Date(this.props.RoosterData.beginTijd).toLocaleTimeString()} - {new Date(this.props.RoosterData.eindTijd).toLocaleTimeString()}</p>
+                                <p>{new Date(this.props.RoosterData.beginTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})} - {new Date(this.props.RoosterData.eindTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}</p>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td>Personen:</td>
+                        <td>Werknemers <br/> toevoegen:</td>
                         <td>
                             <Autocomplete
                             noOptionsText={"Geen werknemer gevonden"}
@@ -201,7 +200,7 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                     </tbody>
                 </table>
                 {
-
+                    this.state.werknemers.length===0||
                  <table className="maxFullHeight overFlowAuto thinScrollBar minHeight">
                     <DagoverzichtRooster  addPopUp={this.props.add} closePopUp={this.props.close} apiLink={this.props.apiLink} eindTijd={new Date(0,0,0,23,59,59)} beginTijd={new Date(0,0,0,0,0,0)} width={700} markerInterval={new Date(0,0,0,2)} changeHigherState={this.changeThisState} renderItems={
                         this.getRenderdItems()
@@ -209,8 +208,10 @@ class TijdvakWeergeven extends Component<IProps,IState>{
                 </table>
 
                 }
+                <div>
+                    <button className="Button" onClick={this.props.close} >Sluiten</button>
+                </div>
 
-                <button className="Button" onClick={this.props.close} >Sluiten</button>
             </div>
         )
     }

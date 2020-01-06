@@ -25,11 +25,14 @@ app.post("/add",auth,(req,res)=>{
                         console.log("Add failed");
                         res.status(500).send(err)
                     }else {
-                        /*
-                        connection.query("INSERT INTO Notifications (userId, messageType, roosterId) VALUES (?,?,(select roosterId from gebruiker where id=?))", [req.user.userId, 3,req.user.userId], (error, results, fields) => {})
-                            */
-                            res.status(200).send(values);
-                            console.log("Add succeed")
+                        connection.query("INSERT INTO Notifications (userId, messageType, roosterId) VALUES (?,3,(select roosterId from gebruiker where id=?))", [req.user.id,req.user.id], (error, results, fields) => {
+                            if(error){
+                                console.error(error)
+                            }
+                            console.log("notification added")
+                        })
+                        res.status(200).send(values)
+                        console.log("Add succeed")
                     }
                 })
             }else{
@@ -51,7 +54,6 @@ app.post("/change/:id",[auth,yourItem],(req, res) => {
         if(err){
             res.status(500).send(err)
         }else{
-            /*
             connection.query("INSERT INTO Notifications (userId, messageType, roosterId,roosterItemId) VALUES (?,?,(select roosterId from gebruiker where id=?),?)", [req.user.id, 3,req.user.id,req.params.id], (error, results, fields) => {
                 if(error){
                     console.log(error)
@@ -61,8 +63,6 @@ app.post("/change/:id",[auth,yourItem],(req, res) => {
                 }
 
             })
-
-             */
             res.status(200).send("Gelukt!")
         }
     })
@@ -75,10 +75,9 @@ app.delete("/remove/:id",[auth,yourItem],(req, res) => {
             res.status(500).send(err);
             console.log("Delete Failed")
         } else {
-            console.log("Delete Done");
-            /*
-            connection.query("INSERT INTO Notifications (userId, messageType, roosterId) VALUES (?,?,(select roosterId from gebruiker where id=?))", [req.user.userId, 3,req.user.userId], (error, results, fields) => {})
-             */
+            console.log("Delete Done")
+            connection.query("INSERT INTO Notifications (userId, messageType, roosterId) VALUES (?,?,(select roosterId from gebruiker where id=?))", [req.user.id, 3,req.user.id], (error, results, fields) => {})
+
             res.status(200).send("Verwijderen Gelukt")
 
         }
