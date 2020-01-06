@@ -27,6 +27,7 @@ var storage= multer.diskStorage({
     }
 });
 
+
 var upload=multer({storage:storage});
 
 app.post("/addbedrijf",(req,res)=>{
