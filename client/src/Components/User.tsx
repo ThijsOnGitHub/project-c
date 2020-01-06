@@ -246,7 +246,7 @@ render(){
                             <td className="leftInfo"><p>Oud wachtwoord:</p></td>
                             <td className="rightValue"><p>**********</p></td>
                             <td><input className={shouldMarkError('OldPass') ? "error" : ""}
-                                       onBlur={this.handleBlur('OldPass')} onChange={this.handleInputChange} type='text' name="OldPass" value={this.state.OldPass}/></td>
+                                       onBlur={this.handleBlur('OldPass')} onChange={this.handleInputChange} type='password' name="OldPass" value={this.state.OldPass}/></td>
                         </tr> : ''
                     }
                     { this.state.wantToChangePassword ?
@@ -254,7 +254,7 @@ render(){
                             <td className="leftInfo"><p>Nieuw wachtwoord:</p></td>
                             <td className="rightValue"><p></p></td>
                             <td><input className={shouldMarkError('newPass1') ? "error" : ""}
-                                       onBlur={this.handleBlur('newPass1')} onChange={this.handleInputChange} type='text' name="newPass1" value={this.state.newPass1}/></td>
+                                       onBlur={this.handleBlur('newPass1')} onChange={this.handleInputChange} type='password' name="newPass1" value={this.state.newPass1}/></td>
                         </tr> : ''
                     }
                     { this.state.wantToChangePassword ?
@@ -262,10 +262,10 @@ render(){
                             <td className="leftInfo"><p>Bevestig nieuw wachtwoord:</p></td>
                             <td className="rightValue"><p></p></td>
                             <td><input className={shouldMarkError('newPass2') ? "error" : ""}
-                                       onBlur={this.handleBlur('newPass2')} onChange={this.handleInputChange} type='text' name="newPass2" value={this.state.newPass2}/></td>
+                                       onBlur={this.handleBlur('newPass2')} onChange={this.handleInputChange} type='password' name="newPass2" value={this.state.newPass2}/></td>
                         </tr>: ''
                     }
-                    
+
                     <tr>
                         <td colSpan={3}><button disabled={isDisabled}  onClick={this.handleSubmit}>Wijzigen</button></td>
                     </tr>
