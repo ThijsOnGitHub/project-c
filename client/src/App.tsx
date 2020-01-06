@@ -185,7 +185,7 @@ class App extends React.Component<{},IState>{
                                         <Route path="/ZiekMeld/:roosterItemId/:notifId/:messageId"  render={(props:{match:{params:{roosterItemId:number, notifId:number, messageId:number}}}) => <ZiekMeld apiLink={this.state.apiLink} serverLink = {this.state.serverLink} roosterItemId={props.match.params.roosterItemId} notifId={props.match.params.notifId} messageId={props.match.params.messageId} currentUser={this.state.id}/>}/>
                                         <Route path="/Rooster" render={() => <Rooster apiLink={this.state.apiLink} isWerkgever={this.state.isWerkgever}/>}/>
                                         <Route path="/ZiekmeldFeedback" render={() => <ZiekmeldFeedback/>}/>
-                                        <Route path="/OvernameFeedback/:messageId/:approve" render={(props:{match:{params:{messageId:number, approve:boolean}}}) => <OvernameFeedback messageId={props.match.params.messageId} approve={props.match.params.approve}/>}/>
+                                        <Route path="/OvernameFeedback/:messageId/:approve" render={(props:{match:{params:{messageId:number, approve:string}}}) => <OvernameFeedback messageId={props.match.params.messageId} approve={props.match.params.approve}/>}/>
                                         {
                                             this.state.isWerkgever?
                                                 <Switch>
