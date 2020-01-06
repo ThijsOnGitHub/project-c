@@ -122,18 +122,20 @@ class ZiekMeld extends React.Component<IProps, IState> {
                     this.setState({RoosterAndPerson:json})
                 }
             );
-        let secondUser = await fetch(this.props.apiLink+"/getSecondUser", {method:"post",
-        headers:
-            {
-                authToken:sessionStorage.getItem("authToken"),
-                "content-type":"application/json"
-            },
-        body: JSON.stringify({notifId:this.props.notifId})
-        }).then(res => res.json());
-        console.log("secondUser JSON as saved in state BEFORE setState: " +JSON.stringify(this.state.secondUser));
-        this.setState({secondUser:secondUser});
-        console.log("secondUser JSON as saved in state AFTER setState: " +JSON.stringify(this.state.secondUser))
-    };
+        if(this.props.messageId == 4) {
+            let secondUser = await fetch(this.props.apiLink+"/getSecondUser", {method:"post",
+            headers:
+                {
+                    authToken:sessionStorage.getItem("authToken"),
+                    "content-type":"application/json"
+                },
+            body: JSON.stringify({notifId:this.props.notifId})
+            }).then(res => res.json());
+                console.log("secondUser JSON as saved in state BEFORE setState: " +JSON.stringify(this.state.secondUser));
+                this.setState({secondUser:secondUser});
+                console.log("secondUser JSON as saved in state AFTER setState: " +JSON.stringify(this.state.secondUser))
+            }
+        };
 
     render() {
         return (
