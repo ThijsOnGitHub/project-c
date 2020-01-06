@@ -86,8 +86,8 @@ app.get("/GetMedewerkers",auth, ((req, res) =>{
 }))
 
 app.get("/GetTijdvakItems", auth, ((req, res) => {
-    if(req.roosterStructuurData.isWerkgever) {
-        connection.query("SELECT id, roosterId, dagNummer, titel, aantalWerknemers, beginTijd, eindTijd, color)", [req.roosterStructuurData], (err, result, val) => {
+    if(req.user.isWerkgever) {
+        connection.query("SELECT id, roosterId, dagNummer, titel, aantalWerknemers, beginTijd, eindTijd, color FROM roosterit.roosterstructuur", [req.roosterStructuurData], (err, result, val) => {
             res.status(200).json(result)
         });
     }else {
