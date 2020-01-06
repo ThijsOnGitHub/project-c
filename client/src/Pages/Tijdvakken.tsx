@@ -6,8 +6,6 @@ interface Iprops{
     apiLink:string
 }
 
-
-
 interface Istate{
     user: {
         id: number,
