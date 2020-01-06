@@ -7,15 +7,24 @@ interface IState {
     newAchternaam:string,
     newEmail:string,
     newTelefoon:string,
+    OldPass: string,
+    newPass1: string,
+    newPass2: string,
+    secondPassSame: boolean,
     updateDone: boolean,
     checkemailSuccess: boolean,
+    checkoldpasswordSuccess: boolean,
     letters: RegExp,
     numbers: RegExp,
+    passwords: RegExp,
     touched: {
         newVoornaam: boolean,
         newAchternaam: boolean,
         newEmail: boolean,
-        newTelefoon: boolean
+        newTelefoon: boolean,
+        OldPass: boolean,
+        newPass1: boolean,
+        newPass2: boolean
     }
 }
 
@@ -26,9 +35,9 @@ interface IProps {
     lastName:string
     mail:string
     telefoon:string
+    wachtwoord:string
     geboorte:string
     serverLink:string
-
 }
 
 class User extends React.Component<IProps,IState> {
@@ -40,15 +49,24 @@ class User extends React.Component<IProps,IState> {
             newAchternaam: '',
             newEmail: '',
             newTelefoon: '',
+            OldPass: '',
+            newPass1: '',
+            newPass2: '',
+            secondPassSame: false,
             updateDone: false,
             checkemailSuccess: false,
+            checkoldpasswordSuccess: false,
             letters: /^[A-Za-z]+$/,
             numbers: /^[0-9]+$/,
+            passwords: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){6,}$/,
             touched: {
                 newVoornaam: false,
                 newAchternaam: false,
                 newEmail: false,
-                newTelefoon: false
+                newTelefoon: false,
+                OldPass: false,
+                newPass1: false,
+                newPass2: false
             }
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -60,7 +78,10 @@ class User extends React.Component<IProps,IState> {
             newVoornaam: this.props.firstName,
             newAchternaam: this.props.lastName,
             newEmail: this.props.mail,
-            newTelefoon: this.props.telefoon
+            newTelefoon: this.props.telefoon,
+            OldPass: '',
+            newPass1: '',
+            newPass2: ''
             }
         )
     }
@@ -76,11 +97,13 @@ class User extends React.Component<IProps,IState> {
                 newVoornaam: this.state.newVoornaam,
                 newAchternaam: this.state.newAchternaam,
                 newEmail: this.state.newEmail,
-                newTelefoon: this.state.newTelefoon
+                newTelefoon: this.state.newTelefoon,
+                newPass: this.state.newPass1
 
             })
 
         });
+
         this.setState({updateDone: true});
     };
 
@@ -89,10 +112,21 @@ class User extends React.Component<IProps,IState> {
         // Laat de waarde de waarde zijn van het actieve veld. Als het input-type een checkbox is is de waarde of deze aangevinkt is of niet.
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
+
+
+
         console.log(this.state.checkemailSuccess);
         if (target.name === "newEmail") {this.checkEmail(); }
 
+
+        // Check of de waarden van het eerste en tweede wachtwoord gelijk zijn. Verander de state naar aanleiding van de uitkomst.
+        if(target.name === "newPass1" || target.name === "newPass2") {
+            if (this.state.newPass2 == this.state.newPass1) { await this.setState({secondPassSame: true});
+            } else { await this.setState({secondPassSame: false}) }
+        }
+
         await this.setState<never> ({[name]: value});
+        if (target.name === "OldPass") {this.checkPass(); }
     }
 
     // Verander de waarde van touched voor een inputveld naar true.
@@ -112,25 +146,44 @@ class User extends React.Component<IProps,IState> {
         this.setState({checkemailSuccess: email.emailCheck});
     };
 
-    validate(newVoornaam:string, newAchternaam:string, newEmail:string, newTelefoon:string,) {
+    checkPass = async () => {
+        if (this.state.OldPass == ''){
+            return
+        }
+            let oldpassword= await fetch(this.props.apiLink + "/account/checkpassword", {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify({oldpassword: this.state.OldPass, email: this.props.mail})
+            })
+            let result=await oldpassword.json()
+
+            this.setState({checkoldpasswordSuccess: result});
+    };
+
+    validate(newVoornaam:string, newAchternaam:string, newEmail:string, newTelefoon:string, OldPass:string, newPass1: string, newPass2: string) {
         // Als een waarde hier true is betekent dat dat het veld niet valide is.
         return {
             newVoornaam: newVoornaam.length === 0 || newVoornaam.length >= 30 || !newVoornaam.match(this.state.letters),
             newAchternaam: newAchternaam.length === 0 || newAchternaam.length >= 30 || !newAchternaam.match(this.state.letters),
             newEmail: !newEmail.includes("@") || (newEmail.length === 0 || newEmail.length >= 30) || !this.state.checkemailSuccess && (this.state.newEmail != this.props.mail),
             newTelefoon: newTelefoon.length < 9 || newTelefoon.length >= 11 || !newTelefoon.match(this.state.numbers),
+            OldPass: this.state.checkoldpasswordSuccess,
+            newPass1: newPass1.length === 0 || !newPass1.match(this.state.passwords),
+            newPass2: newPass2.length === 0 || !this.state.secondPassSame,
+
+
         };
     }
     // Controlleer of de waarden in een veld wel verstuurd kunnen worden.
     canBeSubmitted() {
-        const errors = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon);
+        const errors = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon,this.state.OldPass, this.state.newPass1, this.state.newPass2);
         const isDisabled = Object.values(errors).some(value => value);
         return !isDisabled;
     }
 
 render(){
-    type fields = {newVoornaam: boolean, newAchternaam: boolean, newEmail: boolean, newTelefoon: boolean}
-    const errors:fields = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon);
+    type fields = {newVoornaam: boolean, newAchternaam: boolean, newEmail: boolean, newTelefoon: boolean, OldPass: boolean, newPass1: boolean, newPass2: boolean}
+    const errors:fields = this.validate(this.state.newVoornaam, this.state.newAchternaam, this.state.newEmail, this.state.newTelefoon, this.state.OldPass, this.state.newPass1, this.state.newPass2);
     const isDisabled = Object.values(errors).some(value => value);
 
     // Valideer of een fout getoond zou moeten worden.
@@ -171,6 +224,24 @@ render(){
                         <td className="rightValue"><p>{this.props.mail}</p></td>
                         <td><input className={shouldMarkError('newEmail') ? "error" : ""}
                                    onBlur={this.handleBlur('newEmail')} onChange={this.handleInputChange} type='text' name="newEmail" value={this.state.newEmail}/></td>
+                    </tr>
+                    <tr>
+                        <td className="leftInfo"><p>Oud wachtwoord:</p></td>
+                        <td className="rightValue"><p>**********</p></td>
+                        <td><input className={shouldMarkError('OldPass') ? "error" : ""}
+                                   onBlur={this.handleBlur('OldPass')} onChange={this.handleInputChange} type='text' name="OldPass" value={this.state.OldPass}/></td>
+                    </tr>
+                    <tr>
+                        <td className="leftInfo"><p>Nieuw wachtwoord:</p></td>
+                        <td className="rightValue"><p></p></td>
+                        <td><input className={shouldMarkError('newPass1') ? "error" : ""}
+                                   onBlur={this.handleBlur('newPass1')} onChange={this.handleInputChange} type='text' name="newPass1" value={this.state.newPass1}/></td>
+                    </tr>
+                    <tr>
+                        <td className="leftInfo"><p>Bevestig nieuw wachtwoord:</p></td>
+                        <td className="rightValue"><p></p></td>
+                        <td><input className={shouldMarkError('newPass2') ? "error" : ""}
+                                   onBlur={this.handleBlur('newPass2')} onChange={this.handleInputChange} type='text' name="newPass2" value={this.state.newPass2}/></td>
                     </tr>
                     <tr>
                         <td className="leftInfo"><p>Telefoonnummer:</p></td>
