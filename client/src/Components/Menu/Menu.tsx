@@ -32,25 +32,26 @@ class Menu extends React.Component <IProps,IState>{
                 <ul>
                     <li><img id='logo' src="https://i.imgur.com/HVmQHos.png" alt="Logo RoosterIT"/></li>
                     <MenuItem tekst={this.props.loggedIn?"Home":"Inloggen"} path={"/"}/>
-                {
-                    this.props.loggedIn?
-                        <li >
-                            {/*<MenuItem tekst={"Mijn Account"} path={"/MyAccount"}/>*/}
-                            <MenuItem  path={"/Rooster"} tekst={"Rooster"}/>
-                        </li>:
-                        <div>
-                            <MenuItem tekst={"Registeren"} path={'/Registratie'}/>.
-                        </div>
+                    {
+                        this.props.loggedIn ?
+                            <li>
+                                {/*<MenuItem tekst={"Mijn Account"} path={"/MyAccount"}/>*/}
+                                <MenuItem path={"/Rooster"} tekst={"Rooster"}/>
+                            </li> :
+                            <div>
+                                <MenuItem tekst={"Registeren"} path={'/Registratie'}/>.
+                            </div>
+                    }
                 {
                     this.props.isWerkgever&&this.props.loggedIn?
                     <li>
-                    <MenuItem tekst={"Tijdvakken"} path={"/TijdvakPagina"}/>
+                    <MenuItem tekst={"Tijdvakken"} path={"/Tijdvakken"}/>
                     </li>
                     :
                     <li>
                     </li>
                 }
-                }
+
                 </ul>
                 {
                     this.props.loggedIn&&
