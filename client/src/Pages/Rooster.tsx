@@ -201,7 +201,7 @@ class Rooster extends Component<IProps,IState>{
                     }
                     <div className='row'>
                         <WeekKiezer beginDatum={this.state.beginDatum} changeBeginDatum={this.changeBeginDatum}/>
-                      <OptionWithIcon className="Button" onClick={()=>this.refreshRooster()} imgClass="onAccentFilter" icon={"refresh-24px.svg"} text={"Refresh"}/>
+                      <OptionWithIcon className="Button" onClick={()=>{this.updateRoosterStructure()}} imgClass="onAccentFilter" icon={"refresh-24px.svg"} text={"Refresh"}/>
                         {
                             this.props.isWerkgever &&
                                 <div className="row">
