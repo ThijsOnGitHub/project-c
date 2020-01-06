@@ -85,14 +85,15 @@ class ZiekMeld extends React.Component<IProps, IState> {
                 authToken:sessionStorage.getItem("authToken"),
                 "content-type":"application/json"
             },
-            body: JSON.stringify({roosterItemId:this.props.roosterItemId})
+            body: JSON.stringify({secondUser: this.state.RoosterAndPerson.userId, roosterItemId:this.props.roosterItemId})
         });
+        console.log("SecondUser: "+ JSON.stringify(this.state.secondUser));
         fetch(this.props.apiLink+'/delNotif', {method:'post',
             headers:{
                 authToken:sessionStorage.getItem('authToken'),
                 "content-type":"application/json"
             },
-            body:JSON.stringify({secondUser: this.state.secondUser, notifId:this.props.notifId})});
+            body:JSON.stringify({notifId:this.props.notifId})});
     };
 
     getRoosterAndPerson = async () => {
