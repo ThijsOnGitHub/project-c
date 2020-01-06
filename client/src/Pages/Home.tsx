@@ -15,11 +15,11 @@ interface IState {
     phone: string,
     birth: string,
     profielFotoLink: string,
-    isWerkgever: string
 }
 interface IProps{
     apiLink : string
     serverLink : string
+    isWerkgever:boolean
 }
 class Home extends React.Component<IProps,IState>{
     lijst:string[];
@@ -32,8 +32,7 @@ class Home extends React.Component<IProps,IState>{
             email: "",
             phone: "",
             birth: "",
-            profielFotoLink: "",
-            isWerkgever: ""
+            profielFotoLink: ""
         };
         this.handleInputChange=this.handleInputChange.bind(this);
         this.lijst=["firstName","lastName","email","phone","birth","profielfoto","isWerkgever"];
@@ -97,7 +96,7 @@ class Home extends React.Component<IProps,IState>{
                         <div className='HomeInfoC'>
                             <img className='avatar' width='80' height='80' src={this.state.content.length>0 && this.props.apiLink+"/avatar/"+ this.state.content[0].profielFotoLink} alt='profielfoto'/>
                         </div>
-                        <NotifList apiLink={this.props.apiLink} />
+                        <NotifList apiLink={this.props.apiLink} isWerkgever={this.props.isWerkgever} />
                     </div>
                 </div>
             </div>

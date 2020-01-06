@@ -117,7 +117,7 @@ class Rooster extends Component<IProps,IState>{
     changeBeginDatum=(datum:Date)=>{
         return new Promise((resolve => {
                 this.setState({beginDatum:datum},()=>{
-                    this.refreshRooster()
+                    this.refreshRooster();
                     resolve()
                 })
             })
