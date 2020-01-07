@@ -546,8 +546,8 @@ table#t01 {
   margin: auto;
 }
 
-.error {
-  border: 3px solid red;
+.error,form .error {
+  border: 3px solid red!important;
 }
 
 .validationMessage {
@@ -561,6 +561,31 @@ table#t01 {
   text-align: center;
 }
 
+.validationMessageUser{
+    color: #E21D3E;
+    width: 240px;
+    max-width: 240px!important;
+    position: relative;
+    left: 470px;
+    font-size: 12px;
+    display: inline-block;
+    text-align: center;
+    bottom: 10px;
+    opacity: 1;
+    animation-name: fadeInOpacity;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in-out;
+    animation-duration: 0.8s;
+}
+
+@keyframes fadeInOpacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 .errorMessage{
   color: red;
 }
