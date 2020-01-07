@@ -100,7 +100,7 @@ app.get("/GetTijdvakItems", auth, ((req, res) => {
 
 app.put("/updateTijdvakken",auth, (req, res) => {
     if(req.user.isWerkgever) {
-    connection.query("UPDATE roosterit.roosterstructuur SET roosterId = (?), dagNummer = (?), titel = (?), aantalWerknemers = (?), beginTijd =(?), eindTijd = (?), color = (?)  WHERE rooster", [data.newId, data.newroosterId, data.newdagNummer, data.newtitel, data.newbeginTijd, data.neweindTijd, data.newColor, req.user.id], (error, results, fields) => {
+    connection.query("UPDATE roosterit.roosterstructuur SET roosterId = (?), dagNummer = (?), titel = (?), aantalWerknemers = (?), beginTijd =(?), eindTijd = (?), color = (?)WHERE roosterId = (?)", [data.newId, data.newroosterId, data.newdagNummer, data.newtitel, data.newbeginTijd, data.neweindTijd, data.newColor, req.user.id], (error, results, fields) => {
         res.status(200).json(results);
     })
    console.log("Gebruiker geupdatet.");
