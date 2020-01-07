@@ -58,7 +58,7 @@ class User extends React.Component<IProps,IState> {
             checkemailSuccess: false,
             checkoldpasswordSuccess: false,
             wantToChangePassword: false,
-            letters: /^[A-Za-z]+$/,
+            letters: /^[A-Za-z]?[A-Z\sa-z]*[A-Za-z]$/,
             numbers: /^[0-9]+$/,
             passwords: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){6,}$/,
             touched: {
@@ -298,17 +298,25 @@ render(){
                             <td className="rightValue"><p>**********</p></td>
                             <td><input className={shouldMarkError('OldPass') ? "error" : ""}
                                        onBlur={this.handleBlur('OldPass')} onChange={this.handleInputChange} type='password' name="OldPass" value={this.state.OldPass}/></td>
+
                         </tr>
                         : ''
 
+
                     }
+                    {this.state.wantToChangePassword && errors1.OldPass && this.state.touched.OldPass ? <span className={"validationMessageUser"}>Dit wachtwoord is niet uw huidinge wachtwoord.</span> : ''}
                     { this.state.wantToChangePassword ?
+
                         <tr>
                             <td className="leftInfo"><p>Nieuw wachtwoord:</p></td>
                             <td className="rightValue"><p></p></td>
                             <td><input className={shouldMarkError('newPass1') ? "error" : ""}
                                        onBlur={this.handleBlur('newPass1')} onChange={this.handleInputChange} type='password' name="newPass1" value={this.state.newPass1}/></td>
+
                         </tr> : ''
+                    }
+                    {this.state.wantToChangePassword &&
+                     errors1.newPass1 && this.state.touched.newPass1 ? <span className={"validationMessageUser"}>Vul een wachtwoord in langer dan 6 symbolen met minimaal 1 kleine letter, 1 hoofdletter en een symbool.</span> : ''
                     }
                     { this.state.wantToChangePassword ?
                         <tr>
@@ -316,8 +324,10 @@ render(){
                             <td className="rightValue"><p></p></td>
                             <td><input className={shouldMarkError('newPass2') ? "error" : ""}
                                        onBlur={this.handleBlur('newPass2')} onChange={this.handleInputChange} type='password' name="newPass2" value={this.state.newPass2}/></td>
+
                         </tr>: ''
                     }
+                    {this.state.wantToChangePassword && errors1.newPass1 && this.state.touched.newPass2 ? <span className={"validationMessageUser"}>De ingevulde wachtwoorden komen niet overeen.</span> : ''}
                     {this.state.wantToChangePassword ?
                         <tr>
                             <td colSpan={3}>
