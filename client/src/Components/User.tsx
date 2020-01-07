@@ -234,6 +234,7 @@ render(){
         return hasError ? shouldShow : false;
     };
     return(
+
         <div id="reg">
         <form id="account">
                 <table>
@@ -254,7 +255,7 @@ render(){
                                    type='text' name="newVoornaam" value={this.state.newVoornaam} onChange={this.handleInputChange}/></td>
                     </tr>
                     {   // Dit is een errormessage. Het checkt of het toepasbare veld in de 'errors' array staat, en als daarnaast het veld ook nog niet is aangeraakt wordt een bericht getoond onder het inputveld.
-                        errors2.newVoornaam && this.state.touched.newVoornaam ? <span className={"validationMessageUser"}>Vul een naam in met alleen letters.</span> : ''}
+                        errors2.newVoornaam && this.state.touched.newVoornaam ? <span className={"validationMessageUser"}>Vul een voornaam in met alleen letters.</span> : ''}
 
                     <tr>
                         <td className="leftInfo"><p>Achternaam:</p></td>
@@ -263,7 +264,7 @@ render(){
                                    onBlur={this.handleBlur('newAchternaam')} onChange={this.handleInputChange} type='text' name="newAchternaam" value={this.state.newAchternaam}/></td>
                     </tr>
                     {   // Dit is een errormessage. Het checkt of het toepasbare veld in de 'errors' array staat, en als daarnaast het veld ook nog niet is aangeraakt wordt een bericht getoond onder het inputveld.
-                        errors2.newAchternaam && this.state.touched.newAchternaam ? <span className={"validationMessageUser"}>Vul een naam in met alleen letters.</span> : ''}
+                        errors2.newAchternaam && this.state.touched.newAchternaam ? <span className={"validationMessageUser"}>Vul een achternaam in met alleen letters.</span> : ''}
 
                     <tr>
                         <td className="leftInfo"><p>Email:</p></td>
@@ -280,12 +281,15 @@ render(){
                         <td><input className={shouldMarkError2('newTelefoon') ? "error" : ""}
                                    onBlur={this.handleBlur('newTelefoon')} onChange={this.handleInputChange} type='text' name="newTelefoon" value={this.state.newTelefoon}/></td>
                     </tr>
+                    {   // Dit is een errormessage. Het checkt of het toepasbare veld in de 'errors' array staat, en als daarnaast het veld ook nog niet is aangeraakt wordt een bericht getoond onder het inputveld.
+                        errors2.newTelefoon && this.state.touched.newTelefoon ? <span className={"validationMessageUser"}>Vul een geldig telefoonnummer in.</span> : ''}
+
+
                     <tr>
                         <td className="leftInfo"><p>Verander huidig wachtwoord:</p></td>
                         <td className="rightValue"></td>
                         <td><input type='checkbox' name="wantToChangePassword" checked={this.state.wantToChangePassword} placeholder="false" onChange={this.handleInputChange} /></td>
                     </tr>
-
 
 
                     { this.state.wantToChangePassword ?
@@ -294,7 +298,9 @@ render(){
                             <td className="rightValue"><p>**********</p></td>
                             <td><input className={shouldMarkError('OldPass') ? "error" : ""}
                                        onBlur={this.handleBlur('OldPass')} onChange={this.handleInputChange} type='password' name="OldPass" value={this.state.OldPass}/></td>
-                        </tr> : ''
+                        </tr>
+                        : ''
+
                     }
                     { this.state.wantToChangePassword ?
                         <tr>
