@@ -253,18 +253,27 @@ render(){
                                    onBlur={this.handleBlur('newVoornaam')}
                                    type='text' name="newVoornaam" value={this.state.newVoornaam} onChange={this.handleInputChange}/></td>
                     </tr>
+                    {   // Dit is een errormessage. Het checkt of het toepasbare veld in de 'errors' array staat, en als daarnaast het veld ook nog niet is aangeraakt wordt een bericht getoond onder het inputveld.
+                        errors2.newVoornaam && this.state.touched.newVoornaam ? <span className={"validationMessageUser"}>Vul een naam in met alleen letters.</span> : ''}
+
                     <tr>
                         <td className="leftInfo"><p>Achternaam:</p></td>
                         <td className="rightValue"><p>{this.props.lastName}</p></td>
                         <td><input className={shouldMarkError2('newAchternaam') ? "error" : ""}
                                    onBlur={this.handleBlur('newAchternaam')} onChange={this.handleInputChange} type='text' name="newAchternaam" value={this.state.newAchternaam}/></td>
                     </tr>
+                    {   // Dit is een errormessage. Het checkt of het toepasbare veld in de 'errors' array staat, en als daarnaast het veld ook nog niet is aangeraakt wordt een bericht getoond onder het inputveld.
+                        errors2.newAchternaam && this.state.touched.newAchternaam ? <span className={"validationMessageUser"}>Vul een naam in met alleen letters.</span> : ''}
+
                     <tr>
                         <td className="leftInfo"><p>Email:</p></td>
                         <td className="rightValue"><p>{this.props.mail}</p></td>
                         <td><input className={shouldMarkError2('newEmail') ? "error" : ""}
                                    onBlur={this.handleBlur('newEmail')} onChange={this.handleInputChange} type='text' name="newEmail" value={this.state.newEmail}/></td>
                     </tr>
+                    {   // Dit is een errormessage. Het checkt of het toepasbare veld in de 'errors' array staat, en als daarnaast het veld ook nog niet is aangeraakt wordt een bericht getoond onder het inputveld.
+                        errors2.newEmail && this.state.touched.newEmail ? <span className={"validationMessageUser"}>Vul een geldig email-adres in.</span> : ''}
+
                     <tr>
                         <td className="leftInfo"><p>Telefoonnummer:</p></td>
                         <td className="rightValue"><p>{this.props.telefoon}</p></td>

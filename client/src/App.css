@@ -561,6 +561,18 @@ table#t01 {
   text-align: center;
 }
 
+.validationMessageUser{
+    color: #E21D3E;
+    width: 240px;
+    max-width: 240px!important;
+    position: relative;
+    left: 470px;
+    font-size: 12px;
+    display: inline-block;
+    text-align: center;
+    bottom: 10px;
+
+}
 .errorMessage{
   color: red;
 }
