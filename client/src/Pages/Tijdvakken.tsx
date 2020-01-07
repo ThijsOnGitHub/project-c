@@ -12,7 +12,7 @@ interface Istate{
         roosterId:string,
         dagNummer:string,
         titel: string,
-        aantalWerknemers: string,
+        aantalWerknemers: number,
         beginTijd: number,
         eindTijd: number,
         color: number
@@ -62,30 +62,35 @@ class TijdvakPagina extends React.Component<Iprops,Istate> {
                 <div className="header">
                     <h1>Bewerk tijdvakken</h1>
                 </div>
+
                 <table  id='555555'>
                     <tr>
-                        <th>Id </th>
-                        <th>RoosterId </th>
-                        <th>DagNummer </th>
-                        <th>Titel </th>
-                        <th>Aantal Werknemers </th>
-                        <th>Begintijd </th>
-                        <th>Eindtijd </th>
-                        <th>color </th>
-
+                        <th scope="col">Id </th>
+                        <th scope="col">RoosterId </th>
+                        <th scope="col">DagNummer </th>
+                        <th scope="col">Titel </th>
+                        <th scope="col">Aantal Werknemers </th>
+                        <th scope="col">Begintijd </th>
+                        <th scope="col">Eindtijd </th>
+                        <th scope="col">color </th>
+                        <th></th>
+                        <th>Sla Bewerkingen Op</th>
 
 
                     </tr>
                     {this.state.user.map(value => {
                         return (
                             <tr>
-                                <td>{value.id} </td>
-                                <td>{value.roosterId}</td>
-                                <td>{value.dagNummer}</td>
-                                <td>{value.titel}</td>
-                                <td>{value.beginTijd}</td>
-                                <td>{value.eindTijd}</td>
-                                <td>{value.color}</td>
+
+
+                                <td scope="col" > <div contentEditable>{value.id}  </div> </td>
+                                <td scope="col"><div contentEditable>{value.roosterId}</div></td>
+                                <td scope="col"><div contentEditable>{value.dagNummer}</div></td>
+                                <td scope="col"><div contentEditable>{value.titel}</div></td>
+                                <td scope="col"><div contentEditable>{value.aantalWerknemers}</div></td>
+                                <td scope="col"><div contentEditable>{value.beginTijd}</div></td>
+                                <td scope="col"><div contentEditable>{value.eindTijd}</div></td>
+                                <td scope="col"><div contentEditable>{value.color}</div></td>
 
                             </tr>)
                     })}
