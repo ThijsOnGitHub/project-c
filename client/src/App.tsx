@@ -57,14 +57,12 @@ class App extends React.Component<{},IState>{
   }
 
   componentDidMount=async ():Promise<void>=> {
-
       this.setState({loading:true});
       await this.updateAuth();
       if(this.state.loggedIn){
           this.updateUserData()
       }
       this.setState({loading:false})
-
   };
 
 
@@ -103,8 +101,8 @@ class App extends React.Component<{},IState>{
       const refreshToken=localStorage.getItem("refreshToken");
       const authToken=sessionStorage.getItem("authToken");
       if(authToken!==null){
-          this.setState({loggedIn:true});
           this.updateStateFromJWT(authToken)
+          this.setState({loggedIn:true});
       }else if(refreshToken!==null){
               const result=await fetch(this.state.serverLink+"/auth/refresh",{
                   headers:{
@@ -113,11 +111,10 @@ class App extends React.Component<{},IState>{
               });
               const status=result.status;
               if(status===200){
-
                   var tekst=await result.text();
-                  this.setState({loggedIn:true});
                   this.updateStateFromJWT(tekst);
                   sessionStorage.setItem("authToken",tekst)
+                  this.setState({loggedIn:true});
               }else{
                   this.setState({loggedIn:false});
                   localStorage.removeItem("refreshToken")
