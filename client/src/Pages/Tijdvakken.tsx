@@ -74,16 +74,17 @@ class TijdvakPagina extends React.Component<Iprops,Istate> {
                         <th scope="col">Eindtijd </th>
                         <th scope="col">color </th>
                         <th></th>
-                        <th>Sla Bewerkingen Op</th>
+                        <th>{<OptionWithIcon onClick={event => this.updateTijdvakken(value.roosterid)} icon="save.svg" text="Sla Bewerkingen Op"/>}</th>
 
 
                     </tr>
+
                     {this.state.user.map(value => {
                         return (
                             <tr>
 
 
-                                <td scope="col" > <div contentEditable>{value.id}  </div> </td>
+                                <td scope="col" ><div contentEditable>{value.id}</div> </td>
                                 <td scope="col"><div contentEditable>{value.roosterId}</div></td>
                                 <td scope="col"><div contentEditable>{value.dagNummer}</div></td>
                                 <td scope="col"><div contentEditable>{value.titel}</div></td>
