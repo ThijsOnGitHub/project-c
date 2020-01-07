@@ -80,6 +80,19 @@ app.post("/checkkoppelcode", (req, res) => {
     });
 });
 
+// Kijk in de database of de koppelcode die een werknemer invoert al bestaat of niet.
+app.post("/checkkoppelcodewerknemer", (req, res) => {
+    let data = req.body;
+    connection.query("SELECT EXISTS (SELECT koppelCode FROM koppelCode WHERE koppelCode = ?) AS koppelcode",  [data.koppelCodeWerknemer], (error, results, fields) => {
+        if (error) {
+            console.log(error);
+        } else {
+            results = results[0].koppelcode;
+            res.json({koppelCodeCheck: results});
+        }
+    });
+});
+
 // Kijk in de database of het ingevoerde emailadres al gebruikt is.
 app.post("/checkemail", (req, res) => {
     let data = req.body;

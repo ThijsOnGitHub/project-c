@@ -7,7 +7,7 @@ var {serverSecret}=require('../serverSecret');
 
 var connection=mysql.createPool(serverSecret.databaseLogin);
 
-const expireTime="5m"
+const expireTime="5m";
 
 router.post("/Login", (req,res) => {
     console.log(req.body);
@@ -26,7 +26,7 @@ router.post("/Login", (req,res) => {
                             var payLoad = {id: values[0].id,isWerkgever: values[0].isWerkgever === 1};
                             var sessionToken = jwt.sign(payLoad, serverSecret.sessionSecret, {expiresIn: expireTime});
                             var refreshToken = jwt.sign(payLoad, serverSecret.refreshSecret);
-                            connection.query("INSERT INTO authSessions(refreshToken, gebruikerId, tokenCreated,tokenLastUsed) value (?,?,current_timestamp,current_timestamp)", [refreshToken, values[0].id], (err, values, fiels) => {
+                            connection.query("INSERT INTO authsessions(refreshToken, gebruikerId, tokenCreated,tokenLastUsed) value (?,?,current_timestamp,current_timestamp)", [refreshToken, values[0].id], (err, values, fiels) => {
                                 if (err) {
                                     res.status(502).send(err)
                                 } else {
@@ -48,7 +48,7 @@ router.post("/Login", (req,res) => {
 
 router.get("/refresh",(req, res) => {
     console.log("Refresh");
-    connection.query("SELECT *  FROM authSessions WHERE refreshToken=?",[req.header("refreshToken")],(err,values)=>{
+    connection.query("SELECT *  FROM authsessions WHERE refreshToken=?",[req.header("refreshToken")],(err,values)=>{
         if(err){
             res.status(401).send()
         }
@@ -59,7 +59,7 @@ router.get("/refresh",(req, res) => {
                 if(err1){
                     res.status(401).send()
                 }else{
-                    connection.query("UPDATE authSessions SET tokenLastUsed=CURRENT_TIMESTAMP WHERE refreshToken=?",[values[0].refreshToken]);
+                    connection.query("UPDATE authsessions SET tokenLastUsed=CURRENT_TIMESTAMP WHERE refreshToken=?",[values[0].refreshToken]);
                     const authToken=jwt.sign({id:decoded.id,isWerkgever: decoded.isWerkgever},serverSecret.sessionSecret,{expiresIn:expireTime});
                     res.status(200).send(authToken)
                 }
@@ -70,13 +70,13 @@ router.get("/refresh",(req, res) => {
     })
 });
 
-router.get("/Medewerkers", )
+router.get("/Medewerkers", );
 
 
 router.delete("/logout",((req, res) => {
     console.log(req.header("refreshToken"));
     console.log("hello");
-    connection.query("DELETE FROM authSessions WHERE `refreshToken` = ? ",[req.header("refreshToken")],(err,values)=>{
+    connection.query("DELETE FROM authsessions WHERE `refreshToken` = ? ",[req.header("refreshToken")],(err,values)=>{
         if(err){
             res.status(400).send()
         } else {

@@ -16,7 +16,7 @@ create table gebruiker
     birth           date             not null,
     profielFotoLink varchar(500)     null,
     isWerkgever     bit              not null,
-    roosterId       int(4)           not null,
+    roosterId       int(4)           null,
     verificatie     bit default b'0' not null
 );
 
@@ -64,10 +64,12 @@ create table Notifications
 (
     id            int auto_increment
         primary key,
-    userId        int(5) not null,
-    messageType   int(2) not null,
-    roosterId     int(4) not null,
-    roosterItemId int    null,
+    userId        int(5)               not null,
+    messageType   int(2)               not null,
+    roosterId     int(4)               not null,
+    roosterItemId int                  null,
+    isForBoss     tinyint(1) default 0 not null,
+    secondUser    int                  null,
     constraint Notifications_roosterItems_itemId_fk
         foreign key (roosterItemId) references roosterItems (itemId)
             on delete cascade,
@@ -93,5 +95,3 @@ create table roosterStructuur
     constraint structuur_rooster_roosterId_fk
         foreign key (roosterId) references rooster (roosterId)
 );
-
-

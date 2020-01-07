@@ -23,6 +23,7 @@ interface IState {
     addgebruikerSuccess: boolean,
     addroosterSuccess: boolean,
     checkemailSuccess: boolean,
+    checkKoppelCodeSuccess: boolean,
     koppelgebruikerSuccess: boolean,
     // Beschrijf de toegestane symbolen voor de inputvelden.
     letters: RegExp,
@@ -74,6 +75,7 @@ class Registratie extends React.Component<IProps,IState>{
             addgebruikerSuccess: false,
             addroosterSuccess: false,
             checkemailSuccess: false,
+            checkKoppelCodeSuccess: false,
             koppelgebruikerSuccess: false,
             // Beschrijf de toegestane symbolen voor de inputvelden. Geen spaties voor en na inputs, wel mogen in namen spaties zitten.
             letters: /^[A-Za-z]?[A-Z\sa-z]*[A-Za-z]$/,
@@ -145,9 +147,11 @@ class Registratie extends React.Component<IProps,IState>{
         await this.setState<never> ({[name]: value});
 
         // Voer een check uit of het ingevoerde email al in de database staat of niet wanneer het "email" inputveld wordt gewijzigd.
-        if (target.name === "email") {
-            this.checkEmail();
-        }
+
+        if (target.name === "email") { this.checkEmail(); }
+        // Voer een check uit of de ingevoerde koppelcode al in de database staat of niet wanneer het "koppelCodeWerknemer" inputveld wordt gewijzigd.
+        if (target.name === "koppelCodeWerknemer") { this.checkKoppelCode(); }
+
 
         // Check of de waarden van het eerste en tweede wachtwoord gelijk zijn. Verander de state naar aanleiding van de uitkomst.
         if(target.name === "pass" || target.name === "secondPass") {
@@ -166,6 +170,7 @@ class Registratie extends React.Component<IProps,IState>{
         });
     };
 
+    // Check de database voor het bestaan van een email.
     checkEmail = async () => {
         let email: any = await fetch(this.props.apiLink + "/account/checkemail", {
             headers: {'Content-Type': 'application/json'},
@@ -174,6 +179,17 @@ class Registratie extends React.Component<IProps,IState>{
         }).then(res => res.json());
 
         this.setState({checkemailSuccess: email.emailCheck});
+    };
+
+    // Check de database voor het bestaan van een koppelcode.
+    checkKoppelCode = async () => {
+        let koppelcode: any = await fetch(this.props.apiLink + "/account/checkkoppelcodewerknemer", {
+            headers: {'Content-Type': 'application/json'},
+            method: 'POST',
+            body: JSON.stringify({koppelCodeWerknemer: this.state.koppelCodeWerknemer})
+        }).then(res => res.json());
+
+        this.setState({checkKoppelCodeSuccess: koppelcode.koppelCodeCheck});
     };
 
     validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterName:string, koppelCodeWerknemer:string, secondPass:string) {
@@ -188,7 +204,7 @@ class Registratie extends React.Component<IProps,IState>{
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
             birth: birth.length === 0,
             roosterName: this.state.isWerkgever && roosterName.length === 0,
-            koppelCodeWerknemer: !this.state.isWerkgever && koppelCodeWerknemer.length === 0
+            koppelCodeWerknemer: !this.state.isWerkgever && koppelCodeWerknemer.length === 0 || !this.state.isWerkgever && !this.state.checkKoppelCodeSuccess
         };
     }
 

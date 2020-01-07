@@ -43,23 +43,9 @@ class StructureItem extends React.Component<IProps,IState>{
             <div onClick={this.props.onClick} style={{backgroundColor:this.props.color,color:this.props.werknemers.length<this.props.aantalWerknemers&&"red"}} ref={instance => this.state.changeRef && this.setState({divRef:instance,changeRef:false})} className="column isideItem roosterItem noOverflow">
                 <div className="row">
                     <p className="center" >{this.props.titel} </p>
-                    {/*<p className="onAccent noMargin" >{new Date(this.props.itemData.beginTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}-{new Date(this.props.itemData.eindTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}</p>*/}
-
-                    {/*
-                        <details className="chooseMenu right">
-                            <div>
-                                <OptionWithIcon icon="people-24px.svg" text="Vervanging Regelen"/>
-                                <OptionWithIcon icon="local_hospital-24px.svg" text="Ziek Melden"/>
-                                <OptionWithIcon icon="disable_person.svg" text="Vrij Vragen"/>
-                            </div>
-                            <summary>
-                                <MoreOptions width={35} height={35} className="onAccent right"/>
-                            </summary>
-                        </details>
-                    */}
                 </div>
                 <CreateIcon className="center noVertMargin onAccent"/>
-                <p className="center" >{this.props.werknemers.length} </p>
+                <p className="center" >{this.props.werknemers.length}/{this.props.aantalWerknemers} </p>
                 {<p className="center">Medewerker{this.props.werknemers.length>1&&"s"}</p>}
 
             </div>

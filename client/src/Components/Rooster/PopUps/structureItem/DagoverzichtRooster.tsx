@@ -2,7 +2,7 @@ import React from 'react'
 import DagField from "../../RoosterStructuur/DagField";
 import TimeMarker from "../../RoosterStructuur/TimeMarker";
 import '../../Rooster.css'
-import LosItemWijzigen, {changeHigerStateFunc} from "../WijzigTijden/LosItemWijzigen";
+import LosItemWijzigen, {changeHigerStateFunc} from "../Normaal Item/LosItemWijzigen";
 import {dayRenderItem, roosterItemRenderFunc, UserData} from "../../Rooster Classes/roosterData";
 import {TimeMarkerTypes} from "../../RoosterStructuur/TimeMarkerTypes";
 
@@ -72,22 +72,6 @@ class DagoverzichtRooster extends React.Component<IProps>{
                                         {ditMoet:value[1].function}
                                     } beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={hourHeight} verticaal={true} lengte={this.props.width} markerInterval={this.props.markerInterval}/>
                                 </LosItemWijzigen>)
-                               /*
-                                <tr>
-                                    <td><img className="avatar avatarMini" src={this.props.apiLink+"/avatarWithId/"+value[1].userId}/></td>
-                                <td>{value[1].naam}</td>
-                            <td>  <Create  className="clickAble" onClick={() => {
-                            this.props.addPopUp(
-                            <ItemWijzigen RoosterData={{beginTijd:value[1].beginTijd.toJSON(),eindTijd:value[1].eindTijd.toJSON(),datum:new Date().toJSON(),UserData:[value[1]]}} apiLink={this.props.apiLink}  close={this.props.closePopUp}/>
-                            )
-                            }}/></td>
-
-                            <td>
-
-                            </td>
-                                </tr>
-
-                                */
                                 }
                             )
 
