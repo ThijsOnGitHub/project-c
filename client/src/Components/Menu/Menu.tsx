@@ -26,12 +26,14 @@ class Menu extends React.Component <IProps,IState>{
     }
     
     render() {
+
         return(
             <div className="menu">
                 <ul>
                     <li><img id='logo' src="https://i.imgur.com/HVmQHos.png" alt="Logo RoosterIT"/></li>
                     <MenuItem tekst={this.props.loggedIn?"Home":"Inloggen"} path={"/"}/>
                 {
+                    //Als de gebruiker is ingelogd word een ander menu laten zien
                     this.props.loggedIn?
                         <li >
                             {/*<MenuItem tekst={"Mijn Account"} path={"/MyAccount"}/>*/}
@@ -44,6 +46,7 @@ class Menu extends React.Component <IProps,IState>{
 
                 }
                     {
+                        //Afhankelijk of de gebruiker een werkgever is of niet wordt het menu aangepast
                         this.props.isWerkgever&&this.props.loggedIn?
                             <li>
                                 <MenuItem tekst={"Werknemeroverzicht"} path={"/werknemersoverzicht"}/>
@@ -54,6 +57,7 @@ class Menu extends React.Component <IProps,IState>{
                     }
                 </ul>
                 {
+                    //Hier wordt het balkje rechtsboven gemaakt
                     this.props.loggedIn&&
                     <details className="accountMenu chooseMenu" open={this.state.isOpen}>
                         <div>

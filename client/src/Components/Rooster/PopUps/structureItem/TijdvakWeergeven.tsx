@@ -57,7 +57,7 @@ class TijdvakWeergeven extends Component<IProps,IState>{
 
     updateNewNames=async ()=>{
         const personList=this.state.names.filter(value => {
-            return !this.props.RoosterData.werknemers.some(value1 => value1.userId===value.id)
+            return !this.state.werknemers.some(value1 => value1.userId===value.id)
         })
         await this.setState({newNames:personList})
     }
@@ -92,6 +92,7 @@ class TijdvakWeergeven extends Component<IProps,IState>{
             })
             return {selectedNames:[],werknemers:oldState.werknemers,inroosteren:false}}
         )
+        this.updateNewNames()
     }
 
 

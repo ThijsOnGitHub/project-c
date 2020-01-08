@@ -52,7 +52,9 @@ class ItemWijzigen extends Component<IProps,IState>{
     }
 
 
-
+    /**
+     * Hier worden alle gebruikers opgehaald die bij dit rooster horen
+     */
     getUsers= async ()=>{
         const result=await fetch(this.props.apiLink+"/GetMedewerkers",{headers:{authToken:sessionStorage.getItem("authToken")}})
         const resultJSON:Person[]=await result.json()
@@ -60,6 +62,10 @@ class ItemWijzigen extends Component<IProps,IState>{
 
     }
 
+    /**
+     * Hier worden de namen die nog niet zijn ingeroosterd eruit gehaald
+     * Zo kan er een lijst worden gemaakt van werknemers die nog los kunnen worden ingeroosterd
+     */
     updateNewNames=async ()=>{
         console.log(this.state.werknemers)
         const personList=this.state.names.filter(value => {
@@ -68,6 +74,9 @@ class ItemWijzigen extends Component<IProps,IState>{
         await this.setState({newNames:personList})
     }
 
+    /**
+     * Deze functie zorgt ervoor dat werknemers worden ingeroosterd
+     */
     inroosteren=async ()=>{
         this.setState({inroosteren:true})
         var names = this.state.selectedNames
