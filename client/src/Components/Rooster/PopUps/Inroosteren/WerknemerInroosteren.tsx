@@ -4,9 +4,7 @@ import {Chip} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
 
-/**
- * Deze pagina is gemaakt door Thijs Geurts
- */
+
 export interface Person{
     id:number
     naam:string
