@@ -379,6 +379,20 @@ app.post('/delNotif', auth, (req, res) => {
     })
 });
 
+app.get("/getKoppelcode",auth,(req, res) => {
+    if(req.user.isWerkgever){
+        connection.query("select koppelcode from koppelCode where roosterId=(SELECT roosterId from gebruiker where id=?)",[req.user.id],(err,values)=>{
+            if(err){
+                res.status(401).send(err)
+            }else{
+                res.json(values[0].koppelcode)
+            }
+        })
+    }else{
+        res.status(401).send("Je bent geen werkgever")
+    }
+})
+
 app.post('/getSecondUser', auth, (req, res) => {
     console.log('start getSecondUser');
     connection.query("SELECT concat(firstName, ' ', lastName) as naam, id FROM gebruiker WHERE id = (SELECT secondUser FROM Notifications WHERE Notifications.id = ?)", [req.body.notifId], (error, results, fields) => {
