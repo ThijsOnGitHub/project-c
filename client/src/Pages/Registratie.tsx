@@ -23,6 +23,7 @@ interface IState {
     addgebruikerSuccess: boolean,
     addroosterSuccess: boolean,
     checkemailSuccess: boolean,
+    checkKoppelCodeSuccess: boolean,
     koppelgebruikerSuccess: boolean,
     // Beschrijf de toegestane symbolen voor de inputvelden.
     letters: RegExp,
@@ -74,6 +75,7 @@ class Registratie extends React.Component<IProps,IState>{
             addgebruikerSuccess: false,
             addroosterSuccess: false,
             checkemailSuccess: false,
+            checkKoppelCodeSuccess: false,
             koppelgebruikerSuccess: false,
             // Beschrijf de toegestane symbolen voor de inputvelden. Geen spaties voor en na inputs, wel mogen in namen spaties zitten.
             letters: /^[A-Za-z]?[A-Z\sa-z]*[A-Za-z]$/,
@@ -133,29 +135,25 @@ class Registratie extends React.Component<IProps,IState>{
 
     // Ververs de waarden wanneer deze veranderd worden door de gebruiker.
     handleInputChange = async (event:React.ChangeEvent<HTMLInputElement>) => {
-        const target = event.target;
+
         // Laat de waarde de waarde zijn van het actieve veld. Als het input-type een checkbox is is de waarde of deze aangevinkt is of niet.
+        const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
-        if (target.type === "file"){
-            this.setState<never> ({[name+"File"]: target.files[0]})
-        }
+        if (target.type === "file"){ this.setState<never> ({[name+"File"]: target.files[0]}) }
 
         await this.setState<never> ({[name]: value});
 
         // Voer een check uit of het ingevoerde email al in de database staat of niet wanneer het "email" inputveld wordt gewijzigd.
-        if (target.name === "email") {
-            this.checkEmail();
-        }
+        if (target.name === "email") { this.checkEmail(); }
+        // Voer een check uit of de ingevoerde koppelcode al in de database staat of niet wanneer het "koppelCodeWerknemer" inputveld wordt gewijzigd.
+        if (target.name === "koppelCodeWerknemer") { this.checkKoppelCode(); }
 
         // Check of de waarden van het eerste en tweede wachtwoord gelijk zijn. Verander de state naar aanleiding van de uitkomst.
         if(target.name === "pass" || target.name === "secondPass") {
-            if (this.state.secondPass == this.state.pass) {
-                await this.setState({secondPassSame: true});
-            } else {
-                await this.setState({secondPassSame: false})
-            }
+            if (this.state.secondPass == this.state.pass) { await this.setState({secondPassSame: true});
+            } else { await this.setState({secondPassSame: false}) }
         }
     };
 
@@ -166,6 +164,7 @@ class Registratie extends React.Component<IProps,IState>{
         });
     };
 
+    // Check de database voor het bestaan van een email.
     checkEmail = async () => {
         let email: any = await fetch(this.props.apiLink + "/account/checkemail", {
             headers: {'Content-Type': 'application/json'},
@@ -176,19 +175,29 @@ class Registratie extends React.Component<IProps,IState>{
         this.setState({checkemailSuccess: email.emailCheck});
     };
 
+    // Check de database voor het bestaan van een koppelcode.
+    checkKoppelCode = async () => {
+        let koppelcode: any = await fetch(this.props.apiLink + "/account/checkkoppelcodewerknemer", {
+            headers: {'Content-Type': 'application/json'},
+            method: 'POST',
+            body: JSON.stringify({koppelCodeWerknemer: this.state.koppelCodeWerknemer})
+        }).then(res => res.json());
+
+        this.setState({checkKoppelCodeSuccess: koppelcode.koppelCodeCheck});
+    };
+
     validate(firstName:string, lastName:string, email:string, pass:string, phone:string, birth:string, roosterName:string, koppelCodeWerknemer:string, secondPass:string) {
-        // Als een waarde hier true is betekent dat dat het veld niet valide is.
         return {
+            // Als een waarde hier true is betekent dat dat het veld niet valide is.
             firstName: firstName.length === 0 || firstName.length >= 30 || !firstName.match(this.state.letters),
             lastName: lastName.length === 0 || lastName.length >= 30 || !lastName.match(this.state.letters),
-            // Controlleer hier of een email al aanwezig is in de database of niet door een nieuwe functie aan te roepen.
             email: email.length === 0 || email.length >= 30 || this.state.checkemailSuccess,
             pass: pass.length === 0 || !pass.match(this.state.passwords),
             secondPass: secondPass.length === 0 || !this.state.secondPassSame,
             phone: phone.length === 0 || phone.length >= 20 || !phone.match(this.state.numbers),
             birth: birth.length === 0,
             roosterName: this.state.isWerkgever && roosterName.length === 0,
-            koppelCodeWerknemer: !this.state.isWerkgever && koppelCodeWerknemer.length === 0
+            koppelCodeWerknemer: !this.state.isWerkgever && koppelCodeWerknemer.length === 0 || !this.state.isWerkgever && !this.state.checkKoppelCodeSuccess
         };
     }
 
@@ -262,102 +271,123 @@ class Registratie extends React.Component<IProps,IState>{
             return hasError ? shouldShow : false;
         };
 
-    // Verzamel de inputs van de gebruiker om die in de state op te slaan.
-    // Als er een foto is geselecteerd wordt hieruit een afbeelding aangemaakt.
+        // Verzamel de inputs van de gebruiker om die in de state op te slaan.
+        // Als er een foto is geselecteerd wordt hieruit een afbeelding aangemaakt.
         return(
-        <div id="reg">
+            <div id="reg">
                 <form>
-                <table>
-                <tbody>
-                <tr>
-                    <h1>Registratie</h1>
-                </tr>
-                <tr>
-                    <label>Preview Profielfoto</label>
-                    <td><ProfielFotoBijsnijder size={350} blackCircle={this.state.blackCircle} setImageGetFunction={(functie)=>{this.setState({getImage:functie})}} image={this.state.fotoFile}/></td>
-                </tr>
-                <tr>
-                    <label>Upload Profielfoto</label>
-                    <td><input type="file" accept={"image/*"}  onChange={this.handleInputChange} name="foto"/></td>
-                </tr>
-                <tr>
-                    <label>Voornaam</label>
-                    <td><input className={shouldMarkError('firstName') ? "error" : ""}
-                               onBlur={this.handleBlur('firstName')}
-                               type='text' name="firstName" value={this.state.firstName} placeholder="Voornaam" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Achternaam</label>
-                    <td><input className={shouldMarkError('lastName') ? "error" : ""}
-                               onBlur={this.handleBlur('lastName')}
-                               type='text' name="lastName" value={this.state.lastName} placeholder="Achternaam" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Email</label>
-                    <td><input className={shouldMarkError('email') ? "error" : ""}
-                               onBlur={this.handleBlur('email')}
-                               type='email' name="email" value={this.state.email} placeholder="Email" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Telefoonnummer</label>
-                    <td><input className={shouldMarkError('phone') ? "error" : ""}
-                               onBlur={this.handleBlur('phone')}
-                               type='text' name="phone" value={this.state.phone} placeholder="Telefoonnummer" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Geboortedatum</label>
-                    <td><input className={shouldMarkError('birth') ? "error" : ""}
-                               onBlur={this.handleBlur('birth')}
-                               type='date' name="birth" value={this.state.birth} placeholder="Geboortedatum" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Wachtwoord</label>
-                    <td><input className={shouldMarkError('pass') ? "error" : ""}
-                               onBlur={this.handleBlur('pass')}
-                               type='password' name="pass" value={this.state.pass} placeholder="Wachtwoord" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Bevestiging wachtwoord</label>
-                    <td><input className={shouldMarkError('secondPass') ? "error" : ""}
-                               onBlur={this.handleBlur('secondPass')}
-                               type='password' name="secondPass" value={this.state.secondPass} placeholder="Wachtwoord" onChange={this.handleInputChange}/></td>
-                </tr>
-                <tr>
-                    <label>Account voor werkgever</label>
-                    <td><input type='checkbox' name="isWerkgever" checked={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange} /></td>
-                </tr>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <h1>Registratie</h1>
+                        </tr>
 
-                { this.state.isWerkgever ?
-                    <tr>
-                        <label>Roosternaam</label>
-                        <td><input className={shouldMarkError('roosterName') ? "error" : ""}
-                                   onBlur={this.handleBlur('roosterName')}
-                                   type='text' name="roosterName" value={this.state.roosterName} placeholder="Roosternaam" onChange={this.handleInputChange}/></td>
-                    </tr> : ''
-                }
-                { this.state.isWerkgever ?
-                    <tr>
-                        <label>Koppelcode</label>
-                        <td><input name="koppelCodeWerkgever" value={this.state.koppelCodeWerkgever}/></td>
-                    </tr>
-                    :
-                    <tr>
-                        <label>Koppelcode</label>
-                        <td><input className={shouldMarkError('koppelCodeWerknemer') ? "error" : ""}
-                                   onBlur={this.handleBlur('koppelCodeWerknemer')}
-                                   type='text' name="koppelCodeWerknemer" value={this.state.koppelCodeWerknemer} placeholder="Koppelcode" onChange={this.handleInputChange}/></td>
-                    </tr>
-                }
+                        <tr>
+                            <label>Preview Profielfoto</label>
+                            <td><ProfielFotoBijsnijder size={350} blackCircle={this.state.blackCircle} setImageGetFunction={(functie)=>{this.setState({getImage:functie})}} image={this.state.fotoFile}/></td>
+                        </tr>
+                        <tr>
+                            <label>Upload Profielfoto</label>
+                            <td><input type="file" accept={"image/*"}  onChange={this.handleInputChange} name="foto"/></td>
+                        </tr>
 
-                <button disabled={isDisabled} onClick={this.handleSubmit}>Registreer</button>
-                {
-                    this.state.registratieSucces && <Redirect to={{pathname: '/RegistratieFeedback'}}/>
-                }
+                        <tr>
+                            <label>Voornaam</label>
+                            <td><input className={shouldMarkError('firstName') ? "error" : ""}
+                                       onBlur={this.handleBlur('firstName')}
+                                       type='text' name="firstName" value={this.state.firstName} placeholder="Voornaam" onChange={this.handleInputChange}/></td>
 
-                </tbody>
-            </table>
-            </form>
-        </div>
+                        </tr>
+                        {   // Dit is een errormessage. Het checkt of het toepasbare veld in de 'errors' array staat, en als daarnaast het veld ook nog niet is aangeraakt wordt een bericht getoond onder het inputveld.
+                            errors.firstName && this.state.touched.firstName ? <span className={"validationMessage"}>Vul een naam in met alleen letters.</span> : ''}
+
+                        <tr>
+                            <label>Achternaam</label>
+                            <td><input className={shouldMarkError('lastName') ? "error" : ""}
+                                       onBlur={this.handleBlur('lastName')}
+                                       type='text' name="lastName" value={this.state.lastName} placeholder="Achternaam" onChange={this.handleInputChange}/></td>
+                        </tr>
+                        {errors.lastName && this.state.touched.lastName ? <span className={"validationMessage"}>Vul een naam in met alleen letters.</span> : ''}
+
+                        <tr>
+                            <label>Email</label>
+                            <td><input className={shouldMarkError('email') ? "error" : ""}
+                                       onBlur={this.handleBlur('email')}
+                                       type='email' name="email" value={this.state.email} placeholder="Email" onChange={this.handleInputChange}/></td>
+                        </tr>
+                        {errors.email && this.state.touched.email ? <span className={"validationMessage"}>Vul een uniek email in.</span> : ''}
+
+                        <tr>
+                            <label>Telefoonnummer</label>
+                            <td><input className={shouldMarkError('phone') ? "error" : ""}
+                                       onBlur={this.handleBlur('phone')}
+                                       type='text' name="phone" value={this.state.phone} placeholder="Telefoonnummer" onChange={this.handleInputChange}/></td>
+                        </tr>
+                        {errors.phone && this.state.touched.phone ? <span className={"validationMessage"}>Vul een telefoonnummer in dat bestaat uit cijfers.</span> : ''}
+
+                        <tr>
+                            <label>Geboortedatum</label>
+                            <td><input className={shouldMarkError('birth') ? "error" : ""}
+                                       onBlur={this.handleBlur('birth')}
+                                       type='date' name="birth" value={this.state.birth} placeholder="Geboortedatum" onChange={this.handleInputChange}/></td>
+                        </tr>
+                        {errors.birth && this.state.touched.birth ? <span className={"validationMessage"}>Vul een geboortedatum in.</span> : ''}
+
+                        <tr>
+                            <label>Wachtwoord</label>
+                            <td><input className={shouldMarkError('pass') ? "error" : ""}
+                                       onBlur={this.handleBlur('pass')}
+                                       type='password' name="pass" value={this.state.pass} placeholder="Wachtwoord" onChange={this.handleInputChange}/></td>
+                        </tr>
+                        {errors.pass && this.state.touched.pass ? <span className={"validationMessage"}>Vul een wachtwoord in langer dan 6 symbolen met minimaal 1 kleine letter, 1 hoofdletter en een symbool.</span> : ''}
+
+                        <tr>
+                            <label>Bevestiging wachtwoord</label>
+                            <td><input className={shouldMarkError('secondPass') ? "error" : ""}
+                                       onBlur={this.handleBlur('secondPass')}
+                                       type='password' name="secondPass" value={this.state.secondPass} placeholder="Wachtwoord" onChange={this.handleInputChange}/></td>
+                        </tr>
+                        {errors.secondPass && this.state.touched.secondPass ? <span className={"validationMessage"}>De ingevulde wachtwoorden komen niet overeen.</span> : ''}
+
+                        <tr>
+                            <label>Account voor werkgever</label>
+                            <td><input type='checkbox' name="isWerkgever" checked={this.state.isWerkgever} placeholder="false" onChange={this.handleInputChange} /></td>
+                        </tr>
+
+                        { this.state.isWerkgever ?
+                            <tr>
+                                <label>Roosternaam</label>
+                                <td><input className={shouldMarkError('roosterName') ? "error" : ""}
+                                           onBlur={this.handleBlur('roosterName')}
+                                           type='text' name="roosterName" value={this.state.roosterName} placeholder="Roosternaam" onChange={this.handleInputChange}/></td>
+                            </tr> : ''
+                        }
+                        {errors.roosterName && this.state.touched.roosterName ? <span className={"validationMessage"}>Vul een naam in voor uw rooster.</span> : ''}
+
+                        { this.state.isWerkgever ?
+                            <tr>
+                                <label>Koppelcode</label>
+                                <td><input name="koppelCodeWerkgever" value={this.state.koppelCodeWerkgever}/></td>
+                            </tr>
+                            :
+                            <tr>
+                                <label>Koppelcode</label>
+                                <td><input className={shouldMarkError('koppelCodeWerknemer') ? "error" : ""}
+                                           onBlur={this.handleBlur('koppelCodeWerknemer')}
+                                           type='text' name="koppelCodeWerknemer" value={this.state.koppelCodeWerknemer} placeholder="Koppelcode" onChange={this.handleInputChange}/></td>
+                            </tr>
+                        }
+                        {errors.koppelCodeWerknemer && this.state.touched.koppelCodeWerknemer ? <span className={"validationMessage"}>Vul een bestaande koppelcode in.</span> : ''}
+
+                        <button disabled={isDisabled} onClick={this.handleSubmit}>Registreer</button>
+                        {
+                            this.state.registratieSucces && <Redirect to={{pathname: '/RegistratieFeedback'}}/>
+                        }
+
+                        </tbody>
+                    </table>
+                </form>
+            </div>
         )
     }
 }

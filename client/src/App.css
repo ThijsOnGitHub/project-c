@@ -21,8 +21,6 @@ body{
   cursor: move;
 }
 
-
-
 /*--------------Global Menu--------------*/
 .menu{
     display: flex;
@@ -53,8 +51,6 @@ body{
   margin: 0px;
   padding: 35px 0px 30px 100px;
 }
-
-
 
 .menu li .menuItem {
   display: inline-block;
@@ -94,7 +90,7 @@ body{
 
 /*Underlay*/
 .underlay{
-  width: 100vw;
+  width: 100%;
   height: 50px;
   background: #43494f;
   margin-top: -22px;
@@ -151,73 +147,10 @@ position: fixed;
   z-index: 1;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-:root{
-    --accentColor:#9900CC;
-    --onAccentColor:#ffffff;
-}
-
-.agendaFields{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-}
-.centerText{
-  text-align: center;
-}
-
- */
-/* Werknemer RoosterItems*/
-
-
 body{
   margin: 0;
 }
 
-
-
-
-/*Underlay*/
-.underlay{
-  width: 100vw;
-  height: 50px;
-  background: #43494f;
-  margin-top: -22px;
-}
-.underlay h1{
-  font-size: 25px;
-  padding-top: 7px;
-  font-family: var(--font);
-  color: white;
-  text-align: center;
-  font-weight: 400;
-}
-
-.weighted{
-  font-family: var(--font);
-  font-weight: 700;
-}
 
 
 /* Werknemer RoosterItems*/
@@ -323,25 +256,7 @@ nav {
 
 
 
-/*Underlay*/
-.underlay{
-  width: 100vw;
-  height: 50px;
-  background: #43494f;
-  margin-top: -22px;
-}
-.underlay h1{
-  font-size: 25px;
-  padding-top: 7px;
-  font-family: var(--font);
-  color: white;
-  text-align: center;
-  font-weight: 400;
-}
-.weighted{
-  font-family: var(--font);
-  font-weight: 700;
-}
+
 
 /*---------------Login---------------*/
 #intro{
@@ -568,7 +483,6 @@ table#t01 {
 }
 */
 
-
 #reg table button, #Login table button {
   background-color: #ad35d7;
   border: 4px solid #ba83cd;
@@ -594,8 +508,45 @@ table#t01 {
   margin: auto;
 }
 
-.error {
-  border: 3px solid red;
+.error,form .error {
+  border: 3px solid red!important;
+}
+
+.validationMessage {
+  color: #E21D3E;
+  position: relative;
+  left: 380px;
+  bottom: 10px;
+  max-width: 300px;
+  font-size: 12px;
+  display: block;
+  text-align: center;
+}
+
+.validationMessageUser{
+    color: #E21D3E;
+    width: 240px;
+    max-width: 240px!important;
+    position: relative;
+    left: 470px;
+    font-size: 12px;
+    display: inline-block;
+    text-align: center;
+    bottom: 10px;
+    opacity: 1;
+    animation-name: fadeInOpacity;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in-out;
+    animation-duration: 0.8s;
+}
+
+@keyframes fadeInOpacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 .errorMessage{
   color: red;

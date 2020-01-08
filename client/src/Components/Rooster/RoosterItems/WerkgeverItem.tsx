@@ -1,6 +1,6 @@
 import React from 'react'
 import {ReactComponent as CreateIcon} from '../../../icons/create-24px.svg'
-import {itemComponentsData} from "../roosterData";
+import {itemComponentsData} from "../Rooster Classes/roosterData";
 
 interface IProps {
     itemData:itemComponentsData
@@ -61,7 +61,7 @@ class  WerkgeverItem extends React.Component<IProps,IState>{
                 <p className="center">{this.props.itemData.UserData.length} </p>
                 {(this.state.divRef.clientWidth>100&&this.state.divRef.clientHeight>90)&&<p className="center">Medewerker{this.props.itemData.UserData.length>1&&"s"}</p>}
                 {(this.state.divRef.clientWidth>100&&this.state.divRef.clientHeight>80)&&<p className="center">{new Date(this.props.itemData.beginTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})} - {new Date(this.props.itemData.eindTijd).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}</p>}
-                {/*
+                {
                     (this.state.divRef.clientWidth>100&&this.state.divRef.clientHeight >100) &&
                     <div className="scrolOverflow thinScrollBar" >
                         {
@@ -74,7 +74,7 @@ class  WerkgeverItem extends React.Component<IProps,IState>{
                             })
                         }
                     </div>
-                */}
+                }
 
             </div>
         )

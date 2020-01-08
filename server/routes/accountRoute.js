@@ -1,12 +1,12 @@
 const express = require('express');
 app = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const mysql = require('mysql');
 
 const multer = require('multer');
 const {serverSecret} = require('../serverSecret');
-const connection = mysql.createConnection(serverSecret.databaseLogin);
+const connection = mysql.createPool(serverSecret.databaseLogin);
 
 
 const storage = multer.diskStorage({
@@ -80,6 +80,19 @@ app.post("/checkkoppelcode", (req, res) => {
     });
 });
 
+// Kijk in de database of de koppelcode die een werknemer invoert al bestaat of niet.
+app.post("/checkkoppelcodewerknemer", (req, res) => {
+    let data = req.body;
+    connection.query("SELECT EXISTS (SELECT koppelCode FROM koppelCode WHERE koppelCode = ?) AS koppelcode",  [data.koppelCodeWerknemer], (error, results, fields) => {
+        if (error) {
+            console.log(error);
+        } else {
+            results = results[0].koppelcode;
+            res.json({koppelCodeCheck: results});
+        }
+    });
+});
+
 // Kijk in de database of het ingevoerde emailadres al gebruikt is.
 app.post("/checkemail", (req, res) => {
     let data = req.body;
@@ -91,6 +104,33 @@ app.post("/checkemail", (req, res) => {
             res.json({emailCheck: results});
         }
     });
+});
+
+// Kijk in de database of het ingevoerde emailadres al gebruikt is.
+app.post("/checkpassword", async (req, res) => {
+
+    let data = req.body;
+    connection.query("SELECT pass FROM gebruiker WHERE email = ?", [data.email], (error, results, fields) => {
+        if(error){
+            console.log(error)
+            res.status(500).send(error)
+        }else{
+            console.log(results)
+            bcrypt.compare(data.oldpassword, results[0].pass, (err, result) => {
+
+                if (err) {
+                    res.status(500).send(err)
+                    console.error(err)
+
+
+                }else{
+                    console.log(results)
+                    res.json(result);
+                }
+            })
+        }
+    });
+
 });
 
 // Voeg een rooster toe aan de database met de verstuurde naam.

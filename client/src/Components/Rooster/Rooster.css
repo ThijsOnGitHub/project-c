@@ -9,10 +9,18 @@
     position: absolute;
     width: 100%;
 }
-.lineMarker{
+.lineMarkerHorizontaal{
+     border: 1px dashed gray;
+     width: 98%;
+     height: 0px;
+
+ }
+.lineMarkerVerticaal{
+    position: sticky;
+    top:0;
     border: 1px dashed gray;
-    width: 98%;
-    height: 0px;
+    height: 50px;
+    width: 0px;
 }
 
 .DagField{
@@ -128,6 +136,12 @@
 }
 .dag > div{
     flex: 1 0 190px;
+}
+.verticaalDag{
+    min-height: max-content;
+    display: flex;
+    flex-direction: column;
+
 }
 
 

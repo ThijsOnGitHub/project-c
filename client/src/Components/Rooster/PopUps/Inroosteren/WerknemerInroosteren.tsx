@@ -3,7 +3,7 @@ import {Autocomplete} from "@material-ui/lab";
 import {Chip} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
-import CircularProgress from "@material-ui/core/CircularProgress";
+
 
 export interface Person{
     id:number
@@ -25,16 +25,16 @@ interface IState {
     validToSubmit:HTMLInputElement[]
 }
 class WerknemerInroosteren extends Component<IProps,IState>{
-    private datum:React.RefObject<HTMLInputElement>
-    private beginTijd:React.RefObject<HTMLInputElement>
-    private eindTijd:React.RefObject<HTMLInputElement>
+    private datum:React.RefObject<HTMLInputElement>;
+    private beginTijd:React.RefObject<HTMLInputElement>;
+    private eindTijd:React.RefObject<HTMLInputElement>;
 
 
     constructor(props:IProps){
         super(props);
-        this.datum=React.createRef()
-        this.beginTijd=React.createRef()
-        this.eindTijd=React.createRef()
+        this.datum=React.createRef();
+        this.beginTijd=React.createRef();
+        this.eindTijd=React.createRef();
         this.state={
             beginTijd:"",
             eindTijd:"",
@@ -47,22 +47,29 @@ class WerknemerInroosteren extends Component<IProps,IState>{
     }
 
     componentDidMount(): void {
-        this.getUsers()
+        this.getUsers();
         this.setState({validToSubmit:[this.datum.current,this.beginTijd.current,this.eindTijd.current]})
     }
 
 
-
+    /**
+     * Hier worden de werknemers die aan dit rooster deelnemen weergegeven
+     */
     getUsers= async ()=>{
-        const result=await fetch(this.props.apiLink+"/GetMedewerkers",{headers:{authToken:sessionStorage.getItem("authToken")}})
-        const resultJSON=await result.json()
+        const result=await fetch(this.props.apiLink+"/GetMedewerkers",{headers:{authToken:sessionStorage.getItem("authToken")}});
+        const resultJSON=await result.json();
         this.setState({werknemers:resultJSON})
-    }
+    };
 
+    /**
+     * Deze code roostert mensen in
+     */
     inroosteren=async ()=>{
-        await this.state.validToSubmit.map(value => this.validate(value))
+        await this.state.validToSubmit.map(value => this.validate(value));
+        //Er wordt hier gekeken of er geen fouten in de velden zitten
+
         if(this.state.validToSubmit.length===0){
-            this.setState({loading:true})
+            this.setState({loading:true});
             await fetch(this.props.apiLink+"/rooster/add",
                 {
                     method:"POST",
@@ -71,14 +78,20 @@ class WerknemerInroosteren extends Component<IProps,IState>{
                         'Content-Type': 'application/json'
                     },
                     body:JSON.stringify({date:this.state.datum,beginTijd:this.state.beginTijd+":00",eindTijd:this.state.eindTijd+":00",users:this.state.selectedNames.map(value => value.id)})
-                })
-            this.setState({loading:false})
+                });
+            this.setState({loading:false});
             this.props.close()
         }else{
+            //Hier worden de fouten weergegeven als zich voordoen
             this.state.validToSubmit.forEach(value => value.reportValidity())
         }
-    }
+    };
 
+    /**
+     * Deze functie controleerd of het html-element wel valide is.
+     * Als deze niet valide is wordt deze aan de state toegevoegd.
+     * @param target Het HTML Element dat moet worden gecheckt
+     */
     validate=async (target:HTMLInputElement)=>{
         if(!target.required||!target.checkValidity()){
             this.setState(oldState=>{
@@ -89,18 +102,21 @@ class WerknemerInroosteren extends Component<IProps,IState>{
             })
         }else{
             this.setState(oldState=>{
-                const deletedList=oldState.validToSubmit.filter((value1, index) => value1 !==target)
+                const deletedList=oldState.validToSubmit.filter((value1, index) => value1 !==target);
                 return {validToSubmit: deletedList}
             })
         }
-    }
+    };
 
+    /**
+     * Iedere keer als er een veld wordt aangepast wordt er gekeken of deze valide is d.m.v. de validate functie
+     */
     handleInputChange=(event:React.ChangeEvent<HTMLInputElement>)=> {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
-        this.validate(target)
+        this.validate(target);
 
         this.setState<never>({
             [name]: value

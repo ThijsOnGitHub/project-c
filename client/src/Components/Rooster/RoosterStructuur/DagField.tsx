@@ -1,7 +1,7 @@
 import React from 'react'
 import TimeMarker from "./TimeMarker";
 import {TimeMarkerTypes} from "./TimeMarkerTypes";
-import {dayRenderItem} from "../roosterData";
+import {dayRenderItem} from "../Rooster Classes/roosterData";
 
 
 
@@ -12,8 +12,8 @@ export interface IProps {
     eindTijd:Date
     beginTijd:Date
     hourHeight:number
-    height:number
-    datum:Date
+    lengte:number
+    verticaal?:boolean
 }
 
 export type DagData=Omit<IProps,'renderItems'>
@@ -22,9 +22,9 @@ class DagField extends React.Component<IProps>{
     render() {
         return(
             <div>
-                <div className="DagField" style={{height:this.props.height}}>
+                <div className="DagField" style={this.props.verticaal?{width:this.props.lengte,height:50}:{height:this.props.lengte}}>
                     <div className="DagLijnen absolute">
-                        <TimeMarker interval={this.props.markerInterval} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={this.props.hourHeight} height={this.props.height} type={TimeMarkerTypes.line}/>
+                        <TimeMarker verticaal={this.props.verticaal} interval={this.props.markerInterval} beginTijd={this.props.beginTijd} eindTijd={this.props.eindTijd} hourHeight={this.props.hourHeight} lengte={this.props.lengte} type={TimeMarkerTypes.line}/>
                     </div>
                     <div className="Items absolute">
                         {

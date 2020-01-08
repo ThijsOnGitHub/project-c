@@ -14,6 +14,7 @@ interface Istate{
         firstName:string,
         lastName:string
     }[]
+    koppelcode:string
 
 
 }
@@ -21,11 +22,16 @@ interface Istate{
 
 
 
-class WerkgeversOverzicht extends React.Component<Iprops,Istate> {
+class WerknemersOverzicht extends React.Component<Iprops,Istate> {
 
     constructor(props: Iprops){
         super(props)
-        this.state={user:[]}
+        this.state={
+            user:[],
+            koppelcode:""
+        }
+
+
     }
 
 
@@ -43,6 +49,15 @@ class WerkgeversOverzicht extends React.Component<Iprops,Istate> {
                 })
             }
         )
+
+
+        fetch(this.props.apiLink+"/getKoppelcode",{headers:{authToken:sessionStorage.getItem("authToken")}}).then(value => {
+            value.json().then(value1 => {
+                this.setState({koppelcode:value1})
+            })
+        })
+
+
 
     }
 
@@ -68,9 +83,14 @@ class WerkgeversOverzicht extends React.Component<Iprops,Istate> {
 
 
          <div>
-             <div className="header">
-                 <h1>Werkgeversoverzicht</h1>
+
+             <div>
+                 <h1>Koppelcode: {this.state.koppelcode}</h1>
              </div>
+             <div className="header">
+                 <h1>Werknemersoverzicht</h1>
+         </div>
+
              <table  id='555555'>
                  <tr>
                      <th>Voornaam </th>
@@ -92,4 +112,4 @@ class WerkgeversOverzicht extends React.Component<Iprops,Istate> {
     }
 }
 
-export default WerkgeversOverzicht
+export default WerknemersOverzicht
