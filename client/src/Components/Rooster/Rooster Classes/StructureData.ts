@@ -5,8 +5,25 @@ import {roosterStructuurData} from "../../../Pages/Rooster";
 
 
 class StructureData{
-    static getRenderdItems(structuurData:roosterStructuurData[],roosterData:RoosterData,beginDatum:Date,retrurnStructureItem:((value:roosterStructuurData & { datum: string; beginTijd: string; eindTijd: string; werknemers: any[] },width?:string,startWidth?:string)=>roosterItemRenderFunc)){
+    public maxTijd:Date=new Date(0,0,0,20)
+    public minTijd:Date=new Date(0,0,0,7)
+
+    public getRenderdItems(structuurData:roosterStructuurData[],roosterData:RoosterData,beginDatum:Date,retrurnStructureItem:((value:roosterStructuurData & { datum: string; beginTijd: string; eindTijd: string; werknemers: any[] },width?:string,startWidth?:string)=>roosterItemRenderFunc)){
         var copyData=structuurData.map(value => Object.assign({},value))
+        var minBeginTijd=Math.min(...copyData.map(value => Functions.timeStringToDate(value.beginTijd).getTime()))
+        var maxEindTijd=Math.max(...copyData.map(value => Functions.timeStringToDate(value.eindTijd).getTime()))
+
+        console.log(minBeginTijd)
+        console.log(maxEindTijd)
+
+        if(minBeginTijd<this.minTijd.getTime()){
+            this.minTijd= new Date(minBeginTijd)
+        }
+
+        if(maxEindTijd>this.maxTijd.getTime()){
+            this.maxTijd= new Date(maxEindTijd)
+        }
+
         var sturctureData= copyData.map(value => {
             var amountToAdd=(((value.dagNummer-1)%7)+7)%7
             var datum=new Date(beginDatum.getTime()+amountToAdd*86400000)

@@ -90,7 +90,7 @@ body{
 
 /*Underlay*/
 .underlay{
-  width: 100vw;
+  width: 100%;
   height: 50px;
   background: #43494f;
   margin-top: -22px;
@@ -151,26 +151,6 @@ body{
   margin: 0;
 }
 
-/*Underlay*/
-.underlay{
-  width: 100vw;
-  height: 50px;
-  background: #43494f;
-  margin-top: -22px;
-}
-.underlay h1{
-  font-size: 25px;
-  padding-top: 7px;
-  font-family: var(--font);
-  color: white;
-  text-align: center;
-  font-weight: 400;
-}
-
-.weighted{
-  font-family: var(--font);
-  font-weight: 700;
-}
 
 
 /* Werknemer RoosterItems*/
@@ -276,25 +256,7 @@ nav {
 
 
 
-/*Underlay*/
-.underlay{
-  width: 100vw;
-  height: 50px;
-  background: #43494f;
-  margin-top: -22px;
-}
-.underlay h1{
-  font-size: 25px;
-  padding-top: 7px;
-  font-family: var(--font);
-  color: white;
-  text-align: center;
-  font-weight: 400;
-}
-.weighted{
-  font-family: var(--font);
-  font-weight: 700;
-}
+
 
 /*---------------Login---------------*/
 #intro{

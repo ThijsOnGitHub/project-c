@@ -16,8 +16,7 @@ import RoosterData, {
 } from "../Components/Rooster/Rooster Classes/roosterData";
 import OptionWithIcon from "../Components/OptionWithIcon";
 import WerknemerInroosteren from "../Components/Rooster/PopUps/Inroosteren/WerknemerInroosteren";
-import {sortDataOnTime, sortedData} from "../Components/Rooster/RoosterStructuur/sortData";
-import Functions from "../Extra Functions/functions";
+import { sortedData} from "../Components/Rooster/RoosterStructuur/sortData";
 import StructureItem from "../Components/Rooster/RoosterItems/StructureItem";
 import TijdvakWeergeven from "../Components/Rooster/PopUps/structureItem/TijdvakWeergeven";
 import StructureData from "../Components/Rooster/Rooster Classes/StructureData";
@@ -95,11 +94,15 @@ class Rooster extends Component<IProps,IState>{
 
         var roosterData=new RoosterData(agendaJSON)
 
-        this.setState({minTijd:roosterData.minTijd,maxTijd:roosterData.maxTijd})
+
 
         if(this.props.isWerkgever){
-            renderdAgendaJSON=StructureData.getRenderdItems(this.state.roosterStructuurData,roosterData,this.state.beginDatum,this.retrurnStructureItem)
+            var object=new StructureData()
+            renderdAgendaJSON=object.getRenderdItems(this.state.roosterStructuurData,roosterData,this.state.beginDatum,this.retrurnStructureItem)
+            console.log(object)
+            this.setState({minTijd:object.minTijd,maxTijd:object.maxTijd})
         }else{
+            this.setState({minTijd:roosterData.minTijd,maxTijd:roosterData.maxTijd})
             renderdAgendaJSON=roosterData.getRenderdItems(this.retrurnRenderdItems)
         }
 
