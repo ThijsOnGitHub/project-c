@@ -6,8 +6,9 @@ interface IProps {
     eindTijd:Date
     interval:Date
     hourHeight:number
-    height:number
+    lengte:number
     type:TimeMarkerTypes
+    verticaal?:boolean
 }
 
 interface IState {
@@ -53,24 +54,28 @@ class TimeMarker extends React.Component<IProps,IState>{
 
     render() {
         return(
-            <div style={{height:this.props.height,position:"relative",minWidth:50}}>
+            <div className={this.props.verticaal && "row"} style={this.props.verticaal?{width:this.props.lengte,position:"relative",minHeight:25}:{height:this.props.lengte,position:"relative",minWidth:50}}>
                 {
                     // Hier worden voor alle tijden of lijnen op de uren geplaatst
                     this.state.uren.map((value,index,list) =>{
                         var item=<div/>;
-                    var data:React.CSSProperties={position:"absolute",left:0,top:value.y,textAlign:"center",margin:0};
+                    var data:React.CSSProperties
+                    if(this.props.verticaal){
+                        data={position:"absolute",left:value.y,top:0,textAlign:"center",margin:0};
+                    }else{
+                        data={position:"absolute",left:0,top:value.y,textAlign:"center",margin:0};
+                    }
 
                     //Hier wordt gedefineerd of er een lijn of een tijd wordt weergegeven
                     if (this.props.type===TimeMarkerTypes.line){
                         if(index!==0 && index!==list.length-1) {
-                            Object.assign(data, {marginTop: -2});
-                            item = <div className="lineMarker" style={data}/>
+                            Object.assign(data, this.props.verticaal?{marginLeft:-2}: {marginTop: -2});
+                            item = <div className={this.props.verticaal?"lineMarkerVerticaal":"lineMarkerHorizontaal"} style={data}/>
                         }
                     }else{
-                        Object.assign(data,{marginTop:-24/2,width:"100%"});
+                        Object.assign(data,this.props.verticaal?{marginLeft:-35/2,height:"100%"}:{marginTop:-24/2,width:"100%"});
                         item=<p style={data}>{value.tijd.toLocaleTimeString('nl-NL',{hour:"2-digit",minute:"2-digit",timeZone:"UTC"})}</p>
                     }
-
                     return item
                 })}
             </div>

@@ -3,7 +3,6 @@ import {Autocomplete} from "@material-ui/lab";
 import {Chip} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 export interface Person{
     id:number
@@ -25,16 +24,16 @@ interface IState {
     validToSubmit:HTMLInputElement[]
 }
 class WerknemerInroosteren extends Component<IProps,IState>{
-    private datum:React.RefObject<HTMLInputElement>
-    private beginTijd:React.RefObject<HTMLInputElement>
-    private eindTijd:React.RefObject<HTMLInputElement>
+    private datum:React.RefObject<HTMLInputElement>;
+    private beginTijd:React.RefObject<HTMLInputElement>;
+    private eindTijd:React.RefObject<HTMLInputElement>;
 
 
     constructor(props:IProps){
         super(props);
-        this.datum=React.createRef()
-        this.beginTijd=React.createRef()
-        this.eindTijd=React.createRef()
+        this.datum=React.createRef();
+        this.beginTijd=React.createRef();
+        this.eindTijd=React.createRef();
         this.state={
             beginTijd:"",
             eindTijd:"",
@@ -47,22 +46,22 @@ class WerknemerInroosteren extends Component<IProps,IState>{
     }
 
     componentDidMount(): void {
-        this.getUsers()
+        this.getUsers();
         this.setState({validToSubmit:[this.datum.current,this.beginTijd.current,this.eindTijd.current]})
     }
 
 
 
     getUsers= async ()=>{
-        const result=await fetch(this.props.apiLink+"/GetMedewerkers",{headers:{authToken:sessionStorage.getItem("authToken")}})
-        const resultJSON=await result.json()
+        const result=await fetch(this.props.apiLink+"/GetMedewerkers",{headers:{authToken:sessionStorage.getItem("authToken")}});
+        const resultJSON=await result.json();
         this.setState({werknemers:resultJSON})
-    }
+    };
 
     inroosteren=async ()=>{
-        await this.state.validToSubmit.map(value => this.validate(value))
+        await this.state.validToSubmit.map(value => this.validate(value));
         if(this.state.validToSubmit.length===0){
-            this.setState({loading:true})
+            this.setState({loading:true});
             await fetch(this.props.apiLink+"/rooster/add",
                 {
                     method:"POST",
@@ -71,13 +70,13 @@ class WerknemerInroosteren extends Component<IProps,IState>{
                         'Content-Type': 'application/json'
                     },
                     body:JSON.stringify({date:this.state.datum,beginTijd:this.state.beginTijd+":00",eindTijd:this.state.eindTijd+":00",users:this.state.selectedNames.map(value => value.id)})
-                })
-            this.setState({loading:false})
+                });
+            this.setState({loading:false});
             this.props.close()
         }else{
             this.state.validToSubmit.forEach(value => value.reportValidity())
         }
-    }
+    };
 
     validate=async (target:HTMLInputElement)=>{
         if(!target.required||!target.checkValidity()){
@@ -89,18 +88,18 @@ class WerknemerInroosteren extends Component<IProps,IState>{
             })
         }else{
             this.setState(oldState=>{
-                const deletedList=oldState.validToSubmit.filter((value1, index) => value1 !==target)
+                const deletedList=oldState.validToSubmit.filter((value1, index) => value1 !==target);
                 return {validToSubmit: deletedList}
             })
         }
-    }
+    };
 
     handleInputChange=(event:React.ChangeEvent<HTMLInputElement>)=> {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
-        this.validate(target)
+        this.validate(target);
 
         this.setState<never>({
             [name]: value
