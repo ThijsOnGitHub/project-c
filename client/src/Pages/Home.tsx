@@ -66,21 +66,7 @@ class Home extends React.Component<IProps,IState>{
                 <div className="underlay">
                     <h1>Welkom, <span className="weighted">{this.state.content.length>0 && this.state.content[0].firstName}</span>!</h1>
                 </div>
-                <div style={{textAlign: "center"}} className="LinebreakPrevent">
-                    <Link to='./Rooster'>
-                        <figure>
-                            <CalendarIcon width="150" height="150"/>
-                            <figcaption className='Button'>ROOSTER</figcaption>
-                        </figure>
-                    </Link>
-                    <Link to='./Salaris'>
-                        <figure>
-                            <MoneyIcon width="150" height="150"/>
-                            <figcaption className='Button'>SALARIS</figcaption>
-                        </figure>
-                    </Link>
-                </div>
-                <div className="LinebreakPrevent">
+                <div className="LinebreakPrevent" style={{margin:25}}>
                     <div className='HomeInfo'>
                         <div className='HomeContents'>
                             <h1>Info</h1>
