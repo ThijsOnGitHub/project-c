@@ -4,6 +4,9 @@ import {Chip} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
 
+/**
+ * Deze pagina is gemaakt door Thijs Geurts
+ */
 export interface Person{
     id:number
     naam:string
@@ -51,15 +54,22 @@ class WerknemerInroosteren extends Component<IProps,IState>{
     }
 
 
-
+    /**
+     * Hier worden de werknemers die aan dit rooster deelnemen weergegeven
+     */
     getUsers= async ()=>{
         const result=await fetch(this.props.apiLink+"/GetMedewerkers",{headers:{authToken:sessionStorage.getItem("authToken")}});
         const resultJSON=await result.json();
         this.setState({werknemers:resultJSON})
     };
 
+    /**
+     * Deze code roostert mensen in
+     */
     inroosteren=async ()=>{
         await this.state.validToSubmit.map(value => this.validate(value));
+        //Er wordt hier gekeken of er geen fouten in de velden zitten
+
         if(this.state.validToSubmit.length===0){
             this.setState({loading:true});
             await fetch(this.props.apiLink+"/rooster/add",
@@ -74,10 +84,16 @@ class WerknemerInroosteren extends Component<IProps,IState>{
             this.setState({loading:false});
             this.props.close()
         }else{
+            //Hier worden de fouten weergegeven als zich voordoen
             this.state.validToSubmit.forEach(value => value.reportValidity())
         }
     };
 
+    /**
+     * Deze functie controleerd of het html-element wel valide is.
+     * Als deze niet valide is wordt deze aan de state toegevoegd.
+     * @param target Het HTML Element dat moet worden gecheckt
+     */
     validate=async (target:HTMLInputElement)=>{
         if(!target.required||!target.checkValidity()){
             this.setState(oldState=>{
@@ -94,6 +110,9 @@ class WerknemerInroosteren extends Component<IProps,IState>{
         }
     };
 
+    /**
+     * Iedere keer als er een veld wordt aangepast wordt er gekeken of deze valide is d.m.v. de validate functie
+     */
     handleInputChange=(event:React.ChangeEvent<HTMLInputElement>)=> {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;

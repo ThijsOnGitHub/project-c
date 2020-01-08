@@ -28,12 +28,6 @@ export interface WerknemerRenderObject extends UserData{
     function:roosterItemRenderFunc
 }
 
-/*
-    Dit component zorgt dat er een timemarker aan de linkerkant komt en er 7 dagen daarnaast staan
-    Daarnaast zorgt hij ervoor dat de begintijden en eindtijden op alle velden hetzelfde zijn
-    En dat de roosterItems verdeeld worden over de dagen
- */
-
 
 
 
@@ -42,9 +36,8 @@ class DagoverzichtRooster extends React.Component<IProps>{
 
 
     render() {
-        // Hier wordt berekend hoeveel pixels 1 uur is
         var items:dayRenderItem={}
-
+        // Hier wordt berekend hoeveel pixels 1 uur is
         var hourHeight=this.props.width/((this.props.eindTijd.getHours()+this.props.eindTijd.getMinutes()/60)-(this.props.beginTijd.getHours()+this.props.beginTijd.getMinutes()/60));
 
         return(
