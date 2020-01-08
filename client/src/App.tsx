@@ -13,7 +13,7 @@ import * as jsonwebtoken from 'jsonwebtoken';
 import loadingIcon from "./img/Loding-Icon-zwart.gif";
 
 import WerknemerItem from "./Components/Rooster/RoosterItems/WerknemerItem";
-import WerkgeversOverzicht from "./Pages/WerkgeversOverzicht";
+import WerknemersOverzicht from "./Pages/WerknemersOverzicht";
 
 import ZiekMeld         from "./Pages/ZiekMeld";
 import Rooster          from "./Pages/Rooster";
@@ -187,7 +187,7 @@ class App extends React.Component<{},IState>{
                                             this.state.isWerkgever?
                                                 <Switch>
 
-                                                    <Route path='/WerkgeversOverzicht' render={() => <WerkgeversOverzicht apiLink={this.state.apiLink}/>}/>
+                                                    <Route path='/WerknemersOverzicht' render={() => <WerknemersOverzicht apiLink={this.state.apiLink}/>}/>
 
                                                 </Switch>:
                                                 <Switch>

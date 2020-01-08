@@ -21,7 +21,7 @@ interface Istate{
 
 
 
-class WerkgeversOverzicht extends React.Component<Iprops,Istate> {
+class WerknemersOverzicht extends React.Component<Iprops,Istate> {
 
     constructor(props: Iprops){
         super(props)
@@ -69,7 +69,7 @@ class WerkgeversOverzicht extends React.Component<Iprops,Istate> {
 
          <div>
              <div className="header">
-                 <h1>Werkgeversoverzicht</h1>
+                 <h1>Werknemersoverzicht</h1>
              </div>
              <table  id='555555'>
                  <tr>
@@ -92,4 +92,4 @@ class WerkgeversOverzicht extends React.Component<Iprops,Istate> {
     }
 }
 
-export default WerkgeversOverzicht
+export default WerknemersOverzicht

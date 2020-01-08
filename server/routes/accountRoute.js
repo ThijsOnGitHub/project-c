@@ -106,6 +106,33 @@ app.post("/checkemail", (req, res) => {
     });
 });
 
+// Kijk in de database of het ingevoerde emailadres al gebruikt is.
+app.post("/checkpassword", async (req, res) => {
+
+    let data = req.body;
+    connection.query("SELECT pass FROM gebruiker WHERE email = ?", [data.email], (error, results, fields) => {
+        if(error){
+            console.log(error)
+            res.status(500).send(error)
+        }else{
+            console.log(results)
+            bcrypt.compare(data.oldpassword, results[0].pass, (err, result) => {
+
+                if (err) {
+                    res.status(500).send(err)
+                    console.error(err)
+
+
+                }else{
+                    console.log(results)
+                    res.json(result);
+                }
+            })
+        }
+    });
+
+});
+
 // Voeg een rooster toe aan de database met de verstuurde naam.
 app.post("/addrooster", (req, res) => {
     let data = req.body;

@@ -49,7 +49,7 @@ class Menu extends React.Component <IProps,IState>{
                         //Afhankelijk of de gebruiker een werkgever is of niet wordt het menu aangepast
                         this.props.isWerkgever&&this.props.loggedIn?
                             <li>
-                                <MenuItem tekst={"Werknemeroverzicht"} path={"/werkgeversoverzicht"}/>
+                                <MenuItem tekst={"Werknemeroverzicht"} path={"/werknemersoverzicht"}/>
                             </li>
                             :
                             <li>
