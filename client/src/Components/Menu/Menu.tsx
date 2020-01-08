@@ -46,7 +46,7 @@ class Menu extends React.Component <IProps,IState>{
                     {
                         this.props.isWerkgever&&this.props.loggedIn?
                             <li>
-                                <MenuItem tekst={"Werkgeversoverzicht"} path={"/werkgeversoverzicht"}/>
+                                <MenuItem tekst={"Werknemeroverzicht"} path={"/werkgeversoverzicht"}/>
                             </li>
                             :
                             <li>
