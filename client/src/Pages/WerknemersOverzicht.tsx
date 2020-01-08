@@ -31,11 +31,13 @@ class WerknemersOverzicht extends React.Component<Iprops,Istate> {
             koppelcode:""
         }
 
+
     }
 
 
 
     componentDidMount(): void {
+
 
         fetch(this.props.apiLink+ "/GetMedewerkers", {headers:{authToken:sessionStorage.getItem("authToken")}}).then(
             value => {
@@ -48,11 +50,13 @@ class WerknemersOverzicht extends React.Component<Iprops,Istate> {
             }
         )
 
+
         fetch(this.props.apiLink+"/getKoppelcode",{headers:{authToken:sessionStorage.getItem("authToken")}}).then(value => {
             value.json().then(value1 => {
                 this.setState({koppelcode:value1})
             })
         })
+
 
 
     }
@@ -79,12 +83,14 @@ class WerknemersOverzicht extends React.Component<Iprops,Istate> {
 
 
          <div>
+
              <div>
                  <h1>Koppelcode: {this.state.koppelcode}</h1>
              </div>
              <div className="header">
                  <h1>Werknemersoverzicht</h1>
          </div>
+
              <table  id='555555'>
                  <tr>
                      <th>Voornaam </th>
