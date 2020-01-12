@@ -317,7 +317,7 @@ app.get("/getgebruikerinfo",auth,async (req,res)=>{
 
 app.post('/getRoosterAndPerson', auth, (req, res) => {
     console.log("Getting sick person's data...");
-    connection.query("SELECT concat(firstName, ' ', lastName) as naam, beginTijd, eindTijd, datum, Notifications.userId FROM roosterit.Notifications LEFT JOIN roosterItems rI on Notifications.roosterItemId = rI.itemId LEFT JOIN gebruiker g on Notifications.userId = g.id WHERE Notifications.roosterItemId = ?", [req.body.roosterItemId], (error, results, fields) =>{
+    connection.query("SELECT concat(firstName, ' ', lastName) as naam, beginTijd, eindTijd, datum, Notifications.userId FROM roosterit.Notifications LEFT JOIN roosterItems rI on Notifications.roosterItemId = rI.itemId LEFT JOIN gebruiker g on Notifications.userId = g.id WHERE Notifications.id = ?", [req.body.notifid], (error, results, fields) =>{
         console.log(results);
         res.json(results[0])
     });

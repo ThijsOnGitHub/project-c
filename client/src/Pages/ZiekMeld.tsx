@@ -104,7 +104,7 @@ class ZiekMeld extends React.Component<IProps, IState> {
                     authToken:sessionStorage.getItem("authToken"),
                     "content-type":"application/json"
                 },
-            body: JSON.stringify({roosterItemId:this.props.roosterItemId})
+            body: JSON.stringify({notifid:this.props.notifId})
         })
             .then(
                 (u) => {
